@@ -9,6 +9,7 @@
     "contact_professor": false,
     "has_written_exam": false,
     "has_interview": true,
+    "allowed_background": ["计算机", "电子"],
     "exam_method": "面试",
     "exam_content": "研究计划说明、专业问答"
   },
@@ -22,6 +23,7 @@
     "contact_professor": true,
     "has_written_exam": true,
     "has_interview": true,
+    "allowed_background": ["机械", "自动化"],
     "exam_method": "笔试+面试",
     "exam_content": "数学笔试、专业面试"
   },
@@ -35,6 +37,7 @@
     "contact_professor": false,
     "has_written_exam": true,
     "has_interview": true,
+    "allowed_background": ["物理", "数学"],
     "exam_method": "笔试+面试",
     "exam_content": "物理笔试、面试"
   },
@@ -48,6 +51,7 @@
     "contact_professor": true,
     "has_written_exam": false,
     "has_interview": true,
+    "allowed_background": ["电子", "计算机"],
     "exam_method": "面试",
     "exam_content": "研究计划说明、口头问答"
   },
@@ -61,6 +65,7 @@
     "contact_professor": false,
     "has_written_exam": false,
     "has_interview": true,
+    "allowed_background": ["材料", "化学", "物理"],
     "exam_method": "材料审查+面试",
     "exam_content": "书类审核、研究计划面试"
   },
@@ -74,6 +79,7 @@
     "contact_professor": true,
     "has_written_exam": true,
     "has_interview": false,
+    "allowed_background": ["化学", "材料"],
     "exam_method": "笔试",
     "exam_content": "化学专业笔试"
   }
