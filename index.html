@@ -2,18 +2,10 @@
 
 <h1>日本研究生募集要项</h1>
 
-<!-- 🎯 专业选择（优先） -->
-<select id="programSelect">
-  <option value="">选择专业（默认全部）</option>
-  <option value="信息理工">信息理工</option>
-  <option value="机械工学">机械工学</option>
-  <option value="物理学">物理学</option>
-  <option value="电子工程">电子工程</option>
-  <option value="材料科学">材料科学</option>
-  <option value="化学">化学</option>
-</select>
+<!-- 🎯 专业标签（自动生成） -->
+<div id="programTags"></div>
 
-<br><br>
+<br>
 
 <!-- 🔍 搜索 -->
 <input type="text" id="searchInput" placeholder="搜索学校 / 专业">
@@ -30,7 +22,6 @@
 
 <!-- 🎯 筛选 -->
 <h3>筛选条件</h3>
-
 <label><input type="checkbox" id="noEnglish"> 不需要英语</label>
 <label><input type="checkbox" id="noJapanese"> 不需要日语</label>
 <label><input type="checkbox" id="notExpired"> 未截止</label>
@@ -43,14 +34,18 @@
 
 <script>
 let allData = [];
+let selectedProgram = "";
 
+// 📥 读取数据
 fetch('data.json')
   .then(res => res.json())
   .then(data => {
     allData = data;
+    renderProgramTags(data); // 🔥 自动生成专业标签
     updateAll();
   });
 
+// 🎨 卡片
 function renderCard(item){
   return `
     <div class="card">
@@ -60,17 +55,43 @@ function renderCard(item){
   `;
 }
 
-// 🔥 核心过滤
+// 🔥 自动生成专业标签（核心）
+function renderProgramTags(data){
+  const container = document.getElementById('programTags');
+
+  const programs = [...new Set(data.map(d => d.program))];
+
+  container.innerHTML = "";
+
+  programs.forEach(p => {
+    container.innerHTML += `
+      <span class="tag" onclick="selectProgram('${p}')">
+        ${p}
+      </span>
+    `;
+  });
+}
+
+// 🎯 点击标签筛选
+function selectProgram(p){
+  if(selectedProgram === p){
+    selectedProgram = ""; // 再点一次取消
+  }else{
+    selectedProgram = p;
+  }
+  updateAll();
+}
+
+// 🔍 核心筛选逻辑
 function getFilteredData(){
   let filtered = [...allData];
 
-  const selectedProgram = document.getElementById('programSelect').value;
   const keyword = document.getElementById('searchInput').value.trim();
   const noEnglish = document.getElementById('noEnglish').checked;
   const noJapanese = document.getElementById('noJapanese').checked;
   const notExpired = document.getElementById('notExpired').checked;
 
-  // 🎯 专业优先筛选
+  // 🎯 专业筛选
   if(selectedProgram){
     filtered = filtered.filter(item => item.program === selectedProgram);
   }
@@ -97,7 +118,7 @@ function getFilteredData(){
     filtered = filtered.filter(item => new Date(item.deadline) > today);
   }
 
-  // 排序
+  // 📅 排序
   filtered.sort((a, b) =>
     new Date(a.deadline) - new Date(b.deadline)
   );
@@ -110,14 +131,17 @@ function updateAll(){
   const data = getFilteredData();
   renderList(data);
   renderSections(data);
+  highlightSelectedTag(); // 🔥 高亮选中
 }
 
+// 📊 列表
 function renderList(data){
   const list = document.getElementById('list');
   list.innerHTML = "";
   data.forEach(item => list.innerHTML += renderCard(item));
 }
 
+// 🔥 推荐区
 function renderSections(data){
   const ongoing = document.getElementById('ongoing');
   const upcoming = document.getElementById('upcoming');
@@ -140,8 +164,22 @@ function renderSections(data){
   });
 }
 
+// 🎨 高亮选中标签
+function highlightSelectedTag(){
+  const tags = document.querySelectorAll('#programTags .tag');
+
+  tags.forEach(tag => {
+    if(tag.innerText === selectedProgram){
+      tag.style.background = "black";
+      tag.style.color = "white";
+    }else{
+      tag.style.background = "#eee";
+      tag.style.color = "black";
+    }
+  });
+}
+
 // 🔥 自动触发
-document.getElementById('programSelect').addEventListener('change', updateAll);
 document.getElementById('searchInput').addEventListener('input', updateAll);
 document.getElementById('noEnglish').addEventListener('change', updateAll);
 document.getElementById('noJapanese').addEventListener('change', updateAll);
