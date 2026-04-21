@@ -1,204 +1,126 @@
-{
-  "meta": {
+[
+  {
     "university": "大阪大学",
-    "faculty": "工学研究科",
-    "degree": "修士（博士前期課程）",
-    "admission_type": "一般選抜",
-    "intake": "2027-04",
-    "language": "ja",
-    "note": "在留資格が『留学』の外国人は出願不可"
+    "major": "電気電子情報通信工学",
+    "course": "情報通信工学",
+
+    "apply_start": "2026-07-06",
+    "apply_end": "2026-07-17",
+
+    "exam_start": "2026-08-18",
+    "exam_end": "2026-08-20",
+
+    "english_tests": ["TOEIC", "TOEFL"],
+    "require_contact_professor": false,
+
+    "exam_method": "笔试+面试",
+    "exam_content": "数学、信号处理、通信理论、面试",
+
+    "tuition": "535800円/年",
+
+    "contact_name": "情報通信工学コース",
+    "contact_phone": "06-6879-XXXX",
+    "contact_email": "info@eei.eng.osaka-u.ac.jp",
+    "contact_url": "http://www.eei.eng.osaka-u.ac.jp/"
   },
 
-  "timeline": {
-    "special_accommodation": {
-      "deadline": "2026-05-29"
-    },
-    "eligibility_review": {
-      "apply": "2026-06-09 ~ 2026-06-12",
-      "result": "2026-06-29"
-    },
-    "application_fee": {
-      "period": "2026-06-29 10:00 ~ 2026-07-17 14:00"
-    },
-    "application": {
-      "period": "2026-07-06 ~ 2026-07-17"
-    },
-    "exam": {
-      "period": "2026-08-18 ~ 2026-08-20"
-    },
-    "result": {
-      "date": "2026-08-31 14:00"
-    },
-    "enrollment": {
-      "procedure": "2027-03"
-    }
+  {
+    "university": "大阪大学",
+    "major": "電気電子情報通信工学",
+    "course": "電気工学",
+
+    "apply_start": "2026-07-06",
+    "apply_end": "2026-07-17",
+
+    "exam_start": "2026-08-18",
+    "exam_end": "2026-08-20",
+
+    "english_tests": ["TOEIC", "TOEFL"],
+    "require_contact_professor": false,
+
+    "exam_method": "笔试+面试",
+    "exam_content": "数学、电磁场、电路理论、面试",
+
+    "tuition": "535800円/年",
+
+    "contact_name": "電気工学コース",
+    "contact_phone": "06-6879-XXXX",
+    "contact_email": "elec@eei.eng.osaka-u.ac.jp",
+    "contact_url": "http://www.eei.eng.osaka-u.ac.jp/"
   },
 
-  "fees": {
-    "application_fee": 30000,
-    "admission_fee": 282000,
-    "tuition_year": 535800,
-    "currency": "JPY"
+  {
+    "university": "大阪大学",
+    "major": "機械工学",
+    "course": "機械工学",
+
+    "apply_start": "2026-07-06",
+    "apply_end": "2026-07-17",
+
+    "exam_start": "2026-08-18",
+    "exam_end": "2026-08-20",
+
+    "english_tests": ["TOEIC", "TOEFL"],
+    "require_contact_professor": false,
+
+    "exam_method": "笔试+面试",
+    "exam_content": "数学、材料力学、流体力学、热力学、面试",
+
+    "tuition": "535800円/年",
+
+    "contact_name": "機械工学専攻",
+    "contact_phone": "06-6879-4486",
+    "contact_email": "mech-jimushitsu@mech.eng.osaka-u.ac.jp",
+    "contact_url": "http://www.mech.eng.osaka-u.ac.jp/"
   },
 
-  "eligibility": {
-    "nationality_requirement": [
-      "日本国籍",
-      "永住者",
-      "特別永住者",
-      "定住者"
-    ],
-    "academic": [
-      "学士学位或预计取得",
-      "16年教育经历",
-      "国外学历认可"
-    ],
-    "special_review": {
-      "required_for": "非标准学历",
-      "age_requirement": "22岁以上"
-    }
+  {
+    "university": "大阪大学",
+    "major": "生物工学",
+    "course": "生物工学",
+
+    "apply_start": "2026-07-06",
+    "apply_end": "2026-07-17",
+
+    "exam_start": "2026-08-18",
+    "exam_end": "2026-08-20",
+
+    "english_tests": ["TOEIC", "TOEFL", "IELTS"],
+    "require_contact_professor": true,
+
+    "exam_method": "笔试+面试",
+    "exam_content": "生物化学、分子生物学、面试（需研究计划）",
+
+    "tuition": "535800円/年",
+
+    "contact_name": "生物工学コース",
+    "contact_phone": "06-6879-XXXX",
+    "contact_email": "bio@eng.osaka-u.ac.jp",
+    "contact_url": "https://www-bio.eng.osaka-u.ac.jp/"
   },
 
-  "departments": [
-    {
-      "name": "生物工学",
-      "quota": 63,
-      "courses": ["生物工学"],
-      "pre_contact_required": true
-    },
-    {
-      "name": "応用化学",
-      "quota": 97,
-      "courses": ["分子創成化学", "物質機能化学"],
-      "pre_contact_required": false
-    },
-    {
-      "name": "物理学系",
-      "quota": 72,
-      "courses": ["精密工学", "応用物理学"],
-      "pre_contact_required": false
-    },
-    {
-      "name": "機械工学",
-      "quota": 96,
-      "courses": ["機械工学"],
-      "pre_contact_required": false
-    },
-    {
-      "name": "マテリアル生産科学",
-      "quota": 118,
-      "courses": ["マテリアル科学", "生産科学"],
-      "pre_contact_required": false
-    },
-    {
-      "name": "電気電子情報通信工学",
-      "quota": 141,
-      "courses": ["電気工学", "情報通信工学", "量子情報エレクトロニクス", "イノベーションデザイン"],
-      "pre_contact_required": true
-    },
-    {
-      "name": "環境エネルギー工学",
-      "quota": 82,
-      "courses": ["環境工学", "エネルギー量子工学"],
-      "pre_contact_required": true
-    },
-    {
-      "name": "地球総合工学",
-      "quota": 104,
-      "courses": ["船舶海洋工学", "社会基盤工学", "建築工学"],
-      "pre_contact_required": false
-    },
-    {
-      "name": "ビジネスエンジニアリング",
-      "quota": 38,
-      "courses": ["ビジネスエンジニアリング"],
-      "pre_contact_required": false
-    }
-  ],
+  {
+    "university": "大阪大学",
+    "major": "環境エネルギー工学",
+    "course": "環境工学",
 
-  "application_documents": {
-    "required": [
-      "入学願書",
-      "検定料収納証明書",
-      "履歴書",
-      "志望理由書",
-      "成績証明書",
-      "卒業（見込）証明書",
-      "英語能力証明書",
-      "写真票",
-      "受験票送付封筒",
-      "合否送付封筒"
-    ],
-    "conditional": [
-      "在留カード（外国人）",
-      "学位证书（特定情况）",
-      "志望領域申請書（部分専攻）"
-    ]
-  },
+    "apply_start": "2026-07-06",
+    "apply_end": "2026-07-17",
 
-  "english": {
-    "tests": ["TOEIC", "TOEFL iBT", "IELTS"],
-    "valid_after": "2024-08-01",
-    "invalid_tests": [
-      "TOEIC IP",
-      "TOEFL ITP",
-      "IELTS General"
-    ],
-    "note": "部分专攻可免提交（英语授课背景）"
-  },
+    "exam_start": "2026-08-18",
+    "exam_end": "2026-08-20",
 
-  "exam": {
-    "type": ["笔试", "口试"],
-    "rule": "任何科目缺考=不合格",
-    "major_examples": {
-      "電気電子情報通信工学": [
-        "数学",
-        "电磁理论",
-        "电路",
-        "信息论/算法（部分）"
-      ],
-      "機械工学": [
-        "数学",
-        "力学",
-        "热力学",
-        "流体力学",
-        "控制"
-      ],
-      "ビジネスエンジニアリング": [
-        "数学/物理/化学（选1）",
-        "小论文",
-        "一般工学（选1）"
-      ]
-    }
-  },
+    "english_tests": ["TOEIC", "TOEFL"],
+    "require_contact_professor": true,
 
-  "selection": {
-    "method": "笔试 + 口试 + 材料综合评价"
-  },
+    "exam_method": "笔试+面试",
+    "exam_content": "环境工程基础、数学、面试（需提前联系）",
 
-  "result": {
-    "method": "官网公布 + 邮寄通知"
-  },
+    "tuition": "535800円/年",
 
-  "score_disclosure": {
-    "period": "2026-09-01 ~ 2026-09-11",
-    "content": [
-      "总分",
-      "合格者最高/最低分（部分情况不公开）"
-    ]
-  },
-
-  "notes": [
-    "部分专攻必须提前联系导师",
-    "产学官共创课程必须事前确认",
-    "不可开车进校考试",
-    "提交材料不可修改",
-    "虚假材料将取消资格"
-  ],
-
-  "contact": {
-    "office": "大阪大学工学研究科教務課入試係",
-    "email": "iso-staff@eng.osaka-u.ac.jp",
-    "tel": "+81-6-6879-7226"
+    "contact_name": "環境工学コース",
+    "contact_phone": "06-6879-7682",
+    "contact_email": "env_administrator@see.eng.osaka-u.ac.jp",
+    "contact_url": "https://see.eng.osaka-u.ac.jp/"
   }
-}
+]
