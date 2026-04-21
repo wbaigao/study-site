@@ -1,12 +1,13 @@
 <body>
 
-<h1>🎓 日本研究生院校推荐系统</h1>
+<h1>🎓 日本研究生选校系统（情报学）</h1>
 
-<!-- 🎯 推荐 -->
-<h2>🎓 院校推荐</h2>
+<h2>🎯 输入你的背景</h2>
 
 <select id="programSelect">
-  <option value="">选择目标专业（默认显示大学）</option>
+  <option value="">选择本科背景（默认显示大学）</option>
+  <option value="软件工程">软件工程</option>
+  <option value="计算机">计算机</option>
 </select>
 
 <br><br>
@@ -14,86 +15,52 @@
 <label><input type="checkbox" id="noEnglish"> 不需要英语</label>
 <label><input type="checkbox" id="noJapanese"> 不需要日语</label>
 
+<div id="relatedHint"></div>
+
 <hr>
 
-<!-- 首页列表 -->
 <div id="recommendList"></div>
 
-<!-- 🏫 学校详情页 -->
+<!-- 详情页 -->
 <div id="detailPage" style="display:none;">
-
   <button onclick="backToList()">← 返回</button>
-
   <h2 id="detailTitle"></h2>
-
   <div id="detailContent"></div>
-
 </div>
 
 <hr>
 
-<!-- 🔍 搜索 -->
 <h2>🔍 学校检索</h2>
-
 <input type="text" id="schoolSearch" placeholder="输入学校名称">
-
 <div id="schoolResult"></div>
 
 <style>
-body{
-  font-family:-apple-system,BlinkMacSystemFont,sans-serif;
-  background:#f5f6f8;
-  margin:0;
-  padding:15px;
-}
-
-.card{
-  background:#fff;
-  border-radius:14px;
-  padding:14px;
-  margin:12px 0;
-  box-shadow:0 6px 18px rgba(0,0,0,0.08);
-  cursor:pointer;
-}
-
-.title{font-weight:600;}
+body{font-family:sans-serif;background:#f5f6f8;padding:15px;}
+.card{background:#fff;border-radius:12px;padding:12px;margin:10px 0;box-shadow:0 4px 12px rgba(0,0,0,0.08);cursor:pointer;}
+.title{font-weight:bold;}
 .time{font-size:12px;color:#666;}
-
-.tag{
-  display:inline-block;
-  padding:4px 8px;
-  margin:4px;
-  border-radius:6px;
-  font-size:12px;
-  background:#eef1f5;
-}
-
-.green{background:#e6f7e6;color:#0a0;}
-.red{background:#ffe5e5;color:#d00;}
+.tag{padding:3px 6px;border-radius:5px;font-size:12px;margin:3px;display:inline-block;}
+.green{background:#e6f7e6;color:#090;}
+.red{background:#ffe5e5;color:#c00;}
 .blue{background:#e6f0ff;color:#06c;}
 </style>
 
 <script>
 let allData = [];
 
+// 🔥 专业扩展
+const majorMap = {
+  "软件工程": ["情报学"],
+  "计算机": ["情报学"]
+};
+
 fetch('data.json')
-  .then(res=>res.json())
-  .then(data=>{
-    allData = data;
-    initPrograms(data);
-    renderRecommend(data);
-  });
+.then(res=>res.json())
+.then(data=>{
+  allData = data;
+  renderRecommend(data);
+});
 
-// 初始化专业
-function initPrograms(data){
-  const select = document.getElementById('programSelect');
-  const programs = [...new Set(data.map(d=>d.program))];
-  programs.forEach(p=>{
-    select.innerHTML += `<option value="${p}">${p}</option>`;
-  });
-}
-
-// 推荐更新
 function updateRecommend(){
   const program = document.getElementById('programSelect').value;
   const noEnglish = document.getElementById('noEnglish').checked;
@@ -102,7 +69,11 @@ function updateRecommend(){
   let filtered = [...allData];
 
   if(program){
-    filtered = filtered.filter(i=>i.program===program);
+    const related = majorMap[program] || [program];
+    filtered = filtered.filter(i=>related.includes(i.program));
+    showHint(related);
+  }else{
+    document.getElementById("relatedHint").innerHTML="";
   }
 
   if(noEnglish){
@@ -116,124 +87,94 @@ function updateRecommend(){
   renderRecommend(filtered);
 }
 
-// 渲染（两种模式）
+// 首页 or 推荐
 function renderRecommend(data){
   const div = document.getElementById('recommendList');
   const program = document.getElementById('programSelect').value;
 
-  div.innerHTML = "";
-  document.getElementById('detailPage').style.display = "none";
-  div.style.display = "block";
+  div.innerHTML="";
+  document.getElementById('detailPage').style.display="none";
+  div.style.display="block";
 
-  if(data.length===0){
-    div.innerHTML="<p>❌ 没有符合条件的院校</p>";
-    return;
-  }
-
-  // 🟦 首页模式（只显示大学）
   if(!program){
-    const universities = [...new Set(data.map(d=>d.university))];
-
-    universities.forEach(uni=>{
-      div.innerHTML += `
-        <div class="card" onclick="openUniversity('${uni}')">
-          <div class="title">🏫 ${uni}</div>
-        </div>
-      `;
+    const unis=[...new Set(data.map(d=>d.university))];
+    unis.forEach(uni=>{
+      div.innerHTML+=`<div class="card" onclick="openUni('${uni}')">🏫 ${uni}</div>`;
     });
-
     return;
   }
 
-  // 🟩 专业模式（可展开）
-  data.forEach((item,index)=>{
-    div.innerHTML += `
-      <div class="card" onclick="toggleDetail(${index})">
-        <div class="title">${item.university} · ${item.program}</div>
+  data.forEach(item=>{
+    div.innerHTML+=`
+      <div class="card">
+        <div class="title">${item.university}</div>
         <div class="time">${item.apply_start} ~ ${item.deadline}</div>
-
-        <div id="detail-${index}" style="display:none;margin-top:10px;">
-          <span class="tag blue">${item.exam_method}</span>
-          ${item.english==="不要求" ? `<span class="tag green">无英语</span>`:`<span class="tag red">${item.english}</span>`}
-          ${item.japanese==="不要求" ? `<span class="tag green">无日语</span>`:`<span class="tag red">${item.japanese}</span>`}
-          <p>📝 ${item.exam_content}</p>
-        </div>
+        <span class="tag blue">${item.exam_method}</span>
+        ${item.english==="不要求"?`<span class="tag green">无英语</span>`:`<span class="tag red">${item.english}</span>`}
+        ${item.japanese==="不要求"?`<span class="tag green">无日语</span>`:`<span class="tag red">${item.japanese}</span>`}
+        <p>${item.exam_content}</p>
       </div>
     `;
   });
 }
 
-// 展开详情（仅专业模式）
-function toggleDetail(index){
-  const el = document.getElementById(`detail-${index}`);
-  el.style.display = el.style.display === "none" ? "block" : "none";
-}
+// 详情页
+function openUni(uni){
+  document.getElementById('recommendList').style.display="none";
+  const page=document.getElementById('detailPage');
+  page.style.display="block";
 
-// 打开大学详情页
-function openUniversity(uni){
+  document.getElementById('detailTitle').innerText="🏫 "+uni;
 
-  document.getElementById('recommendList').style.display = "none";
+  const content=document.getElementById('detailContent');
+  content.innerHTML="";
 
-  const page = document.getElementById('detailPage');
-  page.style.display = "block";
-
-  document.getElementById('detailTitle').innerText = "🏫 " + uni;
-
-  const content = document.getElementById('detailContent');
-  content.innerHTML = "";
-
-  let list = allData.filter(i=>i.university===uni);
+  let list=allData.filter(i=>i.university===uni);
 
   list.forEach(item=>{
-    content.innerHTML += `
+    content.innerHTML+=`
       <div class="card">
         <div class="title">${item.program}</div>
         <div class="time">${item.apply_start} ~ ${item.deadline}</div>
-
         <span class="tag blue">${item.exam_method}</span>
-        ${item.english==="不要求" ? `<span class="tag green">无英语</span>`:`<span class="tag red">${item.english}</span>`}
-        ${item.japanese==="不要求" ? `<span class="tag green">无日语</span>`:`<span class="tag red">${item.japanese}</span>`}
-
-        <p>📝 ${item.exam_content}</p>
+        ${item.english==="不要求"?`<span class="tag green">无英语</span>`:`<span class="tag red">${item.english}</span>`}
+        ${item.japanese==="不要求"?`<span class="tag green">无日语</span>`:`<span class="tag red">${item.japanese}</span>`}
+        <p>${item.exam_content}</p>
       </div>
     `;
   });
 }
 
-// 返回首页
 function backToList(){
-  document.getElementById('detailPage').style.display = "none";
-  document.getElementById('recommendList').style.display = "block";
+  document.getElementById('detailPage').style.display="none";
+  document.getElementById('recommendList').style.display="block";
+}
+
+// 提示
+function showHint(list){
+  document.getElementById("relatedHint").innerHTML =
+    "🔍 已扩展推荐专业：" + list.join(" / ");
 }
 
 // 搜索
-function searchSchool(){
-  const keyword=document.getElementById('schoolSearch').value.toLowerCase();
+document.getElementById('schoolSearch').addEventListener('input',function(){
+  const k=this.value.toLowerCase();
   const div=document.getElementById('schoolResult');
 
-  if(!keyword){
-    div.innerHTML="";
-    return;
-  }
+  if(!k){div.innerHTML="";return;}
 
-  let result=allData.filter(i=>i.university.toLowerCase().includes(keyword));
+  let res=allData.filter(i=>i.university.toLowerCase().includes(k));
 
   div.innerHTML="";
-  result.forEach(item=>{
-    div.innerHTML+=`
-      <div class="card">
-        <div class="title">${item.university} · ${item.program}</div>
-        <div class="time">${item.apply_start} ~ ${item.deadline}</div>
-      </div>
-    `;
+  res.forEach(i=>{
+    div.innerHTML+=`<div class="card">${i.university}</div>`;
   });
-}
+});
 
 // 监听
 document.getElementById('programSelect').addEventListener('change',updateRecommend);
 document.getElementById('noEnglish').addEventListener('change',updateRecommend);
 document.getElementById('noJapanese').addEventListener('change',updateRecommend);
-document.getElementById('schoolSearch').addEventListener('input',searchSchool);
 
 </script>
 
