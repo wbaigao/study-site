@@ -2,7 +2,7 @@
 
 <h1>🎓 日本研究生院校推荐系统</h1>
 
-<!-- 🎯 推荐模块 -->
+<!-- 🎯 推荐 -->
 <h2>🎓 院校推荐</h2>
 
 <select id="programSelect">
@@ -13,7 +13,6 @@
 
 <label><input type="checkbox" id="noEnglish"> 不需要英语</label>
 <label><input type="checkbox" id="noJapanese"> 不需要日语</label>
-<label><input type="checkbox" id="noContact"> 无需联系教授</label>
 
 <hr>
 
@@ -21,7 +20,7 @@
 
 <hr>
 
-<!-- 🔍 检索模块 -->
+<!-- 🔍 检索 -->
 <h2>🔍 学校检索</h2>
 
 <input type="text" id="schoolSearch" placeholder="输入学校名称">
@@ -43,11 +42,6 @@ body{
   margin:12px 0;
   box-shadow:0 6px 18px rgba(0,0,0,0.08);
   cursor:pointer;
-  transition:transform .15s ease, box-shadow .15s ease;
-}
-
-.card:active{
-  transform:scale(0.98);
 }
 
 .card-header{
@@ -56,29 +50,17 @@ body{
   align-items:center;
 }
 
-.title{
-  font-weight:600;
-  font-size:16px;
-}
+.title{font-weight:600;}
+.time{font-size:12px;color:#666;}
 
-.time{
-  font-size:12px;
-  color:#666;
-}
-
-.arrow{
-  transition:transform .3s ease;
-}
-
-.arrow.open{
-  transform:rotate(180deg);
-}
+.arrow{transition:transform .3s;}
+.arrow.open{transform:rotate(180deg);}
 
 .detail{
   max-height:0;
   overflow:hidden;
   opacity:0;
-  transition:max-height .35s ease, opacity .25s ease;
+  transition:.3s;
 }
 
 .detail.open{
@@ -90,74 +72,70 @@ body{
 .tag{
   display:inline-block;
   padding:4px 8px;
-  margin:4px 4px 0 0;
+  margin:4px;
   border-radius:6px;
   font-size:12px;
   background:#eef1f5;
 }
 
-.tag.green{background:#e6f7e6;color:#0a0;}
-.tag.red{background:#ffe5e5;color:#d00;}
-.tag.blue{background:#e6f0ff;color:#06c;}
+.green{background:#e6f7e6;color:#0a0;}
+.red{background:#ffe5e5;color:#d00;}
+.blue{background:#e6f0ff;color:#06c;}
 </style>
 
 <script>
 let allData = [];
 let currentOpen = null;
 
-// 初始化
 fetch('data.json')
-  .then(res => res.json())
-  .then(data => {
+  .then(res=>res.json())
+  .then(data=>{
     allData = data;
     initPrograms(data);
+    renderRecommend(data);
   });
 
-// 初始化专业
 function initPrograms(data){
   const select = document.getElementById('programSelect');
-  const programs = [...new Set(data.map(d => d.program))];
-
-  programs.forEach(p => {
+  const programs = [...new Set(data.map(d=>d.program))];
+  programs.forEach(p=>{
     select.innerHTML += `<option value="${p}">${p}</option>`;
   });
 }
 
-// 推荐更新
 function updateRecommend(){
   const program = document.getElementById('programSelect').value;
   const noEnglish = document.getElementById('noEnglish').checked;
   const noJapanese = document.getElementById('noJapanese').checked;
-  const noContact = document.getElementById('noContact').checked;
 
   let filtered = [...allData];
 
   if(program){
-    filtered = filtered.filter(i => i.program === program);
+    filtered = filtered.filter(i=>i.program===program);
   }
 
   if(noEnglish){
-    filtered = filtered.filter(i => i.english === "不要求");
+    filtered = filtered.filter(i=>i.english==="不要求");
   }
 
   if(noJapanese){
-    filtered = filtered.filter(i => i.japanese === "不要求");
-  }
-
-  if(noContact){
-    filtered = filtered.filter(i => i.contact_professor === false);
+    filtered = filtered.filter(i=>i.japanese==="不要求");
   }
 
   renderRecommend(filtered);
 }
 
-// 卡片渲染（带动画）
 function renderRecommend(data){
   const div = document.getElementById('recommendList');
   div.innerHTML = "";
 
-  data.forEach((item, index) => {
-    div.innerHTML += `
+  if(data.length===0){
+    div.innerHTML="<p>❌ 没有符合条件的院校</p>";
+    return;
+  }
+
+  data.forEach((item,index)=>{
+    div.innerHTML+=`
       <div class="card" onclick="toggleDetail(${index})">
         <div class="card-header">
           <div>
@@ -170,59 +148,51 @@ function renderRecommend(data){
         <div id="detail-${index}" class="detail">
           <div>
             <span class="tag blue">${item.exam_method}</span>
-            ${item.english === "不要求"
-              ? `<span class="tag green">无英语</span>`
-              : `<span class="tag red">${item.english}</span>`}
-            ${item.japanese === "不要求"
-              ? `<span class="tag green">无日语</span>`
-              : `<span class="tag red">${item.japanese}</span>`}
+            ${item.english==="不要求" ? `<span class="tag green">无英语</span>`:`<span class="tag red">${item.english}</span>`}
+            ${item.japanese==="不要求" ? `<span class="tag green">无日语</span>`:`<span class="tag red">${item.japanese}</span>`}
           </div>
           <p>📝 ${item.exam_content}</p>
-          <p>👨‍🏫 ${item.contact_professor ? "需要联系教授" : "无需联系教授"}</p>
         </div>
       </div>
     `;
   });
 }
 
-// 手风琴展开
 function toggleDetail(index){
-  const detail = document.getElementById(`detail-${index}`);
-  const arrow = document.getElementById(`arrow-${index}`);
+  const detail=document.getElementById(`detail-${index}`);
+  const arrow=document.getElementById(`arrow-${index}`);
 
-  if(currentOpen === index){
+  if(currentOpen===index){
     detail.classList.remove("open");
     arrow.classList.remove("open");
-    currentOpen = null;
+    currentOpen=null;
     return;
   }
 
-  if(currentOpen !== null){
+  if(currentOpen!==null){
     document.getElementById(`detail-${currentOpen}`).classList.remove("open");
     document.getElementById(`arrow-${currentOpen}`).classList.remove("open");
   }
 
   detail.classList.add("open");
   arrow.classList.add("open");
-  currentOpen = index;
+  currentOpen=index;
 }
 
-// 学校搜索
 function searchSchool(){
-  const keyword = document.getElementById('schoolSearch').value.trim();
-  const div = document.getElementById('schoolResult');
+  const keyword=document.getElementById('schoolSearch').value.toLowerCase();
+  const div=document.getElementById('schoolResult');
 
   if(!keyword){
-    div.innerHTML = "";
+    div.innerHTML="";
     return;
   }
 
-  let result = allData.filter(i => i.university.includes(keyword));
+  let result=allData.filter(i=>i.university.toLowerCase().includes(keyword));
 
-  div.innerHTML = "";
-
-  result.forEach(item => {
-    div.innerHTML += `
+  div.innerHTML="";
+  result.forEach(item=>{
+    div.innerHTML+=`
       <div class="card">
         <div class="title">${item.university} · ${item.program}</div>
         <div class="time">${item.apply_start} ~ ${item.deadline}</div>
@@ -231,12 +201,10 @@ function searchSchool(){
   });
 }
 
-// 监听
-document.getElementById('programSelect').addEventListener('change', updateRecommend);
-document.getElementById('noEnglish').addEventListener('change', updateRecommend);
-document.getElementById('noJapanese').addEventListener('change', updateRecommend);
-document.getElementById('noContact').addEventListener('change', updateRecommend);
-document.getElementById('schoolSearch').addEventListener('input', searchSchool);
+document.getElementById('programSelect').addEventListener('change',updateRecommend);
+document.getElementById('noEnglish').addEventListener('change',updateRecommend);
+document.getElementById('noJapanese').addEventListener('change',updateRecommend);
+document.getElementById('schoolSearch').addEventListener('input',searchSchool);
 
 </script>
 
