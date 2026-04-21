@@ -1,19 +1,24 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <title>日本研究生募集要项</title>
-</head>
-<body>
-  <h1>日本研究生募集要项整理</h1>
+<input type="checkbox" id="noEnglish"> 不需要英语成绩
 
-  <h2>东京大学</h2>
-  <p>出愿时间：XXXX</p>
-  <p>考试时间：XXXX</p>
+<button onclick="filter()">筛选</button>
 
-  <h2>早稻田大学</h2>
-  <p>出愿时间：XXXX</p>
-  <p>考试时间：XXXX</p>
+<div id="list"></div>
 
-</body>
-</html>
+<script>
+const data = [
+  {name:"东京大学", english:false, japanese:true},
+  {name:"早稻田", english:true, japanese:true}
+];
+
+function filter(){
+  const noEnglish = document.getElementById("noEnglish").checked;
+  const list = document.getElementById("list");
+  list.innerHTML = "";
+
+  data.forEach(s => {
+    if(noEnglish && s.english) return;
+
+    list.innerHTML += "<p>" + s.name + "</p>";
+  });
+}
+</script>
