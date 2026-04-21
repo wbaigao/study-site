@@ -3,9 +3,20 @@
 <h1 style="text-align:center;">日本研究生募集要项</h1>
 
 <!-- 🔍 搜索 -->
-<input type="text" id="searchInput" placeholder="搜索学校/专业" style="width:100%; padding:8px;">
+<input type="text" id="searchInput" placeholder="搜索学校/专业"
+  style="width:100%; padding:10px; font-size:16px;">
 
 <br><br>
+
+<!-- 🔥 正在出愿 -->
+<h2>🔥 正在出愿</h2>
+<div id="ongoing"></div>
+
+<!-- ⏳ 即将开始 -->
+<h2>⏳ 即将开始</h2>
+<div id="upcoming"></div>
+
+<hr>
 
 <!-- 🎯 筛选 -->
 <h3>筛选条件</h3>
@@ -21,10 +32,11 @@
 
 <hr>
 
-<!-- 📊 数据展示 -->
+<!-- 📊 全部结果 -->
+<h2>📊 全部项目</h2>
 <div id="list"></div>
 
-<!-- 🚀 核心脚本 -->
+<!-- 🚀 脚本 -->
 <script>
 let allData = [];
 
@@ -32,27 +44,57 @@ fetch('data.json')
   .then(res => res.json())
   .then(data => {
     allData = data;
+
+    renderSections(data);
     render(data);
   });
 
+function renderCard(item){
+  return `
+    <div style="border:1px solid #ccc; margin:10px; padding:10px; border-radius:8px;">
+      <h3>${item.university} - ${item.program}</h3>
+      <p>出愿时间：${item.apply_start} ~ ${item.deadline}</p>
+      <p>考试方式：${item.exam_method}</p>
+      <p>英语：${item.english} | 日语：${item.japanese}</p>
+    </div>
+  `;
+}
+
+// 🔥 分类推荐
+function renderSections(data){
+  const ongoing = document.getElementById('ongoing');
+  const upcoming = document.getElementById('upcoming');
+
+  ongoing.innerHTML = "";
+  upcoming.innerHTML = "";
+
+  const today = new Date();
+
+  data.forEach(item => {
+    const start = new Date(item.apply_start);
+    const end = new Date(item.deadline);
+
+    if(start <= today && end >= today){
+      ongoing.innerHTML += renderCard(item);
+    }
+
+    if(start > today){
+      upcoming.innerHTML += renderCard(item);
+    }
+  });
+}
+
+// 📊 主列表
 function render(data){
   const list = document.getElementById('list');
   list.innerHTML = "";
 
   data.forEach(item => {
-    list.innerHTML += `
-      <div style="border:1px solid #ccc; margin:10px; padding:10px; border-radius:8px;">
-        <h3>${item.university} - ${item.program}</h3>
-        <p>截止时间：${item.deadline}</p>
-        <p>考试方式：${item.exam_method}</p>
-        <p>考试内容：${item.exam_content}</p>
-        <p>英语：${item.english}</p>
-        <p>日语：${item.japanese}</p>
-      </div>
-    `;
+    list.innerHTML += renderCard(item);
   });
 }
 
+// 🎯 筛选
 function filterData(){
   let filtered = [...allData];
 
@@ -81,11 +123,6 @@ function filterData(){
     );
   }
 
-  // 📅 按截止时间排序（越近越靠前）
-  filtered.sort((a, b) =>
-    new Date(a.deadline) - new Date(b.deadline)
-  );
-
   render(filtered);
 }
 
@@ -100,6 +137,7 @@ function resetFilters(){
   document.getElementById('searchInput').value = "";
 
   render(allData);
+  renderSections(allData);
 }
 </script>
 
