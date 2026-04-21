@@ -16,11 +16,23 @@
 
 <hr>
 
+<!-- 首页列表 -->
 <div id="recommendList"></div>
+
+<!-- 🏫 学校详情页 -->
+<div id="detailPage" style="display:none;">
+
+  <button onclick="backToList()">← 返回</button>
+
+  <h2 id="detailTitle"></h2>
+
+  <div id="detailContent"></div>
+
+</div>
 
 <hr>
 
-<!-- 🔍 检索 -->
+<!-- 🔍 搜索 -->
 <h2>🔍 学校检索</h2>
 
 <input type="text" id="schoolSearch" placeholder="输入学校名称">
@@ -44,30 +56,8 @@ body{
   cursor:pointer;
 }
 
-.card-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-
 .title{font-weight:600;}
 .time{font-size:12px;color:#666;}
-
-.arrow{transition:transform .3s;}
-.arrow.open{transform:rotate(180deg);}
-
-.detail{
-  max-height:0;
-  overflow:hidden;
-  opacity:0;
-  transition:.3s;
-}
-
-.detail.open{
-  max-height:500px;
-  opacity:1;
-  margin-top:10px;
-}
 
 .tag{
   display:inline-block;
@@ -85,7 +75,6 @@ body{
 
 <script>
 let allData = [];
-let currentOpen = null;
 
 fetch('data.json')
   .then(res=>res.json())
@@ -104,7 +93,7 @@ function initPrograms(data){
   });
 }
 
-// 更新推荐
+// 推荐更新
 function updateRecommend(){
   const program = document.getElementById('programSelect').value;
   const noEnglish = document.getElementById('noEnglish').checked;
@@ -127,77 +116,46 @@ function updateRecommend(){
   renderRecommend(filtered);
 }
 
-// 核心渲染（两种模式）
+// 渲染（两种模式）
 function renderRecommend(data){
   const div = document.getElementById('recommendList');
-  div.innerHTML = "";
-
   const program = document.getElementById('programSelect').value;
 
-  if(data.length === 0){
-    div.innerHTML = "<p>❌ 没有符合条件的院校</p>";
+  div.innerHTML = "";
+  document.getElementById('detailPage').style.display = "none";
+  div.style.display = "block";
+
+  if(data.length===0){
+    div.innerHTML="<p>❌ 没有符合条件的院校</p>";
     return;
   }
 
-  // 🟦 未选专业 → 按大学分组
+  // 🟦 首页模式（只显示大学）
   if(!program){
+    const universities = [...new Set(data.map(d=>d.university))];
 
-    const grouped = {};
-    data.forEach(item=>{
-      if(!grouped[item.university]){
-        grouped[item.university] = [];
-      }
-      grouped[item.university].push(item);
+    universities.forEach(uni=>{
+      div.innerHTML += `
+        <div class="card" onclick="openUniversity('${uni}')">
+          <div class="title">🏫 ${uni}</div>
+        </div>
+      `;
     });
 
-    let index = 0;
-
-    for(let uni in grouped){
-      div.innerHTML += `
-        <div class="card" onclick="toggleDetail(${index})">
-          <div class="card-header">
-            <div class="title">${uni}</div>
-            <div id="arrow-${index}" class="arrow">▼</div>
-          </div>
-
-          <div id="detail-${index}" class="detail">
-      `;
-
-      grouped[uni].forEach(item=>{
-        div.innerHTML += `
-          <div style="margin-bottom:10px;">
-            <b>${item.program}</b><br>
-            <span class="time">${item.apply_start} ~ ${item.deadline}</span><br>
-            <span class="tag blue">${item.exam_method}</span>
-          </div>
-        `;
-      });
-
-      div.innerHTML += `</div></div>`;
-      index++;
-    }
-
     return;
   }
 
-  // 🟩 已选专业 → 正常推荐卡片
+  // 🟩 专业模式（可展开）
   data.forEach((item,index)=>{
     div.innerHTML += `
       <div class="card" onclick="toggleDetail(${index})">
-        <div class="card-header">
-          <div>
-            <div class="title">${item.university} · ${item.program}</div>
-            <div class="time">${item.apply_start} ~ ${item.deadline}</div>
-          </div>
-          <div id="arrow-${index}" class="arrow">▼</div>
-        </div>
+        <div class="title">${item.university} · ${item.program}</div>
+        <div class="time">${item.apply_start} ~ ${item.deadline}</div>
 
-        <div id="detail-${index}" class="detail">
-          <div>
-            <span class="tag blue">${item.exam_method}</span>
-            ${item.english==="不要求" ? `<span class="tag green">无英语</span>`:`<span class="tag red">${item.english}</span>`}
-            ${item.japanese==="不要求" ? `<span class="tag green">无日语</span>`:`<span class="tag red">${item.japanese}</span>`}
-          </div>
+        <div id="detail-${index}" style="display:none;margin-top:10px;">
+          <span class="tag blue">${item.exam_method}</span>
+          ${item.english==="不要求" ? `<span class="tag green">无英语</span>`:`<span class="tag red">${item.english}</span>`}
+          ${item.japanese==="不要求" ? `<span class="tag green">无日语</span>`:`<span class="tag red">${item.japanese}</span>`}
           <p>📝 ${item.exam_content}</p>
         </div>
       </div>
@@ -205,29 +163,50 @@ function renderRecommend(data){
   });
 }
 
-// 手风琴展开
+// 展开详情（仅专业模式）
 function toggleDetail(index){
-  const detail=document.getElementById(`detail-${index}`);
-  const arrow=document.getElementById(`arrow-${index}`);
-
-  if(currentOpen===index){
-    detail.classList.remove("open");
-    arrow.classList.remove("open");
-    currentOpen=null;
-    return;
-  }
-
-  if(currentOpen!==null){
-    document.getElementById(`detail-${currentOpen}`).classList.remove("open");
-    document.getElementById(`arrow-${currentOpen}`).classList.remove("open");
-  }
-
-  detail.classList.add("open");
-  arrow.classList.add("open");
-  currentOpen=index;
+  const el = document.getElementById(`detail-${index}`);
+  el.style.display = el.style.display === "none" ? "block" : "none";
 }
 
-// 学校搜索
+// 打开大学详情页
+function openUniversity(uni){
+
+  document.getElementById('recommendList').style.display = "none";
+
+  const page = document.getElementById('detailPage');
+  page.style.display = "block";
+
+  document.getElementById('detailTitle').innerText = "🏫 " + uni;
+
+  const content = document.getElementById('detailContent');
+  content.innerHTML = "";
+
+  let list = allData.filter(i=>i.university===uni);
+
+  list.forEach(item=>{
+    content.innerHTML += `
+      <div class="card">
+        <div class="title">${item.program}</div>
+        <div class="time">${item.apply_start} ~ ${item.deadline}</div>
+
+        <span class="tag blue">${item.exam_method}</span>
+        ${item.english==="不要求" ? `<span class="tag green">无英语</span>`:`<span class="tag red">${item.english}</span>`}
+        ${item.japanese==="不要求" ? `<span class="tag green">无日语</span>`:`<span class="tag red">${item.japanese}</span>`}
+
+        <p>📝 ${item.exam_content}</p>
+      </div>
+    `;
+  });
+}
+
+// 返回首页
+function backToList(){
+  document.getElementById('detailPage').style.display = "none";
+  document.getElementById('recommendList').style.display = "block";
+}
+
+// 搜索
 function searchSchool(){
   const keyword=document.getElementById('schoolSearch').value.toLowerCase();
   const div=document.getElementById('schoolResult');
