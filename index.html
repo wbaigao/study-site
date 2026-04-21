@@ -1,12 +1,9 @@
 <body>
 
-<h1 style="text-align:center;">日本研究生募集要项</h1>
+<h1>日本研究生募集要项</h1>
 
 <!-- 🔍 搜索 -->
-<input type="text" id="searchInput" placeholder="搜索学校/专业"
-  style="width:100%; padding:10px; font-size:16px;">
-
-<br><br>
+<input type="text" id="searchInput" placeholder="搜索学校/专业">
 
 <!-- 🔥 正在出愿 -->
 <h2>🔥 正在出愿</h2>
@@ -32,11 +29,11 @@
 
 <hr>
 
-<!-- 📊 全部结果 -->
+<!-- 📊 全部 -->
 <h2>📊 全部项目</h2>
 <div id="list"></div>
 
-<!-- 🚀 脚本 -->
+<!-- 🚀 核心脚本 -->
 <script>
 let allData = [];
 
@@ -44,23 +41,52 @@ fetch('data.json')
   .then(res => res.json())
   .then(data => {
     allData = data;
-
     renderSections(data);
     render(data);
   });
 
+// 🎨 卡片UI
 function renderCard(item){
   return `
-    <div style="border:1px solid #ccc; margin:10px; padding:10px; border-radius:8px;">
-      <h3>${item.university} - ${item.program}</h3>
-      <p>出愿时间：${item.apply_start} ~ ${item.deadline}</p>
-      <p>考试方式：${item.exam_method}</p>
-      <p>英语：${item.english} | 日语：${item.japanese}</p>
+    <div class="card">
+
+      <div class="title">
+        ${item.university} · ${item.program}
+      </div>
+
+      <div class="time">
+        ${item.apply_start} ~ ${item.deadline}
+      </div>
+
+      <div>
+        <span class="tag blue">${item.exam_method}</span>
+
+        ${item.english === "不要求"
+          ? `<span class="tag green">无英语</span>`
+          : `<span class="tag red">${item.english}</span>`}
+
+        ${item.japanese === "不要求"
+          ? `<span class="tag green">无日语</span>`
+          : `<span class="tag red">${item.japanese}</span>`}
+
+        ${item.contact_professor
+          ? `<span class="tag">需联系教授</span>`
+          : `<span class="tag green">无需联系教授</span>`}
+
+        ${item.has_written_exam
+          ? `<span class="tag red">笔试</span>`
+          : `<span class="tag green">无笔试</span>`}
+
+        ${item.has_interview
+          ? `<span class="tag blue">面试</span>`
+          : ""}
+      </div>
+
     </div>
   `;
 }
 
-// 🔥 分类推荐
+// 🔥 推荐区（时间驱动）
 function renderSections(data){
   const ongoing = document.getElementById('ongoing');
   const upcoming = document.getElementById('upcoming');
@@ -122,6 +148,11 @@ function filterData(){
       item.program.includes(keyword)
     );
   }
+
+  // 📅 排序（快截止优先）
+  filtered.sort((a, b) =>
+    new Date(a.deadline) - new Date(b.deadline)
+  );
 
   render(filtered);
 }
