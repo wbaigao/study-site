@@ -1,114 +1,66 @@
 <body>
 
-<h1>日本研究生募集要项</h1>
+<h1>🎓 日本研究生院校推荐系统</h1>
 
-<!-- 🎓 智能推荐 -->
-<h3>🎓 智能推荐</h3>
+<!-- 🎯 模块1：推荐 -->
+<h2>🎓 院校推荐</h2>
 
-<select id="backgroundSelect">
-  <option value="">选择你的本科专业</option>
-  <option value="计算机">计算机</option>
-  <option value="机械">机械</option>
-  <option value="物理">物理</option>
-  <option value="电子">电子</option>
+<select id="programSelect">
+  <option value="">选择目标专业</option>
 </select>
 
-<button onclick="recommend()">智能推荐</button>
+<br><br>
 
-<div id="recommendResult"></div>
-
-<hr>
-
-<!-- 🎯 专业标签 -->
-<div id="programTags"></div>
-
-<br>
-
-<!-- 🔍 搜索 -->
-<input type="text" id="searchInput" placeholder="搜索学校 / 专业">
-
-<!-- 🔥 正在出愿 -->
-<h2>🔥 正在出愿</h2>
-<div id="ongoing"></div>
-
-<!-- ⏳ 即将开始 -->
-<h2>⏳ 即将开始</h2>
-<div id="upcoming"></div>
-
-<hr>
-
-<!-- 🎯 筛选 -->
+<!-- 筛选 -->
 <label><input type="checkbox" id="noEnglish"> 不需要英语</label>
 <label><input type="checkbox" id="noJapanese"> 不需要日语</label>
-<label><input type="checkbox" id="notExpired"> 未截止</label>
+<label><input type="checkbox" id="noContact"> 无需联系教授</label>
 
 <hr>
 
-<!-- 📊 全部 -->
-<h2>📊 全部项目</h2>
-<div id="list"></div>
+<div id="recommendList"></div>
+
+<hr>
+
+<!-- 🔍 模块2：学校检索 -->
+<h2>🔍 学校检索</h2>
+
+<input type="text" id="schoolSearch" placeholder="输入学校名称">
+
+<div id="schoolResult"></div>
 
 <script>
 let allData = [];
-let selectedProgram = "";
 
-// 读取数据
+// 初始化
 fetch('data.json')
   .then(res => res.json())
   .then(data => {
     allData = data;
-    renderProgramTags(data);
-    updateAll();
+    initPrograms(data);
   });
 
-// 卡片UI
-function renderCard(item){
-  return `
-    <div class="card">
-      <div class="title">${item.university} · ${item.program}</div>
-      <div class="time">${item.apply_start} ~ ${item.deadline}</div>
-    </div>
-  `;
-}
-
-// 自动生成专业标签
-function renderProgramTags(data){
-  const container = document.getElementById('programTags');
+// 🎯 初始化专业下拉
+function initPrograms(data){
+  const select = document.getElementById('programSelect');
   const programs = [...new Set(data.map(d => d.program))];
 
-  container.innerHTML = "";
-
   programs.forEach(p => {
-    container.innerHTML += `
-      <span class="tag" onclick="selectProgram('${p}')">${p}</span>
-    `;
+    select.innerHTML += `<option value="${p}">${p}</option>`;
   });
 }
 
-// 点击标签
-function selectProgram(p){
-  selectedProgram = (selectedProgram === p) ? "" : p;
-  updateAll();
-}
-
-// 核心筛选
-function getFilteredData(){
-  let filtered = [...allData];
-
-  const keyword = document.getElementById('searchInput').value.trim();
+// 🎯 推荐逻辑（核心）
+function updateRecommend(){
+  const program = document.getElementById('programSelect').value;
   const noEnglish = document.getElementById('noEnglish').checked;
   const noJapanese = document.getElementById('noJapanese').checked;
-  const notExpired = document.getElementById('notExpired').checked;
+  const noContact = document.getElementById('noContact').checked;
 
-  if(selectedProgram){
-    filtered = filtered.filter(item => item.program === selectedProgram);
-  }
+  let filtered = [...allData];
 
-  if(keyword){
-    filtered = filtered.filter(item =>
-      item.university.includes(keyword) ||
-      item.program.includes(keyword)
-    );
+  if(program){
+    filtered = filtered.filter(item => item.program === program);
   }
 
   if(noEnglish){
@@ -119,84 +71,83 @@ function getFilteredData(){
     filtered = filtered.filter(item => item.japanese === "不要求");
   }
 
-  if(notExpired){
-    const today = new Date();
-    filtered = filtered.filter(item => new Date(item.deadline) > today);
+  if(noContact){
+    filtered = filtered.filter(item => item.contact_professor === false);
   }
 
-  filtered.sort((a,b)=> new Date(a.deadline)-new Date(b.deadline));
-
-  return filtered;
+  renderRecommend(filtered);
 }
 
-// 更新页面
-function updateAll(){
-  const data = getFilteredData();
-  renderList(data);
-  renderSections(data);
-}
-
-// 列表
-function renderList(data){
-  const list = document.getElementById('list');
-  list.innerHTML = "";
-  data.forEach(item => list.innerHTML += renderCard(item));
-}
-
-// 推荐区
-function renderSections(data){
-  const ongoing = document.getElementById('ongoing');
-  const upcoming = document.getElementById('upcoming');
-
-  ongoing.innerHTML = "";
-  upcoming.innerHTML = "";
-
-  const today = new Date();
+// 🎨 推荐展示
+function renderRecommend(data){
+  const div = document.getElementById('recommendList');
+  div.innerHTML = "";
 
   data.forEach(item => {
-    const start = new Date(item.apply_start);
-    const end = new Date(item.deadline);
-
-    if(start <= today && end >= today){
-      ongoing.innerHTML += renderCard(item);
-    }
-
-    if(start > today){
-      upcoming.innerHTML += renderCard(item);
-    }
+    div.innerHTML += `
+      <div class="card">
+        <h3>${item.university} · ${item.program}</h3>
+        <p>${item.apply_start} ~ ${item.deadline}</p>
+        <p>${item.exam_method}</p>
+        <p>英语：${item.english} | 日语：${item.japanese}</p>
+      </div>
+    `;
   });
 }
 
-// 🔥 智能推荐
-function recommend(){
-  const bg = document.getElementById('backgroundSelect').value;
-  const div = document.getElementById('recommendResult');
+// 🔍 学校搜索
+function searchSchool(){
+  const keyword = document.getElementById('schoolSearch').value.trim();
+  const resultDiv = document.getElementById('schoolResult');
 
-  if(!bg){
-    div.innerHTML = "<p>请先选择本科专业</p>";
+  if(!keyword){
+    resultDiv.innerHTML = "";
     return;
   }
 
   let result = allData.filter(item =>
-    item.allowed_background && item.allowed_background.includes(bg)
+    item.university.includes(keyword)
   );
 
-  result.sort((a,b)=> new Date(a.deadline)-new Date(b.deadline));
-
-  if(result.length === 0){
-    div.innerHTML = "<p>暂无匹配结果</p>";
-    return;
-  }
-
-  div.innerHTML = "<h3>🎯 推荐结果</h3>";
-  result.forEach(item => div.innerHTML += renderCard(item));
+  renderSchool(result);
 }
 
-// 自动触发
-document.getElementById('searchInput').addEventListener('input', updateAll);
-document.getElementById('noEnglish').addEventListener('change', updateAll);
-document.getElementById('noJapanese').addEventListener('change', updateAll);
-document.getElementById('notExpired').addEventListener('change', updateAll);
+// 🏫 学校展示（聚合）
+function renderSchool(data){
+  const div = document.getElementById('schoolResult');
+  div.innerHTML = "";
+
+  // 按学校分组
+  const grouped = {};
+
+  data.forEach(item => {
+    if(!grouped[item.university]){
+      grouped[item.university] = [];
+    }
+    grouped[item.university].push(item);
+  });
+
+  for(let uni in grouped){
+    div.innerHTML += `<h3>🏫 ${uni}</h3>`;
+
+    grouped[uni].forEach(item => {
+      div.innerHTML += `
+        <div class="card">
+          <p>${item.program}</p>
+          <p>${item.apply_start} ~ ${item.deadline}</p>
+          <p>${item.exam_method}</p>
+        </div>
+      `;
+    });
+  }
+}
+
+// 🔥 自动触发
+document.getElementById('programSelect').addEventListener('change', updateRecommend);
+document.getElementById('noEnglish').addEventListener('change', updateRecommend);
+document.getElementById('noJapanese').addEventListener('change', updateRecommend);
+document.getElementById('noContact').addEventListener('change', updateRecommend);
+document.getElementById('schoolSearch').addEventListener('input', searchSchool);
 
 </script>
 
