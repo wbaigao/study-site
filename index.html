@@ -24,25 +24,59 @@
 <div id="list"></div>
 
 <style>
-body{font-family:sans-serif;background:#f5f6f8;padding:15px;}
+body{
+  font-family:sans-serif;
+  background:#f5f6f8;
+  padding:15px;
+}
 
 .card{
   background:#fff;
   border-radius:12px;
-  padding:12px;
-  margin:10px 0;
+  padding:14px;
+  margin:12px 0;
   box-shadow:0 4px 12px rgba(0,0,0,0.08);
+  cursor:pointer;
 }
 
-.title{font-weight:bold;font-size:16px;}
+.card-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:10px;
+}
 
-.time{font-size:12px;color:#666;margin:3px 0;}
+.title{
+  font-weight:bold;
+  font-size:16px;
+}
+
+.sub{
+  color:#444;
+  margin-top:4px;
+}
+
+.time{
+  font-size:12px;
+  color:#666;
+  margin:4px 0;
+}
+
+.arrow{
+  font-size:14px;
+  color:#666;
+  transition:transform .2s ease;
+}
+
+.arrow.open{
+  transform:rotate(180deg);
+}
 
 .tag{
   padding:3px 6px;
   border-radius:5px;
   font-size:12px;
-  margin:3px;
+  margin:3px 3px 0 0;
   display:inline-block;
 }
 
@@ -50,44 +84,104 @@ body{font-family:sans-serif;background:#f5f6f8;padding:15px;}
 .red{background:#ffe5e5;color:#c00;}
 .blue{background:#e6f0ff;color:#06c;}
 .orange{background:#fff3e0;color:#ff9800;}
+.gray{background:#eef1f5;color:#555;}
+
+.detail{
+  display:none;
+  margin-top:12px;
+  padding-top:12px;
+  border-top:1px solid #eee;
+}
+
+.detail.open{
+  display:block;
+}
+
+.detail-section{
+  margin-top:10px;
+}
+
+.detail-title{
+  font-weight:bold;
+  margin-bottom:6px;
+  font-size:14px;
+}
+
+.contact-line{
+  font-size:13px;
+  color:#333;
+  margin:4px 0;
+}
+
+.small-note{
+  font-size:12px;
+  color:#666;
+  margin-top:6px;
+}
 </style>
 
 <script>
-
 let allData = [];
+let currentOpen = null;
 
-// 🔥 核心：兼容你的复杂JSON（自动转换）
+// 兼容两种 JSON 结构
 function transform(raw){
-
-  // 如果已经是数组，直接用
-  if(Array.isArray(raw)) return raw;
+  if(Array.isArray(raw)){
+    return raw.map(item => ({
+      university: item.university || "未知大学",
+      major: item.major || item.department || "未知专攻",
+      course: item.course || "未注明课程",
+      apply_start: item.apply_start || "",
+      apply_end: item.apply_end || "",
+      exam_start: item.exam_start || "",
+      exam_end: item.exam_end || "",
+      english_tests: Array.isArray(item.english_tests) ? item.english_tests : [],
+      require_contact_professor: !!item.require_contact_professor,
+      exam_method: item.exam_method || "未注明",
+      exam_content: item.exam_content || item.exam_detail || "暂无详细考试内容",
+      tuition: item.tuition || "",
+      contact_email: item.contact_email || "",
+      contact_phone: item.contact_phone || "",
+      contact_url: item.contact_url || "",
+      contact_name: item.contact_name || item.major || ""
+    }));
+  }
 
   let result = [];
 
-  // 如果是你那种完整结构
-  if(raw.departments){
+  if(raw && raw.departments){
+    raw.departments.forEach(dep => {
+      const courses = Array.isArray(dep.courses) ? dep.courses : [dep.name];
 
-    raw.departments.forEach(dep=>{
-      dep.courses.forEach(course=>{
+      courses.forEach(course => {
+        let contactInfo = null;
+
+        if (raw.contacts && Array.isArray(raw.contacts)) {
+          contactInfo = raw.contacts.find(c =>
+            c.major === dep.name ||
+            c.course === course ||
+            c.course === dep.name
+          );
+        }
 
         result.push({
           university: raw.meta?.university || "未知大学",
-          major: dep.name,
-          course: course,
-
-          apply_start: raw.timeline?.application?.period?.split(" ~ ")[0] || "未知",
-          apply_end: raw.timeline?.application?.period?.split(" ~ ")[1] || "未知",
-
-          exam_start: raw.timeline?.exam?.period?.split(" ~ ")[0] || "未知",
-          exam_end: raw.timeline?.exam?.period?.split(" ~ ")[1] || "未知",
-
+          major: dep.name || "未知专攻",
+          course: course || "未注明课程",
+          apply_start: raw.timeline?.application?.period?.split(" ~ ")[0] || "",
+          apply_end: raw.timeline?.application?.period?.split(" ~ ")[1] || "",
+          exam_start: raw.timeline?.exam?.period?.split(" ~ ")[0] || "",
+          exam_end: raw.timeline?.exam?.period?.split(" ~ ")[1] || "",
           english_tests: raw.english?.tests || [],
-          require_contact_professor: dep.pre_contact_required || false,
-
-          exam_method: "笔试+面试",
-          tuition: raw.fees?.tuition_year + "円/年"
+          require_contact_professor: !!dep.pre_contact_required,
+          exam_method: raw.exam?.type ? raw.exam.type.join("+") : "笔试+面试",
+          exam_content: dep.exam_content || "请查看募集要项中的该专攻/课程考试科目说明",
+          tuition: raw.fees?.tuition_year ? `${raw.fees.tuition_year}円/年` : "",
+          contact_email: contactInfo?.email || raw.contact?.email || "",
+          contact_phone: contactInfo?.phone || raw.contact?.tel || "",
+          contact_url: contactInfo?.url || "",
+          contact_name: contactInfo?.course || contactInfo?.major || dep.name || ""
         });
-
       });
     });
   }
@@ -95,30 +189,28 @@ function transform(raw){
   return result;
 }
 
-// 👉 初始化专业
 function initMajors(data){
   const select = document.getElementById("majorSelect");
-  const majors = [...new Set(data.map(d => d.major))];
-
-  majors.forEach(m=>{
+  const majors = [...new Set(data.map(d => d.major).filter(Boolean))];
+  majors.forEach(m => {
     select.innerHTML += `<option value="${m}">${m}</option>`;
   });
 }
 
-// 👉 状态判断
 function getStatus(item){
+  if(!item.apply_start || !item.apply_end) return "信息待补充";
+
   const today = new Date();
   const start = new Date(item.apply_start);
   const end = new Date(item.apply_end);
 
+  if(isNaN(start) || isNaN(end)) return "信息待补充";
   if(today > end) return "已截止";
   if(today >= start) return "出愿中";
   return "即将开始";
 }
 
-// 👉 渲染
 function render(data){
-
   const div = document.getElementById("list");
   div.innerHTML = "";
 
@@ -127,45 +219,89 @@ function render(data){
     return;
   }
 
-  data.forEach(item=>{
-
-    let status = getStatus(item);
+  data.forEach((item, index) => {
+    const status = getStatus(item);
+    const statusClass =
+      status === "出愿中" ? "green" :
+      status === "即将开始" ? "orange" :
+      status === "已截止" ? "red" : "gray";
 
     div.innerHTML += `
-      <div class="card">
-
-        <div class="title">${item.university}</div>
-
-        <div>${item.major} · ${item.course}</div>
-
-        <div class="time">
-          📄 出愿：${item.apply_start} ~ ${item.apply_end}
+      <div class="card" onclick="toggleDetail(${index})">
+        <div class="card-header">
+          <div>
+            <div class="title">${item.university}</div>
+            <div class="sub">${item.major} · ${item.course}</div>
+            <div class="time">📄 出愿：${item.apply_start || "未注明"} ~ ${item.apply_end || "未注明"}</div>
+            <div class="time">📝 考试：${item.exam_start || "未注明"} ~ ${item.exam_end || "未注明"}</div>
+          </div>
+          <div id="arrow-${index}" class="arrow">▼</div>
         </div>
 
-        <div class="time">
-          📝 考试：${item.exam_start} ~ ${item.exam_end}
+        <div>
+          <span class="tag ${statusClass}">${status}</span>
+          <span class="tag blue">${item.exam_method || "未注明考试方式"}</span>
+          ${(item.english_tests || []).map(t => `<span class="tag blue">${t}</span>`).join("")}
+          ${item.require_contact_professor ? `<span class="tag red">需联系教授</span>` : ""}
+          ${item.tuition ? `<span class="tag gray">${item.tuition}</span>` : ""}
         </div>
 
-        <span class="tag ${status==="出愿中"?"green":status==="即将开始"?"orange":"red"}">
-          ${status}
-        </span>
+        <div id="detail-${index}" class="detail">
+          <div class="detail-section">
+            <div class="detail-title">考试内容</div>
+            <div class="contact-line">${item.exam_content || "暂无详细考试内容"}</div>
+          </div>
 
-        <span class="tag blue">${item.exam_method}</span>
+          <div class="detail-section">
+            <div class="detail-title">联系方式</div>
+            <div class="contact-line">联系人/方向：${item.contact_name || "未注明"}</div>
+            <div class="contact-line">电话：${item.contact_phone || "未注明"}</div>
+            <div class="contact-line">邮箱：${item.contact_email || "未注明"}</div>
+            <div class="contact-line">
+              官网：${
+                item.contact_url
+                  ? `<a href="${item.contact_url}" target="_blank" rel="noopener noreferrer">${item.contact_url}</a>`
+                  : "未注明"
+              }
+            </div>
+          </div>
 
-        ${item.english_tests.map(t=>`<span class="tag blue">${t}</span>`).join("")}
-
-        ${item.require_contact_professor ? `<span class="tag red">需联系教授</span>` : ""}
-
-        <span class="tag">${item.tuition}</span>
-
+          <div class="detail-section">
+            <div class="detail-title">补充说明</div>
+            <div class="small-note">
+              以上信息建议与官网募集要项再次核对。
+            </div>
+          </div>
+        </div>
       </div>
     `;
   });
 }
 
-// 👉 筛选
-function filter(){
+function toggleDetail(index){
+  const detail = document.getElementById(`detail-${index}`);
+  const arrow = document.getElementById(`arrow-${index}`);
 
+  if(currentOpen === index){
+    detail.classList.remove("open");
+    arrow.classList.remove("open");
+    currentOpen = null;
+    return;
+  }
+
+  if(currentOpen !== null){
+    const oldDetail = document.getElementById(`detail-${currentOpen}`);
+    const oldArrow = document.getElementById(`arrow-${currentOpen}`);
+    if(oldDetail) oldDetail.classList.remove("open");
+    if(oldArrow) oldArrow.classList.remove("open");
+  }
+
+  detail.classList.add("open");
+  arrow.classList.add("open");
+  currentOpen = index;
+}
+
+function filter(){
   const major = document.getElementById("majorSelect").value;
   const english = document.getElementById("englishSelect").value;
   const noContact = document.getElementById("noContact").checked;
@@ -177,32 +313,31 @@ function filter(){
   }
 
   if(english === "none"){
-    data = data.filter(d => d.english_tests.length === 0);
-  }else if(english){
-    data = data.filter(d => d.english_tests.includes(english));
+    data = data.filter(d => !d.english_tests || d.english_tests.length === 0);
+  } else if(english){
+    data = data.filter(d => Array.isArray(d.english_tests) && d.english_tests.includes(english));
   }
 
   if(noContact){
     data = data.filter(d => !d.require_contact_professor);
   }
 
+  currentOpen = null;
   render(data);
 }
 
-// 👉 加载数据
 fetch("data.json")
-.then(res=>res.json())
-.then(raw=>{
-  allData = transform(raw);   // 🔥 自动适配
-  initMajors(allData);
-  render(allData);
-})
-.catch(err=>{
-  document.getElementById("list").innerHTML = "❌ 数据加载失败";
-  console.error(err);
-});
+  .then(res => res.json())
+  .then(raw => {
+    allData = transform(raw);
+    initMajors(allData);
+    render(allData);
+  })
+  .catch(err => {
+    document.getElementById("list").innerHTML = "❌ 数据加载失败";
+    console.error(err);
+  });
 
-// 👉 监听
 document.getElementById("majorSelect").addEventListener("change", filter);
 document.getElementById("englishSelect").addEventListener("change", filter);
 document.getElementById("noContact").addEventListener("change", filter);
