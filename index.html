@@ -2,7 +2,24 @@
 
 <h1>日本研究生募集要项</h1>
 
-<!-- 🎯 专业标签（自动生成） -->
+<!-- 🎓 智能推荐 -->
+<h3>🎓 智能推荐</h3>
+
+<select id="backgroundSelect">
+  <option value="">选择你的本科专业</option>
+  <option value="计算机">计算机</option>
+  <option value="机械">机械</option>
+  <option value="物理">物理</option>
+  <option value="电子">电子</option>
+</select>
+
+<button onclick="recommend()">智能推荐</button>
+
+<div id="recommendResult"></div>
+
+<hr>
+
+<!-- 🎯 专业标签 -->
 <div id="programTags"></div>
 
 <br>
@@ -21,7 +38,6 @@
 <hr>
 
 <!-- 🎯 筛选 -->
-<h3>筛选条件</h3>
 <label><input type="checkbox" id="noEnglish"> 不需要英语</label>
 <label><input type="checkbox" id="noJapanese"> 不需要日语</label>
 <label><input type="checkbox" id="notExpired"> 未截止</label>
@@ -36,16 +52,16 @@
 let allData = [];
 let selectedProgram = "";
 
-// 📥 读取数据
+// 读取数据
 fetch('data.json')
   .then(res => res.json())
   .then(data => {
     allData = data;
-    renderProgramTags(data); // 🔥 自动生成专业标签
+    renderProgramTags(data);
     updateAll();
   });
 
-// 🎨 卡片
+// 卡片UI
 function renderCard(item){
   return `
     <div class="card">
@@ -55,34 +71,27 @@ function renderCard(item){
   `;
 }
 
-// 🔥 自动生成专业标签（核心）
+// 自动生成专业标签
 function renderProgramTags(data){
   const container = document.getElementById('programTags');
-
   const programs = [...new Set(data.map(d => d.program))];
 
   container.innerHTML = "";
 
   programs.forEach(p => {
     container.innerHTML += `
-      <span class="tag" onclick="selectProgram('${p}')">
-        ${p}
-      </span>
+      <span class="tag" onclick="selectProgram('${p}')">${p}</span>
     `;
   });
 }
 
-// 🎯 点击标签筛选
+// 点击标签
 function selectProgram(p){
-  if(selectedProgram === p){
-    selectedProgram = ""; // 再点一次取消
-  }else{
-    selectedProgram = p;
-  }
+  selectedProgram = (selectedProgram === p) ? "" : p;
   updateAll();
 }
 
-// 🔍 核心筛选逻辑
+// 核心筛选
 function getFilteredData(){
   let filtered = [...allData];
 
@@ -91,12 +100,10 @@ function getFilteredData(){
   const noJapanese = document.getElementById('noJapanese').checked;
   const notExpired = document.getElementById('notExpired').checked;
 
-  // 🎯 专业筛选
   if(selectedProgram){
     filtered = filtered.filter(item => item.program === selectedProgram);
   }
 
-  // 🔍 搜索
   if(keyword){
     filtered = filtered.filter(item =>
       item.university.includes(keyword) ||
@@ -104,7 +111,6 @@ function getFilteredData(){
     );
   }
 
-  // 其他筛选
   if(noEnglish){
     filtered = filtered.filter(item => item.english === "不要求");
   }
@@ -118,30 +124,26 @@ function getFilteredData(){
     filtered = filtered.filter(item => new Date(item.deadline) > today);
   }
 
-  // 📅 排序
-  filtered.sort((a, b) =>
-    new Date(a.deadline) - new Date(b.deadline)
-  );
+  filtered.sort((a,b)=> new Date(a.deadline)-new Date(b.deadline));
 
   return filtered;
 }
 
-// 🔄 更新
+// 更新页面
 function updateAll(){
   const data = getFilteredData();
   renderList(data);
   renderSections(data);
-  highlightSelectedTag(); // 🔥 高亮选中
 }
 
-// 📊 列表
+// 列表
 function renderList(data){
   const list = document.getElementById('list');
   list.innerHTML = "";
   data.forEach(item => list.innerHTML += renderCard(item));
 }
 
-// 🔥 推荐区
+// 推荐区
 function renderSections(data){
   const ongoing = document.getElementById('ongoing');
   const upcoming = document.getElementById('upcoming');
@@ -158,28 +160,39 @@ function renderSections(data){
     if(start <= today && end >= today){
       ongoing.innerHTML += renderCard(item);
     }
+
     if(start > today){
       upcoming.innerHTML += renderCard(item);
     }
   });
 }
 
-// 🎨 高亮选中标签
-function highlightSelectedTag(){
-  const tags = document.querySelectorAll('#programTags .tag');
+// 🔥 智能推荐
+function recommend(){
+  const bg = document.getElementById('backgroundSelect').value;
+  const div = document.getElementById('recommendResult');
 
-  tags.forEach(tag => {
-    if(tag.innerText === selectedProgram){
-      tag.style.background = "black";
-      tag.style.color = "white";
-    }else{
-      tag.style.background = "#eee";
-      tag.style.color = "black";
-    }
-  });
+  if(!bg){
+    div.innerHTML = "<p>请先选择本科专业</p>";
+    return;
+  }
+
+  let result = allData.filter(item =>
+    item.allowed_background && item.allowed_background.includes(bg)
+  );
+
+  result.sort((a,b)=> new Date(a.deadline)-new Date(b.deadline));
+
+  if(result.length === 0){
+    div.innerHTML = "<p>暂无匹配结果</p>";
+    return;
+  }
+
+  div.innerHTML = "<h3>🎯 推荐结果</h3>";
+  result.forEach(item => div.innerHTML += renderCard(item));
 }
 
-// 🔥 自动触发
+// 自动触发
 document.getElementById('searchInput').addEventListener('input', updateAll);
 document.getElementById('noEnglish').addEventListener('change', updateAll);
 document.getElementById('noJapanese').addEventListener('change', updateAll);
