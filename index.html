@@ -40,3 +40,24 @@ fetch('data.json')
     });
   });
 </script>
+<h2>筛选条件</h2>
+
+<label>
+  <input type="checkbox" id="noEnglish">
+  不需要英语成绩
+</label>
+
+<label>
+  <input type="checkbox" id="noJapanese">
+  不需要日语成绩
+</label>
+
+<label>
+  <input type="checkbox" id="notExpired">
+  只看未截止
+</label>
+
+<br><br>
+<button onclick="filterData()">筛选</button>
+
+<hr>
