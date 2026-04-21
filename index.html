@@ -3,7 +3,7 @@
 <h1>日本研究生募集要项</h1>
 
 <!-- 🔍 搜索 -->
-<input type="text" id="searchInput" placeholder="搜索学校/专业">
+<input type="text" id="searchInput" placeholder="搜索学校 / 专业">
 
 <!-- 🔥 正在出愿 -->
 <h2>🔥 正在出愿</h2>
@@ -15,17 +15,12 @@
 
 <hr>
 
-<!-- 🎯 筛选 -->
+<!-- 🎯 筛选（自动触发） -->
 <h3>筛选条件</h3>
 
 <label><input type="checkbox" id="noEnglish"> 不需要英语</label>
 <label><input type="checkbox" id="noJapanese"> 不需要日语</label>
 <label><input type="checkbox" id="notExpired"> 未截止</label>
-
-<br><br>
-
-<button onclick="filterData()">筛选</button>
-<button onclick="resetFilters()">重置</button>
 
 <hr>
 
@@ -33,7 +28,6 @@
 <h2>📊 全部项目</h2>
 <div id="list"></div>
 
-<!-- 🚀 核心脚本 -->
 <script>
 let allData = [];
 
@@ -41,22 +35,15 @@ fetch('data.json')
   .then(res => res.json())
   .then(data => {
     allData = data;
-    renderSections(data);
-    render(data);
+    updateAll();
   });
 
 // 🎨 卡片UI
 function renderCard(item){
   return `
     <div class="card">
-
-      <div class="title">
-        ${item.university} · ${item.program}
-      </div>
-
-      <div class="time">
-        ${item.apply_start} ~ ${item.deadline}
-      </div>
+      <div class="title">${item.university} · ${item.program}</div>
+      <div class="time">${item.apply_start} ~ ${item.deadline}</div>
 
       <div>
         <span class="tag blue">${item.exam_method}</span>
@@ -68,25 +55,68 @@ function renderCard(item){
         ${item.japanese === "不要求"
           ? `<span class="tag green">无日语</span>`
           : `<span class="tag red">${item.japanese}</span>`}
-
-        ${item.contact_professor
-          ? `<span class="tag">需联系教授</span>`
-          : `<span class="tag green">无需联系教授</span>`}
-
-        ${item.has_written_exam
-          ? `<span class="tag red">笔试</span>`
-          : `<span class="tag green">无笔试</span>`}
-
-        ${item.has_interview
-          ? `<span class="tag blue">面试</span>`
-          : ""}
       </div>
-
     </div>
   `;
 }
 
-// 🔥 推荐区（时间驱动）
+// 🎯 核心统一过滤逻辑（🔥关键）
+function getFilteredData(){
+  let filtered = [...allData];
+
+  const noEnglish = document.getElementById('noEnglish').checked;
+  const noJapanese = document.getElementById('noJapanese').checked;
+  const notExpired = document.getElementById('notExpired').checked;
+  const keyword = document.getElementById('searchInput').value.trim();
+
+  if(noEnglish){
+    filtered = filtered.filter(item => item.english === "不要求");
+  }
+
+  if(noJapanese){
+    filtered = filtered.filter(item => item.japanese === "不要求");
+  }
+
+  if(notExpired){
+    const today = new Date();
+    filtered = filtered.filter(item => new Date(item.deadline) > today);
+  }
+
+  // 🔥 搜索同时匹配 学校 + 专业
+  if(keyword){
+    filtered = filtered.filter(item =>
+      item.university.includes(keyword) ||
+      item.program.includes(keyword)
+    );
+  }
+
+  // 📅 排序
+  filtered.sort((a, b) =>
+    new Date(a.deadline) - new Date(b.deadline)
+  );
+
+  return filtered;
+}
+
+// 🔄 更新全部区域（核心）
+function updateAll(){
+  const data = getFilteredData();
+
+  renderList(data);
+  renderSections(data);
+}
+
+// 📊 列表
+function renderList(data){
+  const list = document.getElementById('list');
+  list.innerHTML = "";
+
+  data.forEach(item => {
+    list.innerHTML += renderCard(item);
+  });
+}
+
+// 🔥 推荐区
 function renderSections(data){
   const ongoing = document.getElementById('ongoing');
   const upcoming = document.getElementById('upcoming');
@@ -110,66 +140,12 @@ function renderSections(data){
   });
 }
 
-// 📊 主列表
-function render(data){
-  const list = document.getElementById('list');
-  list.innerHTML = "";
+// 🔥 所有交互都自动触发
+document.getElementById('searchInput').addEventListener('input', updateAll);
+document.getElementById('noEnglish').addEventListener('change', updateAll);
+document.getElementById('noJapanese').addEventListener('change', updateAll);
+document.getElementById('notExpired').addEventListener('change', updateAll);
 
-  data.forEach(item => {
-    list.innerHTML += renderCard(item);
-  });
-}
-
-// 🎯 筛选
-function filterData(){
-  let filtered = [...allData];
-
-  const noEnglish = document.getElementById('noEnglish').checked;
-  const noJapanese = document.getElementById('noJapanese').checked;
-  const notExpired = document.getElementById('notExpired').checked;
-  const keyword = document.getElementById('searchInput').value.trim();
-
-  if(noEnglish){
-    filtered = filtered.filter(item => item.english === "不要求");
-  }
-
-  if(noJapanese){
-    filtered = filtered.filter(item => item.japanese === "不要求");
-  }
-
-  if(notExpired){
-    const today = new Date();
-    filtered = filtered.filter(item => new Date(item.deadline) > today);
-  }
-
-  if(keyword){
-    filtered = filtered.filter(item =>
-      item.university.includes(keyword) ||
-      item.program.includes(keyword)
-    );
-  }
-
-  // 📅 排序（快截止优先）
-  filtered.sort((a, b) =>
-    new Date(a.deadline) - new Date(b.deadline)
-  );
-
-  render(filtered);
-}
-
-// 🔍 实时搜索
-document.getElementById('searchInput').addEventListener('input', filterData);
-
-// 🔄 重置
-function resetFilters(){
-  document.getElementById('noEnglish').checked = false;
-  document.getElementById('noJapanese').checked = false;
-  document.getElementById('notExpired').checked = false;
-  document.getElementById('searchInput').value = "";
-
-  render(allData);
-  renderSections(allData);
-}
 </script>
 
 </body>
