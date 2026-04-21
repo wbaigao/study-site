@@ -1,12 +1,204 @@
-[
-  {"university":"东京大学","program":"情报学","apply_start":"2025-12-01","deadline":"2026-01-15","english":"TOEFL","japanese":"不要求","exam_method":"笔试+面试","exam_content":"数学、编程、面试"},
-  {"university":"京都大学","program":"情报学","apply_start":"2025-12-05","deadline":"2026-01-20","english":"必须","japanese":"不要求","exam_method":"笔试+面试","exam_content":"专业课笔试+面试"},
-  {"university":"大阪大学","program":"情报学","apply_start":"2025-12-10","deadline":"2026-01-25","english":"TOEIC/TOEFL","japanese":"N2","exam_method":"面试","exam_content":"研究计划+问答"},
-  {"university":"东北大学","program":"情报学","apply_start":"2025-12-15","deadline":"2026-02-01","english":"不要求","japanese":"N2","exam_method":"材料+面试","exam_content":"书类审核+面试"},
-  {"university":"名古屋大学","program":"情报学","apply_start":"2025-12-20","deadline":"2026-02-05","english":"TOEFL","japanese":"不要求","exam_method":"笔试","exam_content":"数学+专业课"},
-  {"university":"北海道大学","program":"情报学","apply_start":"2025-12-25","deadline":"2026-02-10","english":"TOEIC","japanese":"N2","exam_method":"面试","exam_content":"研究计划说明"},
-  {"university":"九州大学","program":"情报学","apply_start":"2025-12-28","deadline":"2026-02-12","english":"TOEFL","japanese":"不要求","exam_method":"笔试+面试","exam_content":"专业笔试+面试"},
-  {"university":"筑波大学","program":"情报学","apply_start":"2025-11-20","deadline":"2025-12-25","english":"TOEIC/TOEFL","japanese":"不要求","exam_method":"面试","exam_content":"研究计划+面试"},
-  {"university":"神户大学","program":"情报学","apply_start":"2025-12-18","deadline":"2026-02-03","english":"不要求","japanese":"N2","exam_method":"材料+面试","exam_content":"书类审核+面试"},
-  {"university":"广岛大学","program":"情报学","apply_start":"2025-12-22","deadline":"2026-02-08","english":"TOEIC","japanese":"N2","exam_method":"面试","exam_content":"研究计划说明"}
-]
+{
+  "meta": {
+    "university": "大阪大学",
+    "faculty": "工学研究科",
+    "degree": "修士（博士前期課程）",
+    "admission_type": "一般選抜",
+    "intake": "2027-04",
+    "language": "ja",
+    "note": "在留資格が『留学』の外国人は出願不可"
+  },
+
+  "timeline": {
+    "special_accommodation": {
+      "deadline": "2026-05-29"
+    },
+    "eligibility_review": {
+      "apply": "2026-06-09 ~ 2026-06-12",
+      "result": "2026-06-29"
+    },
+    "application_fee": {
+      "period": "2026-06-29 10:00 ~ 2026-07-17 14:00"
+    },
+    "application": {
+      "period": "2026-07-06 ~ 2026-07-17"
+    },
+    "exam": {
+      "period": "2026-08-18 ~ 2026-08-20"
+    },
+    "result": {
+      "date": "2026-08-31 14:00"
+    },
+    "enrollment": {
+      "procedure": "2027-03"
+    }
+  },
+
+  "fees": {
+    "application_fee": 30000,
+    "admission_fee": 282000,
+    "tuition_year": 535800,
+    "currency": "JPY"
+  },
+
+  "eligibility": {
+    "nationality_requirement": [
+      "日本国籍",
+      "永住者",
+      "特別永住者",
+      "定住者"
+    ],
+    "academic": [
+      "学士学位或预计取得",
+      "16年教育经历",
+      "国外学历认可"
+    ],
+    "special_review": {
+      "required_for": "非标准学历",
+      "age_requirement": "22岁以上"
+    }
+  },
+
+  "departments": [
+    {
+      "name": "生物工学",
+      "quota": 63,
+      "courses": ["生物工学"],
+      "pre_contact_required": true
+    },
+    {
+      "name": "応用化学",
+      "quota": 97,
+      "courses": ["分子創成化学", "物質機能化学"],
+      "pre_contact_required": false
+    },
+    {
+      "name": "物理学系",
+      "quota": 72,
+      "courses": ["精密工学", "応用物理学"],
+      "pre_contact_required": false
+    },
+    {
+      "name": "機械工学",
+      "quota": 96,
+      "courses": ["機械工学"],
+      "pre_contact_required": false
+    },
+    {
+      "name": "マテリアル生産科学",
+      "quota": 118,
+      "courses": ["マテリアル科学", "生産科学"],
+      "pre_contact_required": false
+    },
+    {
+      "name": "電気電子情報通信工学",
+      "quota": 141,
+      "courses": ["電気工学", "情報通信工学", "量子情報エレクトロニクス", "イノベーションデザイン"],
+      "pre_contact_required": true
+    },
+    {
+      "name": "環境エネルギー工学",
+      "quota": 82,
+      "courses": ["環境工学", "エネルギー量子工学"],
+      "pre_contact_required": true
+    },
+    {
+      "name": "地球総合工学",
+      "quota": 104,
+      "courses": ["船舶海洋工学", "社会基盤工学", "建築工学"],
+      "pre_contact_required": false
+    },
+    {
+      "name": "ビジネスエンジニアリング",
+      "quota": 38,
+      "courses": ["ビジネスエンジニアリング"],
+      "pre_contact_required": false
+    }
+  ],
+
+  "application_documents": {
+    "required": [
+      "入学願書",
+      "検定料収納証明書",
+      "履歴書",
+      "志望理由書",
+      "成績証明書",
+      "卒業（見込）証明書",
+      "英語能力証明書",
+      "写真票",
+      "受験票送付封筒",
+      "合否送付封筒"
+    ],
+    "conditional": [
+      "在留カード（外国人）",
+      "学位证书（特定情况）",
+      "志望領域申請書（部分専攻）"
+    ]
+  },
+
+  "english": {
+    "tests": ["TOEIC", "TOEFL iBT", "IELTS"],
+    "valid_after": "2024-08-01",
+    "invalid_tests": [
+      "TOEIC IP",
+      "TOEFL ITP",
+      "IELTS General"
+    ],
+    "note": "部分专攻可免提交（英语授课背景）"
+  },
+
+  "exam": {
+    "type": ["笔试", "口试"],
+    "rule": "任何科目缺考=不合格",
+    "major_examples": {
+      "電気電子情報通信工学": [
+        "数学",
+        "电磁理论",
+        "电路",
+        "信息论/算法（部分）"
+      ],
+      "機械工学": [
+        "数学",
+        "力学",
+        "热力学",
+        "流体力学",
+        "控制"
+      ],
+      "ビジネスエンジニアリング": [
+        "数学/物理/化学（选1）",
+        "小论文",
+        "一般工学（选1）"
+      ]
+    }
+  },
+
+  "selection": {
+    "method": "笔试 + 口试 + 材料综合评价"
+  },
+
+  "result": {
+    "method": "官网公布 + 邮寄通知"
+  },
+
+  "score_disclosure": {
+    "period": "2026-09-01 ~ 2026-09-11",
+    "content": [
+      "总分",
+      "合格者最高/最低分（部分情况不公开）"
+    ]
+  },
+
+  "notes": [
+    "部分专攻必须提前联系导师",
+    "产学官共创课程必须事前确认",
+    "不可开车进校考试",
+    "提交材料不可修改",
+    "虚假材料将取消资格"
+  ],
+
+  "contact": {
+    "office": "大阪大学工学研究科教務課入試係",
+    "email": "iso-staff@eng.osaka-u.ac.jp",
+    "tel": "+81-6-6879-7226"
+  }
+}
