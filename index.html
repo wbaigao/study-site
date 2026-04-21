@@ -22,3 +22,21 @@ function filter(){
   });
 }
 </script>
+<div id="list"></div>
+
+<script>
+fetch('data.json')
+  .then(res => res.json())
+  .then(data => {
+    const list = document.getElementById('list');
+
+    data.forEach(item => {
+      list.innerHTML += `
+        <div>
+          <h2>${item.university} - ${item.program}</h2>
+          <p>截止时间：${item.deadline}</p>
+        </div>
+      `;
+    });
+  });
+</script>
