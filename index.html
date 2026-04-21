@@ -1,74 +1,76 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <title>日本研究生募集要项</title>
-</head>
+<script>
+let allData = [];
 
-<body>
+fetch('data.json')
+  .then(res => res.json())
+  .then(data => {
+    allData = data;
+    render(data);
+  });
 
-  <h1>日本研究生募集要项</h1>
+function render(data){
+  const list = document.getElementById('list');
+  list.innerHTML = "";
 
-  <!-- ✅ 这里放筛选UI（第一步那段） -->
-  <h2>筛选条件</h2>
-  <label><input type="checkbox" id="noEnglish"> 不需要英语</label>
-  <label><input type="checkbox" id="noJapanese"> 不需要日语</label>
-  <label><input type="checkbox" id="notExpired"> 未截止</label>
-  <button onclick="filterData()">筛选</button>
+  data.forEach(item => {
+    list.innerHTML += `
+      <div style="border:1px solid #ccc; margin:10px; padding:10px;">
+        <h3>${item.university} - ${item.program}</h3>
+        <p>截止时间：${item.deadline}</p>
+        <p>考试方式：${item.exam_method}</p>
+        <p>英语：${item.english}</p>
+        <p>日语：${item.japanese}</p>
+      </div>
+    `;
+  });
+}
 
-  <hr>
+function filterData(){
+  let filtered = [...allData];
 
-  <!-- ✅ 这里是显示数据的地方 -->
-  <div id="list"></div>
+  const noEnglish = document.getElementById('noEnglish').checked;
+  const noJapanese = document.getElementById('noJapanese').checked;
+  const notExpired = document.getElementById('notExpired').checked;
+  const keyword = document.getElementById('searchInput').value.trim();
 
-  <!-- ✅ 第二步代码放这里（最重要） -->
-  <script>
-    let allData = [];
+  if(noEnglish){
+    filtered = filtered.filter(item => item.english === "不要求");
+  }
 
-    fetch('data.json')
-      .then(res => res.json())
-      .then(data => {
-        allData = data;
-        render(data);
-      });
+  if(noJapanese){
+    filtered = filtered.filter(item => item.japanese === "不要求");
+  }
 
-    function render(data){
-      const list = document.getElementById('list');
-      list.innerHTML = "";
+  if(notExpired){
+    const today = new Date();
+    filtered = filtered.filter(item => new Date(item.deadline) > today);
+  }
 
-      data.forEach(item => {
-        list.innerHTML += `
-          <div>
-            <h3>${item.university} - ${item.program}</h3>
-            <p>截止时间：${item.deadline}</p>
-          </div>
-        `;
-      });
-    }
+  if(keyword){
+    filtered = filtered.filter(item =>
+      item.university.includes(keyword) ||
+      item.program.includes(keyword)
+    );
+  }
 
-    function filterData(){
-      let filtered = allData;
+  // 🔥 自动排序（快截止在前）
+  filtered.sort((a, b) =>
+    new Date(a.deadline) - new Date(b.deadline)
+  );
 
-      const noEnglish = document.getElementById('noEnglish').checked;
-      const noJapanese = document.getElementById('noJapanese').checked;
-      const notExpired = document.getElementById('notExpired').checked;
+  render(filtered);
+}
 
-      if(noEnglish){
-        filtered = filtered.filter(item => item.english === "不要求");
-      }
+// 🔍 实时搜索（输入就触发）
+document.getElementById('searchInput').addEventListener('input', filterData);
 
-      if(noJapanese){
-        filtered = filtered.filter(item => item.japanese === "不要求");
-      }
+// 🔄 重置按钮
+function resetFilters(){
+  document.getElementById('noEnglish').checked = false;
+  document.getElementById('noJapanese').checked = false;
+  document.getElementById('notExpired').checked = false;
+  document.getElementById('searchInput').value = "";
 
-      if(notExpired){
-        const today = new Date();
-        filtered = filtered.filter(item => new Date(item.deadline) > today);
-      }
-
-      render(filtered);
-    }
-  </script>
-
-</body>
-</html>
+  render(allData);
+}
+</script>
