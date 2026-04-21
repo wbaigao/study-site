@@ -1,127 +1,53 @@
-
 [
   {
-    "university": "大阪大学",
     "major": "電気電子情報通信工学",
     "course": "情報通信工学",
-
     "apply_start": "2026-07-06",
     "apply_end": "2026-07-17",
-
     "exam_start": "2026-08-18",
     "exam_end": "2026-08-20",
-
     "english_tests": ["TOEIC", "TOEFL"],
     "require_contact_professor": false,
-
     "exam_method": "笔试+面试",
     "exam_content": "数学、信号处理、通信理论、面试",
-
     "tuition": "535800円/年",
-
     "contact_name": "情報通信工学コース",
-    "contact_phone": "06-6879-XXXX",
-    "contact_email": "info@eei.eng.osaka-u.ac.jp",
+    "contact_phone": "06-6879-7719",
+    "contact_email": "in-nyuushi@eei.eng.osaka-u.ac.jp",
     "contact_url": "http://www.eei.eng.osaka-u.ac.jp/"
   },
-
   {
-    "university": "大阪大学",
-    "major": "電気電子情報通信工学",
-    "course": "電気工学",
-
-    "apply_start": "2026-07-06",
-    "apply_end": "2026-07-17",
-
-    "exam_start": "2026-08-18",
-    "exam_end": "2026-08-20",
-
-    "english_tests": ["TOEIC", "TOEFL"],
-    "require_contact_professor": false,
-
-    "exam_method": "笔试+面试",
-    "exam_content": "数学、电磁场、电路理论、面试",
-
-    "tuition": "535800円/年",
-
-    "contact_name": "電気工学コース",
-    "contact_phone": "06-6879-XXXX",
-    "contact_email": "elec@eei.eng.osaka-u.ac.jp",
-    "contact_url": "http://www.eei.eng.osaka-u.ac.jp/"
-  },
-
-  {
-    "university": "大阪大学",
     "major": "機械工学",
     "course": "機械工学",
-
     "apply_start": "2026-07-06",
     "apply_end": "2026-07-17",
-
     "exam_start": "2026-08-18",
     "exam_end": "2026-08-20",
-
-    "english_tests": ["TOEIC", "TOEFL"],
+    "english_tests": ["TOEIC"],
     "require_contact_professor": false,
-
     "exam_method": "笔试+面试",
-    "exam_content": "数学、材料力学、流体力学、热力学、面试",
-
+    "exam_content": "材料力学、流体力学、热力学、面试",
     "tuition": "535800円/年",
-
     "contact_name": "機械工学専攻",
     "contact_phone": "06-6879-4486",
     "contact_email": "mech-jimushitsu@mech.eng.osaka-u.ac.jp",
     "contact_url": "http://www.mech.eng.osaka-u.ac.jp/"
   },
-
   {
-    "university": "大阪大学",
     "major": "生物工学",
     "course": "生物工学",
-
     "apply_start": "2026-07-06",
     "apply_end": "2026-07-17",
-
     "exam_start": "2026-08-18",
     "exam_end": "2026-08-20",
-
     "english_tests": ["TOEIC", "TOEFL", "IELTS"],
     "require_contact_professor": true,
-
     "exam_method": "笔试+面试",
-    "exam_content": "生物化学、分子生物学、面试（需研究计划）",
-
+    "exam_content": "分子生物学、生物化学、面试（需研究计划）",
     "tuition": "535800円/年",
-
     "contact_name": "生物工学コース",
-    "contact_phone": "06-6879-XXXX",
-    "contact_email": "bio@eng.osaka-u.ac.jp",
+    "contact_phone": "06-6879-7449",
+    "contact_email": "jimu@bio.eng.osaka-u.ac.jp",
     "contact_url": "https://www-bio.eng.osaka-u.ac.jp/"
-  },
-
-  {
-    "university": "大阪大学",
-    "major": "環境エネルギー工学",
-    "course": "環境工学",
-
-    "apply_start": "2026-07-06",
-    "apply_end": "2026-07-17",
-
-    "exam_start": "2026-08-18",
-    "exam_end": "2026-08-20",
-
-    "english_tests": ["TOEIC", "TOEFL"],
-    "require_contact_professor": true,
-
-    "exam_method": "笔试+面试",
-    "exam_content": "环境工程基础、数学、面试（需提前联系）",
-
-    "tuition": "535800円/年",
-
-    "contact_name": "環境工学コース",
-    "contact_phone": "06-6879-7682",
-    "contact_email": "env_administrator@see.eng.osaka-u.ac.jp",
-    "contact_url": "https://see.eng.osaka-u.ac.jp/"
   }
 ]
