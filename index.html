@@ -1,139 +1,733 @@
 <body>
+  <div class="container">
+    <header class="hero">
+      <h1>🎓 日本修士选校系统</h1>
+      <p class="subtitle">先输入你的背景，再查看匹配学校与专业信息</p>
+    </header>
 
-<h1>🎓 日本修士选校系统</h1>
+    <section class="panel search-panel">
+      <h2>🔎 条件搜索</h2>
 
-<h2>🏫 选择学校</h2>
-<div id="schoolList"></div>
+      <div class="filters">
+        <div class="field">
+          <label for="backgroundSelect">我的本科专业</label>
+          <select id="backgroundSelect">
+            <option value="">请选择本科专业</option>
+            <option value="计算机">计算机</option>
+            <option value="软件工程">软件工程</option>
+            <option value="电子信息">电子信息</option>
+            <option value="机械">机械</option>
+            <option value="材料">材料</option>
+            <option value="化学">化学</option>
+            <option value="生物">生物</option>
+            <option value="环境">环境</option>
+            <option value="土木">土木</option>
+            <option value="建筑">建筑</option>
+            <option value="管理工程">管理工程</option>
+            <option value="物理">物理</option>
+          </select>
+        </div>
 
-<hr>
+        <div class="field">
+          <label for="englishSelect">英语情况</label>
+          <select id="englishSelect">
+            <option value="">不限</option>
+            <option value="TOEIC">我有 TOEIC</option>
+            <option value="TOEFL">我有 TOEFL</option>
+            <option value="IELTS">我有 IELTS</option>
+            <option value="none">我没有英语成绩</option>
+          </select>
+        </div>
 
-<div id="detail" style="display:none;">
-  <button onclick="back()">← 返回</button>
-  <h2 id="schoolTitle"></h2>
-
-  <h3>🎯 筛选</h3>
-
-  <select id="majorSelect">
-    <option value="">全部专业</option>
-  </select>
-
-  <select id="englishSelect">
-    <option value="">英语情况</option>
-    <option value="TOEIC">TOEIC</option>
-    <option value="TOEFL">TOEFL</option>
-    <option value="IELTS">IELTS</option>
-    <option value="none">无英语</option>
-  </select>
-
-  <label><input type="checkbox" id="noContact"> 不联系教授</label>
-
-  <hr>
-
-  <div id="list"></div>
-</div>
-
-<script>
-let currentData = [];
-
-// 首页加载学校
-fetch("data/schools.json")
-.then(res=>res.json())
-.then(data=>{
-  const div = document.getElementById("schoolList");
-  data.forEach(s=>{
-    div.innerHTML += `
-      <div onclick="openSchool('${s.id}','${s.name}')"
-           style="background:#fff;padding:12px;margin:10px;border-radius:8px;cursor:pointer;">
-        <b>${s.name}</b><br>
-        ${s.graduate_school}
+        <div class="field checkbox-field">
+          <label>
+            <input type="checkbox" id="noContact" />
+            我不想联系教授
+          </label>
+        </div>
       </div>
-    `;
-  });
-});
 
-// 打开学校
-function openSchool(id,name){
-  document.getElementById("schoolList").style.display="none";
-  document.getElementById("detail").style.display="block";
-  document.getElementById("schoolTitle").innerText=name;
-
-  fetch(`data/${id}.json`)
-  .then(res=>res.json())
-  .then(data=>{
-    currentData = data;
-    initMajors(data);
-    render(data);
-  });
-}
-
-// 返回
-function back(){
-  document.getElementById("schoolList").style.display="block";
-  document.getElementById("detail").style.display="none";
-}
-
-// 初始化专业
-function initMajors(data){
-  const select = document.getElementById("majorSelect");
-  select.innerHTML = `<option value="">全部专业</option>`;
-  const majors = [...new Set(data.map(d=>d.major))];
-  majors.forEach(m=>{
-    select.innerHTML += `<option value="${m}">${m}</option>`;
-  });
-}
-
-// 渲染
-function render(data){
-  const div = document.getElementById("list");
-  div.innerHTML="";
-
-  data.forEach(item=>{
-    div.innerHTML+=`
-      <div style="background:#fff;padding:12px;margin:10px;border-radius:8px;">
-        <b>${item.major} · ${item.course}</b><br>
-        📄 ${item.apply_start} ~ ${item.apply_end}<br>
-        📝 ${item.exam_start} ~ ${item.exam_end}<br>
-
-        ${item.exam_method}<br>
-        ${item.english_tests.join(", ")}<br>
-        ${item.require_contact_professor?"⚠️需联系教授":""}
-
-        <p>${item.exam_content}</p>
-        <p>📧 ${item.contact_email}</p>
+      <div class="actions">
+        <button id="searchBtn" class="primary-btn">开始匹配</button>
+        <button id="resetBtn" class="secondary-btn">重置</button>
       </div>
-    `;
-  });
-}
 
-// 筛选
-function filter(){
-  let data = [...currentData];
+      <div id="searchHint" class="hint">
+        先选择你的本科专业，再开始筛选。
+      </div>
+    </section>
 
-  const major = document.getElementById("majorSelect").value;
-  const eng = document.getElementById("englishSelect").value;
-  const noContact = document.getElementById("noContact").checked;
+    <section class="panel">
+      <div class="section-head">
+        <h2>🏫 学校列表</h2>
+        <span id="resultCount" class="count-badge">0 所学校</span>
+      </div>
+      <div id="schoolList" class="school-grid"></div>
+    </section>
 
-  if(major){
-    data = data.filter(d=>d.major===major);
-  }
+    <section id="detailSection" class="panel detail-section hidden">
+      <div class="detail-top">
+        <button onclick="backToSchools()" class="back-btn">← 返回学校列表</button>
+        <div>
+          <h2 id="schoolTitle">学校详情</h2>
+          <p id="schoolSubtitle" class="subtitle small"></p>
+        </div>
+      </div>
 
-  if(eng==="none"){
-    data = data.filter(d=>d.english_tests.length===0);
-  }else if(eng){
-    data = data.filter(d=>d.english_tests.includes(eng));
-  }
+      <div class="detail-filter-row">
+        <div class="field">
+          <label for="majorSelect">研究方向 / 专业</label>
+          <select id="majorSelect">
+            <option value="">全部专业</option>
+          </select>
+        </div>
+      </div>
 
-  if(noContact){
-    data = data.filter(d=>!d.require_contact_professor);
-  }
+      <div id="majorList" class="major-list"></div>
+    </section>
+  </div>
 
-  render(data);
-}
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-document.getElementById("majorSelect").addEventListener("change",filter);
-document.getElementById("englishSelect").addEventListener("change",filter);
-document.getElementById("noContact").addEventListener("change",filter);
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC",
+        "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      background: #f5f7fb;
+      color: #1f2937;
+    }
 
-</script>
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px 16px 48px;
+    }
 
+    .hero {
+      margin-bottom: 20px;
+    }
+
+    .hero h1 {
+      margin: 0 0 8px;
+      font-size: 40px;
+      line-height: 1.2;
+    }
+
+    .subtitle {
+      margin: 0;
+      color: #6b7280;
+      font-size: 15px;
+    }
+
+    .subtitle.small {
+      margin-top: 6px;
+      font-size: 14px;
+    }
+
+    .panel {
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 20px;
+      margin-bottom: 18px;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+      border: 1px solid #e5e7eb;
+    }
+
+    .search-panel h2,
+    .panel h2 {
+      margin: 0 0 16px;
+      font-size: 24px;
+    }
+
+    .filters {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      align-items: end;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #374151;
+    }
+
+    .checkbox-field {
+      display: flex;
+      align-items: center;
+      padding-bottom: 10px;
+    }
+
+    .checkbox-field label {
+      margin: 0;
+      font-weight: 500;
+    }
+
+    select,
+    button,
+    input[type="checkbox"] {
+      font: inherit;
+    }
+
+    select {
+      width: 100%;
+      border: 1px solid #d1d5db;
+      border-radius: 12px;
+      padding: 12px 14px;
+      background: #fff;
+      color: #111827;
+      outline: none;
+    }
+
+    select:focus {
+      border-color: #6366f1;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+
+    .primary-btn,
+    .secondary-btn,
+    .back-btn {
+      border: none;
+      border-radius: 12px;
+      padding: 11px 16px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .primary-btn {
+      background: #4f46e5;
+      color: #fff;
+    }
+
+    .primary-btn:hover {
+      background: #4338ca;
+    }
+
+    .secondary-btn,
+    .back-btn {
+      background: #eef2ff;
+      color: #3730a3;
+    }
+
+    .secondary-btn:hover,
+    .back-btn:hover {
+      background: #e0e7ff;
+    }
+
+    .hint {
+      margin-top: 14px;
+      font-size: 14px;
+      color: #6b7280;
+    }
+
+    .section-head,
+    .detail-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .count-badge {
+      background: #eef2ff;
+      color: #4338ca;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 8px 12px;
+      border-radius: 999px;
+    }
+
+    .school-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    .school-card {
+      border: 1px solid #e5e7eb;
+      border-radius: 16px;
+      padding: 18px;
+      background: linear-gradient(180deg, #ffffff 0%, #fafbff 100%);
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+      cursor: pointer;
+    }
+
+    .school-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 18px rgba(79, 70, 229, 0.08);
+      border-color: #c7d2fe;
+    }
+
+    .school-card h3 {
+      margin: 0 0 8px;
+      font-size: 24px;
+    }
+
+    .school-card p {
+      margin: 0;
+      color: #6b7280;
+      font-size: 14px;
+    }
+
+    .school-meta {
+      margin-top: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .school-tag {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #f3f4f6;
+      color: #374151;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .open-text {
+      color: #4f46e5;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .detail-filter-row {
+      margin-bottom: 16px;
+    }
+
+    .major-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .major-card {
+      border: 1px solid #e5e7eb;
+      border-radius: 16px;
+      padding: 18px;
+      background: #fff;
+      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+    }
+
+    .major-title {
+      margin: 0 0 8px;
+      font-size: 22px;
+    }
+
+    .major-subtitle {
+      margin: 0 0 14px;
+      font-size: 14px;
+      color: #6b7280;
+    }
+
+    .info-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .info-box {
+      background: #f9fafb;
+      border: 1px solid #eef2f7;
+      border-radius: 12px;
+      padding: 12px;
+      font-size: 14px;
+    }
+
+    .info-box strong {
+      display: block;
+      margin-bottom: 6px;
+      color: #111827;
+    }
+
+    .tag-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .tag-blue {
+      background: #dbeafe;
+      color: #1d4ed8;
+    }
+
+    .tag-red {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .tag-green {
+      background: #dcfce7;
+      color: #15803d;
+    }
+
+    .tag-gray {
+      background: #f3f4f6;
+      color: #4b5563;
+    }
+
+    .content-block {
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px dashed #e5e7eb;
+    }
+
+    .content-block h4 {
+      margin: 0 0 8px;
+      font-size: 15px;
+    }
+
+    .content-block p {
+      margin: 0;
+      line-height: 1.7;
+      color: #374151;
+      font-size: 14px;
+    }
+
+    .contact-list {
+      margin: 0;
+      padding-left: 18px;
+      color: #374151;
+      line-height: 1.8;
+      font-size: 14px;
+    }
+
+    .contact-list a {
+      color: #4f46e5;
+      text-decoration: none;
+      word-break: break-all;
+    }
+
+    .contact-list a:hover {
+      text-decoration: underline;
+    }
+
+    .empty-box {
+      padding: 28px 16px;
+      text-align: center;
+      color: #6b7280;
+      background: #f9fafb;
+      border: 1px dashed #d1d5db;
+      border-radius: 14px;
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 30px;
+      }
+
+      .filters {
+        grid-template-columns: 1fr;
+      }
+
+      .info-row {
+        grid-template-columns: 1fr;
+      }
+
+      .school-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+
+  <script>
+    let schoolsData = [];
+    let currentSchoolId = "";
+    let currentSchoolName = "";
+    let currentSchoolMajors = [];
+    let currentFilteredSchoolIds = [];
+
+    const backgroundMajorMap = {
+      "计算机": ["電気電子情報通信工学", "情報工学", "知能情報", "システム工学", "機械工学"],
+      "软件工程": ["電気電子情報通信工学", "情報工学", "知能情報", "システム工学"],
+      "电子信息": ["電気電子情報通信工学", "情報工学", "量子情報エレクトロニクス"],
+      "机械": ["機械工学", "精密工学", "システム工学"],
+      "材料": ["マテリアル生産科学", "応用化学"],
+      "化学": ["応用化学", "マテリアル生産科学", "環境エネルギー工学"],
+      "生物": ["生物工学", "応用化学"],
+      "环境": ["環境エネルギー工学", "地球総合工学"],
+      "土木": ["地球総合工学", "環境エネルギー工学"],
+      "建筑": ["地球総合工学"],
+      "管理工程": ["ビジネスエンジニアリング"],
+      "物理": ["物理学系", "電気電子情報通信工学", "量子情報エレクトロニクス"]
+    };
+
+    const schoolMetaMap = {
+      "osaka-u": {
+        desc: "工学类专业全面，适合工科背景学生做进一步筛选。",
+        tags: ["国立", "工学强校"]
+      },
+      "tokyo-u": {
+        desc: "研究导向强，适合目标顶尖院校的学生。",
+        tags: ["国立", "顶尖院校"]
+      },
+      "kyoto-u": {
+        desc: "研究型氛围浓厚，适合重视学术发展的学生。",
+        tags: ["国立", "研究型"]
+      }
+    };
+
+    async function loadSchools() {
+      try {
+        const res = await fetch("data/schools.json");
+        const data = await res.json();
+        schoolsData = data;
+        currentFilteredSchoolIds = data.map(item => item.id);
+        renderSchools(data);
+      } catch (err) {
+        document.getElementById("schoolList").innerHTML =
+          '<div class="empty-box">学校列表加载失败，请检查 data/schools.json 是否存在且格式正确。</div>';
+        console.error(err);
+      }
+    }
+
+    function renderSchools(data) {
+      const schoolList = document.getElementById("schoolList");
+      const resultCount = document.getElementById("resultCount");
+      schoolList.innerHTML = "";
+
+      if (!data.length) {
+        schoolList.innerHTML = '<div class="empty-box">当前条件下没有匹配学校，请尝试放宽条件。</div>';
+        resultCount.textContent = "0 所学校";
+        return;
+      }
+
+      resultCount.textContent = `${data.length} 所学校`;
+
+      data.forEach((school) => {
+        const meta = schoolMetaMap[school.id] || { desc: "点击查看该校专业与考试要求。", tags: ["学校"] };
+
+        schoolList.innerHTML += `
+          <div class="school-card" onclick="openSchool('${school.id}', '${school.name}', '${school.graduate_school || ""}')">
+            <h3>${school.name}</h3>
+            <p>${school.graduate_school || ""}</p>
+            <p style="margin-top:8px;">${meta.desc}</p>
+            <div class="school-meta">
+              <div>
+                ${meta.tags.map(tag => `<span class="school-tag">${tag}</span>`).join("")}
+              </div>
+              <span class="open-text">查看详情 →</span>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    async function openSchool(id, name, graduateSchool) {
+      currentSchoolId = id;
+      currentSchoolName = name;
+
+      document.getElementById("detailSection").classList.remove("hidden");
+      document.getElementById("schoolTitle").textContent = name;
+      document.getElementById("schoolSubtitle").textContent = graduateSchool || "";
+
+      try {
+        const res = await fetch(`data/${id}.json`);
+        const data = await res.json();
+        currentSchoolMajors = data;
+        initMajorSelect(data);
+        renderMajorList(data);
+        document.getElementById("detailSection").scrollIntoView({ behavior: "smooth", block: "start" });
+      } catch (err) {
+        document.getElementById("majorList").innerHTML =
+          '<div class="empty-box">该学校数据加载失败，请检查对应 json 文件是否存在且格式正确。</div>';
+        console.error(err);
+      }
+    }
+
+    function backToSchools() {
+      document.getElementById("detailSection").classList.add("hidden");
+      document.getElementById("majorList").innerHTML = "";
+    }
+
+    function initMajorSelect(data) {
+      const majorSelect = document.getElementById("majorSelect");
+      const majors = [...new Set(data.map(item => item.major))];
+
+      majorSelect.innerHTML = `<option value="">全部专业</option>`;
+      majors.forEach((major) => {
+        majorSelect.innerHTML += `<option value="${major}">${major}</option>`;
+      });
+    }
+
+    function renderMajorList(data) {
+      const container = document.getElementById("majorList");
+      container.innerHTML = "";
+
+      if (!data.length) {
+        container.innerHTML = '<div class="empty-box">当前筛选条件下没有匹配专业。</div>';
+        return;
+      }
+
+      data.forEach((item) => {
+        const englishTags = (item.english_tests || []).map(
+          test => `<span class="tag tag-blue">${test}</span>`
+        ).join("");
+
+        const contactTag = item.require_contact_professor
+          ? `<span class="tag tag-red">需联系教授</span>`
+          : `<span class="tag tag-green">可不联系教授</span>`;
+
+        container.innerHTML += `
+          <div class="major-card">
+            <h3 class="major-title">${item.major} · ${item.course}</h3>
+            <p class="major-subtitle">${currentSchoolName}</p>
+
+            <div class="info-row">
+              <div class="info-box">
+                <strong>出愿时间</strong>
+                ${item.apply_start || "未填写"} ~ ${item.apply_end || "未填写"}
+              </div>
+              <div class="info-box">
+                <strong>考试时间</strong>
+                ${item.exam_start || "未填写"} ~ ${item.exam_end || "未填写"}
+              </div>
+              <div class="info-box">
+                <strong>考试方式</strong>
+                ${item.exam_method || "未填写"}
+              </div>
+              <div class="info-box">
+                <strong>学费</strong>
+                ${item.tuition || "未填写"}
+              </div>
+            </div>
+
+            <div class="tag-row">
+              ${englishTags || '<span class="tag tag-gray">英语要求待补充</span>'}
+              ${contactTag}
+            </div>
+
+            <div class="content-block">
+              <h4>考试内容</h4>
+              <p>${item.exam_content || "暂无详细说明"}</p>
+            </div>
+
+            <div class="content-block">
+              <h4>联系方式</h4>
+              <ul class="contact-list">
+                <li>联系人 / 方向：${item.contact_name || "未填写"}</li>
+                <li>电话：${item.contact_phone || "未填写"}</li>
+                <li>邮箱：${item.contact_email || "未填写"}</li>
+                <li>官网：${
+                  item.contact_url
+                    ? `<a href="${item.contact_url}" target="_blank" rel="noopener noreferrer">${item.contact_url}</a>`
+                    : "未填写"
+                }</li>
+              </ul>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    async function runSearch() {
+      const background = document.getElementById("backgroundSelect").value;
+      const english = document.getElementById("englishSelect").value;
+      const noContact = document.getElementById("noContact").checked;
+      const hint = document.getElementById("searchHint");
+
+      if (!background) {
+        hint.textContent = "请先选择你的本科专业。";
+        renderSchools(schoolsData);
+        return;
+      }
+
+      hint.textContent = "正在根据你的背景匹配学校…";
+
+      const targetMajors = backgroundMajorMap[background] || [];
+      const matchedSchoolIds = [];
+
+      for (const school of schoolsData) {
+        try {
+          const res = await fetch(`data/${school.id}.json`);
+          const majors = await res.json();
+
+          const matchedMajors = majors.filter(item => {
+            const majorOk = targetMajors.length ? targetMajors.includes(item.major) : true;
+
+            let englishOk = true;
+            if (english === "none") {
+              englishOk = !item.english_tests || item.english_tests.length === 0;
+            } else if (english) {
+              englishOk = (item.english_tests || []).includes(english);
+            }
+
+            const contactOk = noContact ? !item.require_contact_professor : true;
+
+            return majorOk && englishOk && contactOk;
+          });
+
+          if (matchedMajors.length > 0) {
+            matchedSchoolIds.push(school.id);
+          }
+        } catch (err) {
+          console.error(`读取 ${school.id}.json 失败`, err);
+        }
+      }
+
+      currentFilteredSchoolIds = matchedSchoolIds;
+      const filteredSchools = schoolsData.filter(item => matchedSchoolIds.includes(item.id));
+
+      hint.textContent = filteredSchools.length
+        ? `已根据“${background}”为你找到 ${filteredSchools.length} 所匹配学校。`
+        : `暂时没有找到与你当前条件匹配的学校，可以尝试放宽英语或联系教授条件。`;
+
+      renderSchools(filteredSchools);
+    }
+
+    function resetSearch() {
+      document.getElementById("backgroundSelect").value = "";
+      document.getElementById("englishSelect").value = "";
+      document.getElementById("noContact").checked = false;
+      document.getElementById("searchHint").textContent = "先选择你的本科专业，再开始筛选。";
+      renderSchools(schoolsData);
+    }
+
+    function filterCurrentSchoolMajors() {
+      const selectedMajor = document.getElementById("majorSelect").value;
+      let data = [...currentSchoolMajors];
+
+      if (selectedMajor) {
+        data = data.filter(item => item.major === selectedMajor);
+      }
+
+      renderMajorList(data);
+    }
+
+    document.getElementById("searchBtn").addEventListener("click", runSearch);
+    document.getElementById("resetBtn").addEventListener("click", resetSearch);
+    document.getElementById("majorSelect").addEventListener("change", filterCurrentSchoolMajors);
+
+    loadSchools();
+  </script>
 </body>
