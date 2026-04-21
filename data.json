@@ -1,0 +1,20 @@
+[
+  {
+    "university": "东京大学",
+    "program": "信息理工",
+    "deadline": "2026-01-15",
+    "exam_method": "面试",
+    "exam_content": "研究计划说明",
+    "english": "不要求",
+    "japanese": "不要求"
+  },
+  {
+    "university": "早稻田大学",
+    "program": "计算机",
+    "deadline": "2026-02-01",
+    "exam_method": "笔试+面试",
+    "exam_content": "专业考试",
+    "english": "需要",
+    "japanese": "N2"
+  }
+]
