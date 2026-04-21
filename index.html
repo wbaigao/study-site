@@ -1,3 +1,30 @@
+<body>
+
+<h1 style="text-align:center;">日本研究生募集要项</h1>
+
+<!-- 🔍 搜索 -->
+<input type="text" id="searchInput" placeholder="搜索学校/专业" style="width:100%; padding:8px;">
+
+<br><br>
+
+<!-- 🎯 筛选 -->
+<h3>筛选条件</h3>
+
+<label><input type="checkbox" id="noEnglish"> 不需要英语</label>
+<label><input type="checkbox" id="noJapanese"> 不需要日语</label>
+<label><input type="checkbox" id="notExpired"> 未截止</label>
+
+<br><br>
+
+<button onclick="filterData()">筛选</button>
+<button onclick="resetFilters()">重置</button>
+
+<hr>
+
+<!-- 📊 数据展示 -->
+<div id="list"></div>
+
+<!-- 🚀 核心脚本 -->
 <script>
 let allData = [];
 
@@ -14,10 +41,11 @@ function render(data){
 
   data.forEach(item => {
     list.innerHTML += `
-      <div style="border:1px solid #ccc; margin:10px; padding:10px;">
+      <div style="border:1px solid #ccc; margin:10px; padding:10px; border-radius:8px;">
         <h3>${item.university} - ${item.program}</h3>
         <p>截止时间：${item.deadline}</p>
         <p>考试方式：${item.exam_method}</p>
+        <p>考试内容：${item.exam_content}</p>
         <p>英语：${item.english}</p>
         <p>日语：${item.japanese}</p>
       </div>
@@ -53,7 +81,7 @@ function filterData(){
     );
   }
 
-  // 🔥 自动排序（快截止在前）
+  // 📅 按截止时间排序（越近越靠前）
   filtered.sort((a, b) =>
     new Date(a.deadline) - new Date(b.deadline)
   );
@@ -61,10 +89,10 @@ function filterData(){
   render(filtered);
 }
 
-// 🔍 实时搜索（输入就触发）
+// 🔍 实时搜索
 document.getElementById('searchInput').addEventListener('input', filterData);
 
-// 🔄 重置按钮
+// 🔄 重置
 function resetFilters(){
   document.getElementById('noEnglish').checked = false;
   document.getElementById('noJapanese').checked = false;
@@ -74,3 +102,5 @@ function resetFilters(){
   render(allData);
 }
 </script>
+
+</body>
