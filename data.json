@@ -6,10 +6,8 @@
     "deadline": "2026-01-15",
     "english": "不要求",
     "japanese": "不要求",
-    "contact_professor": false,
     "has_written_exam": false,
     "has_interview": true,
-    "allowed_background": ["计算机", "电子"],
     "exam_method": "面试",
     "exam_content": "研究计划说明、专业问答"
   },
@@ -20,10 +18,8 @@
     "deadline": "2026-01-20",
     "english": "TOEFL",
     "japanese": "N2",
-    "contact_professor": true,
     "has_written_exam": true,
     "has_interview": true,
-    "allowed_background": ["机械", "自动化"],
     "exam_method": "笔试+面试",
     "exam_content": "数学笔试、专业面试"
   },
@@ -34,10 +30,8 @@
     "deadline": "2026-02-01",
     "english": "必须",
     "japanese": "不要求",
-    "contact_professor": false,
     "has_written_exam": true,
     "has_interview": true,
-    "allowed_background": ["物理", "数学"],
     "exam_method": "笔试+面试",
     "exam_content": "物理笔试、面试"
   },
@@ -48,10 +42,8 @@
     "deadline": "2026-02-10",
     "english": "TOEIC",
     "japanese": "N2",
-    "contact_professor": true,
     "has_written_exam": false,
     "has_interview": true,
-    "allowed_background": ["电子", "计算机"],
     "exam_method": "面试",
     "exam_content": "研究计划说明、口头问答"
   },
@@ -62,12 +54,10 @@
     "deadline": "2026-02-15",
     "english": "不要求",
     "japanese": "N2",
-    "contact_professor": false,
     "has_written_exam": false,
     "has_interview": true,
-    "allowed_background": ["材料", "化学", "物理"],
     "exam_method": "材料审查+面试",
-    "exam_content": "书类审核、研究计划面试"
+    "exam_content": "书类审核、面试"
   },
   {
     "university": "名古屋大学",
@@ -76,10 +66,8 @@
     "deadline": "2026-02-20",
     "english": "TOEFL",
     "japanese": "不要求",
-    "contact_professor": true,
     "has_written_exam": true,
     "has_interview": false,
-    "allowed_background": ["化学", "材料"],
     "exam_method": "笔试",
     "exam_content": "化学专业笔试"
   }
