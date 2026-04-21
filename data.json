@@ -2,19 +2,79 @@
   {
     "university": "东京大学",
     "program": "信息理工",
+    "apply_start": "2025-12-01",
     "deadline": "2026-01-15",
-    "exam_method": "面试",
-    "exam_content": "研究计划说明",
     "english": "不要求",
-    "japanese": "不要求"
+    "japanese": "不要求",
+    "contact_professor": false,
+    "has_written_exam": false,
+    "has_interview": true,
+    "exam_method": "面试",
+    "exam_content": "研究计划说明、专业问答"
   },
   {
-    "university": "早稻田大学",
-    "program": "计算机",
-    "deadline": "2026-02-01",
+    "university": "东京大学",
+    "program": "机械工学",
+    "apply_start": "2025-12-05",
+    "deadline": "2026-01-20",
+    "english": "TOEFL",
+    "japanese": "N2",
+    "contact_professor": true,
+    "has_written_exam": true,
+    "has_interview": true,
     "exam_method": "笔试+面试",
-    "exam_content": "专业考试",
-    "english": "需要",
-    "japanese": "N2"
+    "exam_content": "数学笔试、专业面试"
+  },
+  {
+    "university": "京都大学",
+    "program": "物理学",
+    "apply_start": "2025-12-10",
+    "deadline": "2026-02-01",
+    "english": "必须",
+    "japanese": "不要求",
+    "contact_professor": false,
+    "has_written_exam": true,
+    "has_interview": true,
+    "exam_method": "笔试+面试",
+    "exam_content": "物理笔试、面试"
+  },
+  {
+    "university": "大阪大学",
+    "program": "电子工程",
+    "apply_start": "2025-12-15",
+    "deadline": "2026-02-10",
+    "english": "TOEIC",
+    "japanese": "N2",
+    "contact_professor": true,
+    "has_written_exam": false,
+    "has_interview": true,
+    "exam_method": "面试",
+    "exam_content": "研究计划说明、口头问答"
+  },
+  {
+    "university": "东北大学",
+    "program": "材料科学",
+    "apply_start": "2025-12-20",
+    "deadline": "2026-02-15",
+    "english": "不要求",
+    "japanese": "N2",
+    "contact_professor": false,
+    "has_written_exam": false,
+    "has_interview": true,
+    "exam_method": "材料审查+面试",
+    "exam_content": "书类审核、研究计划面试"
+  },
+  {
+    "university": "名古屋大学",
+    "program": "化学",
+    "apply_start": "2025-12-25",
+    "deadline": "2026-02-20",
+    "english": "TOEFL",
+    "japanese": "不要求",
+    "contact_professor": true,
+    "has_written_exam": true,
+    "has_interview": false,
+    "exam_method": "笔试",
+    "exam_content": "化学专业笔试"
   }
 ]
