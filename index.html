@@ -56,7 +56,46 @@ body{font-family:sans-serif;background:#f5f6f8;padding:15px;}
 
 let allData = [];
 
-// 👉 自动生成专业列表
+// 🔥 核心：兼容你的复杂JSON（自动转换）
+function transform(raw){
+
+  // 如果已经是数组，直接用
+  if(Array.isArray(raw)) return raw;
+
+  let result = [];
+
+  // 如果是你那种完整结构
+  if(raw.departments){
+
+    raw.departments.forEach(dep=>{
+      dep.courses.forEach(course=>{
+
+        result.push({
+          university: raw.meta?.university || "未知大学",
+          major: dep.name,
+          course: course,
+
+          apply_start: raw.timeline?.application?.period?.split(" ~ ")[0] || "未知",
+          apply_end: raw.timeline?.application?.period?.split(" ~ ")[1] || "未知",
+
+          exam_start: raw.timeline?.exam?.period?.split(" ~ ")[0] || "未知",
+          exam_end: raw.timeline?.exam?.period?.split(" ~ ")[1] || "未知",
+
+          english_tests: raw.english?.tests || [],
+          require_contact_professor: dep.pre_contact_required || false,
+
+          exam_method: "笔试+面试",
+          tuition: raw.fees?.tuition_year + "円/年"
+        });
+
+      });
+    });
+  }
+
+  return result;
+}
+
+// 👉 初始化专业
 function initMajors(data){
   const select = document.getElementById("majorSelect");
   const majors = [...new Set(data.map(d => d.major))];
@@ -66,7 +105,7 @@ function initMajors(data){
   });
 }
 
-// 👉 判断状态（核心🔥）
+// 👉 状态判断
 function getStatus(item){
   const today = new Date();
   const start = new Date(item.apply_start);
@@ -82,6 +121,11 @@ function render(data){
 
   const div = document.getElementById("list");
   div.innerHTML = "";
+
+  if(data.length === 0){
+    div.innerHTML = "<p>暂无匹配结果</p>";
+    return;
+  }
 
   data.forEach(item=>{
 
@@ -119,7 +163,7 @@ function render(data){
   });
 }
 
-// 👉 筛选逻辑
+// 👉 筛选
 function filter(){
 
   const major = document.getElementById("majorSelect").value;
@@ -145,13 +189,17 @@ function filter(){
   render(data);
 }
 
-// 👉 初始化
+// 👉 加载数据
 fetch("data.json")
 .then(res=>res.json())
-.then(data=>{
-  allData = data;
-  initMajors(data);
-  render(data);
+.then(raw=>{
+  allData = transform(raw);   // 🔥 自动适配
+  initMajors(allData);
+  render(allData);
+})
+.catch(err=>{
+  document.getElementById("list").innerHTML = "❌ 数据加载失败";
+  console.error(err);
 });
 
 // 👉 监听
