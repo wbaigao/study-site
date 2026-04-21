@@ -13,32 +13,26 @@
 
   <h3>🎯 筛选</h3>
 
-  <select id="majorSelect"></select>
+  <select id="majorSelect">
+    <option value="">全部专业</option>
+  </select>
 
   <select id="englishSelect">
     <option value="">英语情况</option>
     <option value="TOEIC">TOEIC</option>
     <option value="TOEFL">TOEFL</option>
     <option value="IELTS">IELTS</option>
+    <option value="none">无英语</option>
   </select>
 
   <label><input type="checkbox" id="noContact"> 不联系教授</label>
 
+  <hr>
+
   <div id="list"></div>
 </div>
 
-<style>
-body{font-family:sans-serif;background:#f5f6f8;padding:15px;}
-.card{background:#fff;padding:12px;margin:10px 0;border-radius:10px;box-shadow:0 3px 10px rgba(0,0,0,0.1);cursor:pointer;}
-.title{font-weight:bold;}
-.tag{padding:3px 6px;border-radius:5px;font-size:12px;margin:3px;display:inline-block;}
-.green{background:#e6f7e6;color:#090;}
-.red{background:#ffe5e5;color:#c00;}
-.blue{background:#e6f0ff;color:#06c;}
-</style>
-
 <script>
-
 let currentData = [];
 
 // 首页加载学校
@@ -46,12 +40,12 @@ fetch("data/schools.json")
 .then(res=>res.json())
 .then(data=>{
   const div = document.getElementById("schoolList");
-
   data.forEach(s=>{
     div.innerHTML += `
-      <div class="card" onclick="openSchool('${s.id}','${s.name}')">
-        <div class="title">${s.name}</div>
-        <div>${s.graduate_school}</div>
+      <div onclick="openSchool('${s.id}','${s.name}')"
+           style="background:#fff;padding:12px;margin:10px;border-radius:8px;cursor:pointer;">
+        <b>${s.name}</b><br>
+        ${s.graduate_school}
       </div>
     `;
   });
@@ -59,7 +53,6 @@ fetch("data/schools.json")
 
 // 打开学校
 function openSchool(id,name){
-
   document.getElementById("schoolList").style.display="none";
   document.getElementById("detail").style.display="block";
   document.getElementById("schoolTitle").innerText=name;
@@ -83,7 +76,6 @@ function back(){
 function initMajors(data){
   const select = document.getElementById("majorSelect");
   select.innerHTML = `<option value="">全部专业</option>`;
-
   const majors = [...new Set(data.map(d=>d.major))];
   majors.forEach(m=>{
     select.innerHTML += `<option value="${m}">${m}</option>`;
@@ -97,17 +89,17 @@ function render(data){
 
   data.forEach(item=>{
     div.innerHTML+=`
-      <div class="card">
-        <div class="title">${item.major} · ${item.course}</div>
-        <div>📄 ${item.apply_start} ~ ${item.apply_end}</div>
-        <div>📝 ${item.exam_start} ~ ${item.exam_end}</div>
+      <div style="background:#fff;padding:12px;margin:10px;border-radius:8px;">
+        <b>${item.major} · ${item.course}</b><br>
+        📄 ${item.apply_start} ~ ${item.apply_end}<br>
+        📝 ${item.exam_start} ~ ${item.exam_end}<br>
 
-        <span class="tag blue">${item.exam_method}</span>
-        ${item.english_tests.map(t=>`<span class="tag blue">${t}</span>`).join("")}
-        ${item.require_contact_professor?`<span class="tag red">需联系教授</span>`:""}
+        ${item.exam_method}<br>
+        ${item.english_tests.join(", ")}<br>
+        ${item.require_contact_professor?"⚠️需联系教授":""}
 
         <p>${item.exam_content}</p>
-        <p>📧 ${item.contact_email || "无"}</p>
+        <p>📧 ${item.contact_email}</p>
       </div>
     `;
   });
@@ -125,7 +117,9 @@ function filter(){
     data = data.filter(d=>d.major===major);
   }
 
-  if(eng){
+  if(eng==="none"){
+    data = data.filter(d=>d.english_tests.length===0);
+  }else if(eng){
     data = data.filter(d=>d.english_tests.includes(eng));
   }
 
