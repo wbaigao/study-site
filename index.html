@@ -1,63 +1,74 @@
-<input type="checkbox" id="noEnglish"> 不需要英语成绩
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>日本研究生募集要项</title>
+</head>
 
-<button onclick="filter()">筛选</button>
+<body>
 
-<div id="list"></div>
+  <h1>日本研究生募集要项</h1>
 
-<script>
-const data = [
-  {name:"东京大学", english:false, japanese:true},
-  {name:"早稻田", english:true, japanese:true}
-];
+  <!-- ✅ 这里放筛选UI（第一步那段） -->
+  <h2>筛选条件</h2>
+  <label><input type="checkbox" id="noEnglish"> 不需要英语</label>
+  <label><input type="checkbox" id="noJapanese"> 不需要日语</label>
+  <label><input type="checkbox" id="notExpired"> 未截止</label>
+  <button onclick="filterData()">筛选</button>
 
-function filter(){
-  const noEnglish = document.getElementById("noEnglish").checked;
-  const list = document.getElementById("list");
-  list.innerHTML = "";
+  <hr>
 
-  data.forEach(s => {
-    if(noEnglish && s.english) return;
+  <!-- ✅ 这里是显示数据的地方 -->
+  <div id="list"></div>
 
-    list.innerHTML += "<p>" + s.name + "</p>";
-  });
-}
-</script>
-<div id="list"></div>
+  <!-- ✅ 第二步代码放这里（最重要） -->
+  <script>
+    let allData = [];
 
-<script>
-fetch('data.json')
-  .then(res => res.json())
-  .then(data => {
-    const list = document.getElementById('list');
+    fetch('data.json')
+      .then(res => res.json())
+      .then(data => {
+        allData = data;
+        render(data);
+      });
 
-    data.forEach(item => {
-      list.innerHTML += `
-        <div>
-          <h2>${item.university} - ${item.program}</h2>
-          <p>截止时间：${item.deadline}</p>
-        </div>
-      `;
-    });
-  });
-</script>
-<h2>筛选条件</h2>
+    function render(data){
+      const list = document.getElementById('list');
+      list.innerHTML = "";
 
-<label>
-  <input type="checkbox" id="noEnglish">
-  不需要英语成绩
-</label>
+      data.forEach(item => {
+        list.innerHTML += `
+          <div>
+            <h3>${item.university} - ${item.program}</h3>
+            <p>截止时间：${item.deadline}</p>
+          </div>
+        `;
+      });
+    }
 
-<label>
-  <input type="checkbox" id="noJapanese">
-  不需要日语成绩
-</label>
+    function filterData(){
+      let filtered = allData;
 
-<label>
-  <input type="checkbox" id="notExpired">
-  只看未截止
-</label>
+      const noEnglish = document.getElementById('noEnglish').checked;
+      const noJapanese = document.getElementById('noJapanese').checked;
+      const notExpired = document.getElementById('notExpired').checked;
 
-<br><br>
-<button onclick="filterData()">筛选</button>
+      if(noEnglish){
+        filtered = filtered.filter(item => item.english === "不要求");
+      }
 
-<hr>
+      if(noJapanese){
+        filtered = filtered.filter(item => item.japanese === "不要求");
+      }
+
+      if(notExpired){
+        const today = new Date();
+        filtered = filtered.filter(item => new Date(item.deadline) > today);
+      }
+
+      render(filtered);
+    }
+  </script>
+
+</body>
+</html>
