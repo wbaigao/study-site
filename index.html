@@ -6,7 +6,7 @@
 <h2>🎓 院校推荐</h2>
 
 <select id="programSelect">
-  <option value="">选择目标专业</option>
+  <option value="">选择目标专业（默认显示大学）</option>
 </select>
 
 <br><br>
@@ -64,7 +64,7 @@ body{
 }
 
 .detail.open{
-  max-height:300px;
+  max-height:500px;
   opacity:1;
   margin-top:10px;
 }
@@ -95,6 +95,7 @@ fetch('data.json')
     renderRecommend(data);
   });
 
+// 初始化专业
 function initPrograms(data){
   const select = document.getElementById('programSelect');
   const programs = [...new Set(data.map(d=>d.program))];
@@ -103,6 +104,7 @@ function initPrograms(data){
   });
 }
 
+// 更新推荐
 function updateRecommend(){
   const program = document.getElementById('programSelect').value;
   const noEnglish = document.getElementById('noEnglish').checked;
@@ -125,17 +127,62 @@ function updateRecommend(){
   renderRecommend(filtered);
 }
 
+// 核心渲染（两种模式）
 function renderRecommend(data){
   const div = document.getElementById('recommendList');
   div.innerHTML = "";
 
-  if(data.length===0){
-    div.innerHTML="<p>❌ 没有符合条件的院校</p>";
+  const program = document.getElementById('programSelect').value;
+
+  if(data.length === 0){
+    div.innerHTML = "<p>❌ 没有符合条件的院校</p>";
     return;
   }
 
+  // 🟦 未选专业 → 按大学分组
+  if(!program){
+
+    const grouped = {};
+    data.forEach(item=>{
+      if(!grouped[item.university]){
+        grouped[item.university] = [];
+      }
+      grouped[item.university].push(item);
+    });
+
+    let index = 0;
+
+    for(let uni in grouped){
+      div.innerHTML += `
+        <div class="card" onclick="toggleDetail(${index})">
+          <div class="card-header">
+            <div class="title">${uni}</div>
+            <div id="arrow-${index}" class="arrow">▼</div>
+          </div>
+
+          <div id="detail-${index}" class="detail">
+      `;
+
+      grouped[uni].forEach(item=>{
+        div.innerHTML += `
+          <div style="margin-bottom:10px;">
+            <b>${item.program}</b><br>
+            <span class="time">${item.apply_start} ~ ${item.deadline}</span><br>
+            <span class="tag blue">${item.exam_method}</span>
+          </div>
+        `;
+      });
+
+      div.innerHTML += `</div></div>`;
+      index++;
+    }
+
+    return;
+  }
+
+  // 🟩 已选专业 → 正常推荐卡片
   data.forEach((item,index)=>{
-    div.innerHTML+=`
+    div.innerHTML += `
       <div class="card" onclick="toggleDetail(${index})">
         <div class="card-header">
           <div>
@@ -158,6 +205,7 @@ function renderRecommend(data){
   });
 }
 
+// 手风琴展开
 function toggleDetail(index){
   const detail=document.getElementById(`detail-${index}`);
   const arrow=document.getElementById(`arrow-${index}`);
@@ -179,6 +227,7 @@ function toggleDetail(index){
   currentOpen=index;
 }
 
+// 学校搜索
 function searchSchool(){
   const keyword=document.getElementById('schoolSearch').value.toLowerCase();
   const div=document.getElementById('schoolResult');
@@ -201,6 +250,7 @@ function searchSchool(){
   });
 }
 
+// 监听
 document.getElementById('programSelect').addEventListener('change',updateRecommend);
 document.getElementById('noEnglish').addEventListener('change',updateRecommend);
 document.getElementById('noJapanese').addEventListener('change',updateRecommend);
