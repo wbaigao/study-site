@@ -1,0 +1,44 @@
+{
+  "id": "nagoya-eng",
+  "name": "名古屋大学 工学研究科",
+  "university": "名古屋大学",
+  "majors": [
+    {
+      "major_name": "机械工程专攻",
+      "degree": "修士",
+      "language": "日语",
+
+      "exam_subjects": "数学 + 力学 + 面试",
+      "application_period": "2025年6月",
+      "exam_date": "2025年8月",
+
+      "tuition": "约535,800日元/年",
+
+      "requirements": "机械相关本科背景",
+      "notes": "需联系导师",
+
+      "contacts": [
+        "https://www.engg.nagoya-u.ac.jp/",
+        "eng-admission@nagoya-u.ac.jp"
+      ]
+    },
+    {
+      "major_name": "材料科学专攻",
+      "degree": "修士",
+      "language": "日语/英语",
+
+      "exam_subjects": "专业课 + 面试",
+      "application_period": "2025年6月",
+      "exam_date": "2025年8月",
+
+      "tuition": "约535,800日元/年",
+
+      "requirements": "理工科背景",
+      "notes": "英文项目可申请",
+
+      "contacts": [
+        "https://www.material.nagoya-u.ac.jp/"
+      ]
+    }
+  ]
+}
