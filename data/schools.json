@@ -1,8 +1,152 @@
-
 [
+  {
+    "id": "tokyo-u",
+    "name": "东京大学",
+    "graduate_school": "工学系研究科 / 情報理工学系研究科"
+  },
+  {
+    "id": "kyoto-u",
+    "name": "京都大学",
+    "graduate_school": "工学研究科 / 情報学研究科"
+  },
   {
     "id": "osaka-u",
     "name": "大阪大学",
     "graduate_school": "工学研究科"
+  },
+  {
+    "id": "tohoku-u",
+    "name": "东北大学",
+    "graduate_school": "工学研究科 / 情報科学研究科"
+  },
+  {
+    "id": "nagoya-u",
+    "name": "名古屋大学",
+    "graduate_school": "工学研究科 / 情報学研究科"
+  },
+  {
+    "id": "kyushu-u",
+    "name": "九州大学",
+    "graduate_school": "工学府 / システム情報科学府"
+  },
+  {
+    "id": "hokkaido-u",
+    "name": "北海道大学",
+    "graduate_school": "工学院 / 情報科学院"
+  },
+  {
+    "id": "tsukuba-u",
+    "name": "筑波大学",
+    "graduate_school": "理工情報生命学術院"
+  },
+  {
+    "id": "science-tokyo",
+    "name": "Science Tokyo",
+    "graduate_school": "理工学系"
+  },
+  {
+    "id": "kobe-u",
+    "name": "神户大学",
+    "graduate_school": "工学研究科 / システム情報学研究科"
+  },
+  {
+    "id": "hiroshima-u",
+    "name": "广岛大学",
+    "graduate_school": "先進理工系科学研究科"
+  },
+  {
+    "id": "chiba-u",
+    "name": "千叶大学",
+    "graduate_school": "融合理工学府"
+  },
+  {
+    "id": "kanazawa-u",
+    "name": "金泽大学",
+    "graduate_school": "自然科学研究科"
+  },
+  {
+    "id": "okayama-u",
+    "name": "冈山大学",
+    "graduate_school": "自然科学研究科"
+  },
+  {
+    "id": "kumamoto-u",
+    "name": "熊本大学",
+    "graduate_school": "自然科学教育部 / 先端科学研究部"
+  },
+  {
+    "id": "niigata-u",
+    "name": "新潟大学",
+    "graduate_school": "自然科学研究科"
+  },
+  {
+    "id": "shinshu-u",
+    "name": "信州大学",
+    "graduate_school": "総合理工学研究科"
+  },
+  {
+    "id": "shizuoka-u",
+    "name": "静冈大学",
+    "graduate_school": "総合科学技術研究科"
+  },
+  {
+    "id": "kagoshima-u",
+    "name": "鹿儿岛大学",
+    "graduate_school": "理工学研究科"
+  },
+  {
+    "id": "nagasaki-u",
+    "name": "长崎大学",
+    "graduate_school": "総合生産科学研究科"
+  },
+  {
+    "id": "gifu-u",
+    "name": "岐阜大学",
+    "graduate_school": "自然科学技術研究科"
+  },
+  {
+    "id": "mie-u",
+    "name": "三重大学",
+    "graduate_school": "工学研究科 / 地域イノベーション学研究科"
+  },
+  {
+    "id": "yamaguchi-u",
+    "name": "山口大学",
+    "graduate_school": "創成科学研究科"
+  },
+  {
+    "id": "gunma-u",
+    "name": "群马大学",
+    "graduate_school": "理工学府"
+  },
+  {
+    "id": "utsunomiya-u",
+    "name": "宇都宫大学",
+    "graduate_school": "地域創生科学研究科"
+  },
+  {
+    "id": "yamagata-u",
+    "name": "山形大学",
+    "graduate_school": "理工学研究科"
+  },
+  {
+    "id": "toyama-u",
+    "name": "富山大学",
+    "graduate_school": "理工学教育部"
+  },
+  {
+    "id": "ehime-u",
+    "name": "爱媛大学",
+    "graduate_school": "理工学研究科"
+  },
+  {
+    "id": "tokushima-u",
+    "name": "德岛大学",
+    "graduate_school": "創成科学研究科 / 社会産業理工学研究部"
+  },
+  {
+    "id": "hirosaki-u",
+    "name": "弘前大学",
+    "graduate_school": "理工学研究科"
   }
 ]
