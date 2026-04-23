@@ -1,12 +1,14 @@
-{
-  "id": "kyoto-u-engineering",
-  "university": "京都大学",
-  "graduate_school": "工学研究科",
-  "desc": "日本顶级工学研究科之一，包含机械、电气、材料、化学等多个方向（2027年度募集要项）"
-}
-{
-  "id": "osaka-u-engineering",
-  "university": "大阪大学",
-  "graduate_school": "工学研究科",
-  "desc": "包含生物工学、应化、机械、电气电子信息通信、环境能源、建筑等方向"
-}
+[
+  {
+    "id": "kyoto-u-engineering",
+    "university": "京都大学",
+    "graduate_school": "工学研究科",
+    "desc": "日本顶级工学研究科之一，包含机械、电气、材料、化学等多个方向（2027年度募集要项）"
+  },
+  {
+    "id": "osaka-u-engineering",
+    "university": "大阪大学",
+    "graduate_school": "工学研究科",
+    "desc": "包含生物工学、应化、机械、电气电子信息通信、环境能源、建筑等方向"
+  }
+]
