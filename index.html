@@ -1,726 +1,732 @@
-<body>
-  <div class="container">
-    <header class="hero">
-      <h1>🎓 日本修士研究科检索系统</h1>
-      <p class="subtitle">按研究科整理募集要项，点击后查看该研究科下的专业与考试信息</p>
-    </header>
-
-    <section class="panel search-panel">
-      <h2>🔎 模糊查询</h2>
-
-      <div class="search-row">
-        <div class="field grow">
-          <label for="keywordInput">输入关键词</label>
-          <input
-            id="keywordInput"
-            type="text"
-            placeholder="例如：工学研究科 / 情報学研究科 / 电气 / 机械 / 名古屋大学"
-          />
-        </div>
-
-        <div class="action-inline">
-          <button id="searchBtn" class="primary-btn">搜索</button>
-          <button id="resetBtn" class="secondary-btn">重置</button>
-        </div>
-      </div>
-
-      <div id="searchHint" class="hint">
-        可搜索大学名、研究科名、专业方向、考试内容等关键词。
-      </div>
-    </section>
-
-    <section class="panel">
-      <div class="section-head">
-        <h2>🏫 研究科列表</h2>
-        <span id="resultCount" class="count-badge">0 个研究科</span>
-      </div>
-      <div id="schoolList" class="school-grid"></div>
-    </section>
-
-    <section id="detailSection" class="panel detail-section hidden">
-      <div class="detail-top">
-        <button onclick="backToList()" class="back-btn">← 返回研究科列表</button>
-        <div>
-          <h2 id="detailTitle">研究科详情</h2>
-          <p id="detailSubtitle" class="subtitle small"></p>
-        </div>
-      </div>
-
-      <div class="detail-toolbar">
-        <div class="field grow">
-          <label for="detailKeywordInput">当前研究科内检索</label>
-          <input
-            id="detailKeywordInput"
-            type="text"
-            placeholder="搜索专业 / 课程 / 考试内容 / 联系方式"
-          />
-        </div>
-      </div>
-
-      <div id="majorList" class="major-list"></div>
-    </section>
-  </div>
-
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC",
-        "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-      background: #f5f7fb;
-      color: #1f2937;
-    }
-
-    .container {
-      max-width: 1120px;
-      margin: 0 auto;
-      padding: 24px 16px 48px;
-    }
-
-    .hero {
-      margin-bottom: 20px;
-    }
-
-    .hero h1 {
-      margin: 0 0 8px;
-      font-size: 40px;
-      line-height: 1.2;
-    }
-
-    .subtitle {
-      margin: 0;
-      color: #6b7280;
-      font-size: 15px;
-    }
-
-    .subtitle.small {
-      margin-top: 6px;
-      font-size: 14px;
-    }
-
-    .panel {
-      background: #fff;
-      border-radius: 18px;
-      padding: 20px;
-      margin-bottom: 18px;
-      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
-      border: 1px solid #e5e7eb;
-    }
-
-    .panel h2 {
-      margin: 0 0 16px;
-      font-size: 24px;
-    }
-
-    .search-row,
-    .detail-toolbar {
-      display: flex;
-      gap: 12px;
-      align-items: end;
-      flex-wrap: wrap;
-    }
-
-    .field {
-      min-width: 220px;
-    }
-
-    .field.grow {
-      flex: 1;
-    }
-
-    .field label {
-      display: block;
-      margin-bottom: 8px;
-      font-size: 14px;
-      font-weight: 600;
-      color: #374151;
-    }
-
-    input,
-    button {
-      font: inherit;
-    }
-
-    input {
-      width: 100%;
-      border: 1px solid #d1d5db;
-      border-radius: 12px;
-      padding: 12px 14px;
-      background: #fff;
-      color: #111827;
-      outline: none;
-    }
-
-    input:focus {
-      border-color: #6366f1;
-      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
-    }
-
-    .action-inline {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .primary-btn,
-    .secondary-btn,
-    .back-btn {
-      border: none;
-      border-radius: 12px;
-      padding: 12px 16px;
-      cursor: pointer;
-      font-weight: 600;
-      white-space: nowrap;
-    }
-
-    .primary-btn {
-      background: #4f46e5;
-      color: #fff;
-    }
-
-    .primary-btn:hover {
-      background: #4338ca;
-    }
-
-    .secondary-btn,
-    .back-btn {
-      background: #eef2ff;
-      color: #3730a3;
-    }
-
-    .secondary-btn:hover,
-    .back-btn:hover {
-      background: #e0e7ff;
-    }
-
-    .hint {
-      margin-top: 14px;
-      font-size: 14px;
-      color: #6b7280;
-    }
-
-    .section-head,
-    .detail-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 14px;
-      flex-wrap: wrap;
-    }
-
-    .count-badge {
-      background: #eef2ff;
-      color: #4338ca;
-      font-size: 13px;
-      font-weight: 700;
-      padding: 8px 12px;
-      border-radius: 999px;
-    }
-
-    .school-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
-      gap: 16px;
-    }
-
-    .school-card {
-      border: 1px solid #e5e7eb;
-      border-radius: 16px;
-      padding: 18px;
-      background: linear-gradient(180deg, #ffffff 0%, #fafbff 100%);
-      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
-      cursor: pointer;
-    }
-
-    .school-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 18px rgba(79, 70, 229, 0.08);
-      border-color: #c7d2fe;
-    }
-
-    .school-card h3 {
-      margin: 0 0 8px;
-      font-size: 22px;
-      line-height: 1.35;
-    }
-
-    .school-card p {
-      margin: 0;
-      color: #6b7280;
-      font-size: 14px;
-      line-height: 1.6;
-    }
-
-    .school-meta {
-      margin-top: 14px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .school-tag {
-      display: inline-block;
-      padding: 6px 10px;
-      border-radius: 999px;
-      background: #f3f4f6;
-      color: #374151;
-      font-size: 12px;
-      font-weight: 600;
-      margin-right: 6px;
-      margin-bottom: 6px;
-    }
-
-    .open-text {
-      color: #4f46e5;
-      font-size: 13px;
-      font-weight: 700;
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    .major-list {
-      display: grid;
-      gap: 14px;
-      margin-top: 16px;
-    }
-
-    .major-card {
-      border: 1px solid #e5e7eb;
-      border-radius: 16px;
-      padding: 18px;
-      background: #fff;
-      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
-    }
-
-    .major-title {
-      margin: 0 0 8px;
-      font-size: 20px;
-      line-height: 1.4;
-    }
-
-    .major-subtitle {
-      margin: 0 0 14px;
-      font-size: 14px;
-      color: #6b7280;
-    }
-
-    .info-row {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-      margin-bottom: 14px;
-    }
-
-    .info-box {
-      background: #f9fafb;
-      border: 1px solid #eef2f7;
-      border-radius: 12px;
-      padding: 12px;
-      font-size: 14px;
-    }
-
-    .info-box strong {
-      display: block;
-      margin-bottom: 6px;
-      color: #111827;
-    }
-
-    .tag-row {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-bottom: 14px;
-    }
-
-    .tag {
-      display: inline-block;
-      padding: 6px 10px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 700;
-    }
-
-    .tag-blue {
-      background: #dbeafe;
-      color: #1d4ed8;
-    }
-
-    .tag-gray {
-      background: #f3f4f6;
-      color: #4b5563;
-    }
-
-    .content-block {
-      margin-top: 14px;
-      padding-top: 14px;
-      border-top: 1px dashed #e5e7eb;
-    }
-
-    .content-block h4 {
-      margin: 0 0 8px;
-      font-size: 15px;
-    }
-
-    .content-block p {
-      margin: 0;
-      line-height: 1.7;
-      color: #374151;
-      font-size: 14px;
-      white-space: pre-wrap;
-    }
-
-    .contact-list {
-      margin: 0;
-      padding-left: 18px;
-      color: #374151;
-      line-height: 1.8;
-      font-size: 14px;
-    }
-
-    .contact-list a {
-      color: #4f46e5;
-      text-decoration: none;
-      word-break: break-all;
-    }
-
-    .contact-list a:hover {
-      text-decoration: underline;
-    }
-
-    .empty-box {
-      padding: 28px 16px;
-      text-align: center;
-      color: #6b7280;
-      background: #f9fafb;
-      border: 1px dashed #d1d5db;
-      border-radius: 14px;
-    }
-
-    @media (max-width: 768px) {
-      .hero h1 {
-        font-size: 30px;
-      }
-
-      .search-row,
-      .detail-toolbar {
-        flex-direction: column;
-        align-items: stretch;
-      }
-
-      .action-inline {
-        width: 100%;
-      }
-
-      .action-inline button {
-        flex: 1;
-      }
-
-      .info-row {
-        grid-template-columns: 1fr;
-      }
-
-      .school-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
-
-  <script>
-    let graduateSchoolsData = [];
-    let currentGraduateSchoolId = "";
-    let currentGraduateSchoolData = null;
-
-    async function loadGraduateSchools() {
-      try {
-        const res = await fetch("data/graduate-schools.json");
-        const data = await res.json();
-        graduateSchoolsData = Array.isArray(data) ? data : [];
-        renderGraduateSchoolCards(graduateSchoolsData);
-      } catch (err) {
-        document.getElementById("schoolList").innerHTML =
-          '<div class="empty-box">研究科列表加载失败，请检查 data/graduate-schools.json 是否存在且格式正确。</div>';
-        console.error(err);
-      }
-    }
-
-    function renderGraduateSchoolCards(data) {
-      const schoolList = document.getElementById("schoolList");
-      const resultCount = document.getElementById("resultCount");
-      schoolList.innerHTML = "";
-
-      if (!data.length) {
-        schoolList.innerHTML = '<div class="empty-box">没有找到匹配研究科，请换个关键词试试。</div>';
-        resultCount.textContent = "0 个研究科";
-        return;
-      }
-
-      resultCount.textContent = ${data.length} 个研究科;
-
-      data.forEach((item) => {
-        schoolList.innerHTML += 
-          <div class="school-card" onclick="openGraduateSchool('${escapeJs(item.id || "")}', '${escapeJs(item.university || "")}', '${escapeJs(item.graduate_school || "")}', '${escapeJs(item.desc || "")}')">
-            <h3>${escapeHtml(item.university || "")}</h3>
-            <p>${escapeHtml(item.graduate_school || "")}</p>
-            <p style="margin-top:8px;">${escapeHtml(item.desc || "点击查看该研究科下的专业信息。")}</p>
-            <div class="school-meta">
-              <div>
-                <span class="school-tag">研究科</span>
-              </div>
-              <span class="open-text">查看专业 →</span>
-            </div>
-          </div>
-        ;
-      });
-    }
-
-    async function openGraduateSchool(id, university, graduateSchool, desc) {
-      currentGraduateSchoolId = id;
-
-      document.getElementById("detailSection").classList.remove("hidden");
-      document.getElementById("detailTitle").textContent = ${university} · ${graduateSchool};
-      document.getElementById("detailSubtitle").textContent = desc || "该研究科下的专业与考试信息";
-
-      try {
-        const res = await fetch(data/${id}.json);
-        const data = await res.json();
-        currentGraduateSchoolData = data;
-        document.getElementById("detailKeywordInput").value = "";
-        renderMajorList(data);
-        document.getElementById("detailSection").scrollIntoView({ behavior: "smooth", block: "start" });
-      } catch (err) {
-        document.getElementById("majorList").innerHTML =
-          '<div class="empty-box">研究科数据加载失败，请检查对应 json 文件是否存在且格式正确。</div>';
-        console.error(err);
-      }
-    }
-
-    function renderMajorList(data) {
-      const container = document.getElementById("majorList");
-      container.innerHTML = "";
-
-      if (!data || !Array.isArray(data.majors) || !data.majors.length) {
-        container.innerHTML = '<div class="empty-box">当前研究科下暂无专业数据。</div>';
-        return;
-      }
-
-      data.majors.forEach((item) => {
-        const englishTags = (item.english_tests || []).length
-          ? (item.english_tests || []).map(
-              test => <span class="tag tag-blue">${escapeHtml(test)}</span>
-            ).join("")
-          : '<span class="tag tag-gray">英语要求未写明</span>';
-
-        container.innerHTML += 
-          <div class="major-card">
-            <h3 class="major-title">${escapeHtml(item.major || "未填写")} · ${escapeHtml(item.course || "未填写")}</h3>
-            <p class="major-subtitle">${escapeHtml(data.university || "")} / ${escapeHtml(data.graduate_school || "")}</p>
-
-            <div class="info-row">
-              <div class="info-box">
-                <strong>出愿时间</strong>
-                ${escapeHtml(item.apply_start || "未填写")} ~ ${escapeHtml(item.apply_end || "未填写")}
-              </div>
-              <div class="info-box">
-                <strong>考试时间</strong>
-                ${escapeHtml(item.exam_start || "未填写")} ~ ${escapeHtml(item.exam_end || "未填写")}
-              </div>
-              <div class="info-box">
-                <strong>考试方式</strong>
-                ${escapeHtml(item.exam_method || "未填写")}
-              </div>
-              <div class="info-box">
-                <strong>学费</strong>
-                ${escapeHtml(item.tuition || "未填写")}
-              </div>
-            </div>
-
-            <div class="info-row">
-              <div class="info-box">
-                <strong>募集人数</strong>
-                ${item.capacity ?? "未填写"}
-              </div>
-              <div class="info-box">
-                <strong>检定料 / 入学料</strong>
-                ${escapeHtml(item.application_fee || "未填写")} / ${escapeHtml(item.admission_fee || "未填写")}
-              </div>
-            </div>
-
-            <div class="tag-row">
-              ${englishTags}
-            </div>
-
-            <div class="content-block">
-              <h4>考试内容</h4>
-              <p>${escapeHtml(item.exam_content || "暂无详细说明")}</p>
-            </div>
-
-            <div class="content-block">
-              <h4>联系方式</h4>
-              <ul class="contact-list">
-                <li>联系人 / 方向：${escapeHtml(item.contact_name || "未填写")}</li>
-                <li>电话：${escapeHtml(item.contact_phone || "未填写")}</li>
-                <li>邮箱：${escapeHtml(item.contact_email || "未填写")}</li>
-                <li>官网：${
-                  item.contact_url
-                    ? <a href="${escapeAttr(item.contact_url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.contact_url)}</a>
-                    : "未填写"
-                }</li>
-              </ul>
-            </div>
-          </div>
-        ;
-      });
-    }
-
-    function backToList() {
-      document.getElementById("detailSection").classList.add("hidden");
-      document.getElementById("majorList").innerHTML = "";
-      document.getElementById("detailKeywordInput").value = "";
-    }
-
-    async function runSearch() {
-      const keyword = document.getElementById("keywordInput").value.trim().toLowerCase();
-      const hint = document.getElementById("searchHint");
-
-      if (!keyword) {
-        hint.textContent = "请输入关键词后再搜索。";
-        renderGraduateSchoolCards(graduateSchoolsData);
-        return;
-      }
-
-      hint.textContent = "正在检索研究科数据…";
-
-      const matchedIds = [];
-
-      for (const item of graduateSchoolsData) {
-        try {
-          const cardText = [
-            item.university,
-            item.graduate_school,
-            item.desc
-          ].filter(Boolean).join(" ").toLowerCase();
-
-          if (cardText.includes(keyword)) {
-            matchedIds.push(item.id);
-            continue;
-          }
-
-          const res = await fetch(data/${item.id}.json);
-          const data = await res.json();
-
-          if (matchesGraduateSchoolData(data, keyword)) {
-            matchedIds.push(item.id);
-          }
-        } catch (err) {
-          console.error(读取 ${item.id}.json 失败, err);
-        }
-      }
-
-      const filtered = graduateSchoolsData.filter(item => matchedIds.includes(item.id));
-
-      hint.textContent = filtered.length
-        ? 找到 ${filtered.length} 个匹配研究科。
-        : "没有找到匹配研究科，请换个关键词试试。";
-
-      renderGraduateSchoolCards(filtered);
-    }
-
-    function matchesGraduateSchoolData(data, keyword) {
-      if (!data) return false;
-
-      const headText = [
-        data.university,
-        data.graduate_school
-      ].filter(Boolean).join(" ").toLowerCase();
-
-      if (headText.includes(keyword)) return true;
-
-      const majors = Array.isArray(data.majors) ? data.majors : [];
-
-      return majors.some(item => {
-        const text = [
-          item.major,
-          item.course,
-          item.exam_method,
-          item.exam_content,
-          item.contact_name,
-          item.contact_email
-        ].filter(Boolean).join(" ").toLowerCase();
-
-        return text.includes(keyword);
-      });
-    }
-
-    function resetSearch() {
-      document.getElementById("keywordInput").value = "";
-      document.getElementById("searchHint").textContent = "可搜索大学名、研究科名、专业方向、考试内容等关键词。";
-      renderGraduateSchoolCards(graduateSchoolsData);
-    }
-
-    function filterCurrentGraduateSchool() {
-      const keyword = document.getElementById("detailKeywordInput").value.trim().toLowerCase();
-
-      if (!currentGraduateSchoolData) return;
-
-      if (!keyword) {
-        renderMajorList(currentGraduateSchoolData);
-        return;
-      }
-
-      const filteredMajors = (currentGraduateSchoolData.majors || []).filter(item => {
-        const text = [
-          item.major,
-          item.course,
-          item.exam_method,
-          item.exam_content,
-          item.contact_name,
-          item.contact_email
-        ].filter(Boolean).join(" ").toLowerCase();
-
-        return text.includes(keyword);
-      });
-
-      renderMajorList({
-        ...currentGraduateSchoolData,
-        majors: filteredMajors
-      });
-    }
-
-    function escapeHtml(value) {
-      return String(value)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#39;");
-    }
-
-    function escapeAttr(value) {
-      return String(value).replace(/"/g, "&quot;");
-    }
-
-    function escapeJs(value) {
-      return String(value)
-        .replace(/\\/g, "\\\\")
-        .replace(/'/g, "\\'")
-        .replace(/"/g, '\\"');
-    }
-
-    document.getElementById("searchBtn").addEventListener("click", runSearch);
-    document.getElementById("resetBtn").addEventListener("click", resetSearch);
-    document.getElementById("keywordInput").addEventListener("keydown", (e) => {
-      if (e.key === "Enter") runSearch();
-    });
-    document.getElementById("detailKeywordInput").addEventListener("input", filterCurrentGraduateSchool);
-
-    loadGraduateSchools();
-  </script>
-</body>
+diff --git a/C:\Users\xu\Desktop\募集要项网站项目\index.html b/C:\Users\xu\Desktop\募集要项网站项目\index.html
+new file mode 100644
+--- /dev/null
++++ b/C:\Users\xu\Desktop\募集要项网站项目\index.html
+@@ -0,0 +1,727 @@
++<!doctype html>
++<html lang="zh-CN">
++<head>
++  <meta charset="UTF-8">
++  <meta name="viewport" content="width=device-width, initial-scale=1.0">
++  <title>&#x65e5;&#x672c;&#x4fee;&#x58eb;&#x7814;&#x7a76;&#x79d1;&#x68c0;&#x7d22;&#x7cfb;&#x7edf;</title>
++  <style>
++    * {
++      box-sizing: border-box;
++    }
++
++    body {
++      margin: 0;
++      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC",
++        "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
++      background: #f5f7fb;
++      color: #1f2937;
++    }
++
++    .container {
++      max-width: 1120px;
++      margin: 0 auto;
++      padding: 24px 16px 48px;
++    }
++
++    .hero {
++      margin-bottom: 20px;
++    }
++
++    .hero h1 {
++      margin: 0 0 8px;
++      font-size: 40px;
++      line-height: 1.2;
++    }
++
++    .subtitle {
++      margin: 0;
++      color: #6b7280;
++      font-size: 15px;
++    }
++
++    .subtitle.small {
++      margin-top: 6px;
++      font-size: 14px;
++    }
++
++    .panel {
++      background: #fff;
++      border: 1px solid #e5e7eb;
++      border-radius: 18px;
++      padding: 20px;
++      margin-bottom: 18px;
++      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
++    }
++
++    .panel h2 {
++      margin: 0 0 16px;
++      font-size: 24px;
++    }
++
++    .search-row,
++    .detail-toolbar {
++      display: flex;
++      gap: 12px;
++      align-items: end;
++      flex-wrap: wrap;
++    }
++
++    .field {
++      min-width: 220px;
++    }
++
++    .field.grow {
++      flex: 1;
++    }
++
++    .field label {
++      display: block;
++      margin-bottom: 8px;
++      font-size: 14px;
++      font-weight: 600;
++      color: #374151;
++    }
++
++    input,
++    button {
++      font: inherit;
++    }
++
++    input {
++      width: 100%;
++      border: 1px solid #d1d5db;
++      border-radius: 12px;
++      padding: 12px 14px;
++      background: #fff;
++      color: #111827;
++      outline: none;
++    }
++
++    input:focus {
++      border-color: #6366f1;
++      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
++    }
++
++    .action-inline {
++      display: flex;
++      gap: 10px;
++      flex-wrap: wrap;
++    }
++
++    .primary-btn,
++    .secondary-btn,
++    .back-btn {
++      border: none;
++      border-radius: 12px;
++      padding: 12px 16px;
++      cursor: pointer;
++      font-weight: 600;
++      white-space: nowrap;
++    }
++
++    .primary-btn {
++      background: #4f46e5;
++      color: #fff;
++    }
++
++    .primary-btn:hover {
++      background: #4338ca;
++    }
++
++    .secondary-btn,
++    .back-btn {
++      background: #eef2ff;
++      color: #3730a3;
++    }
++
++    .secondary-btn:hover,
++    .back-btn:hover {
++      background: #e0e7ff;
++    }
++
++    .hint {
++      margin-top: 14px;
++      font-size: 14px;
++      color: #6b7280;
++    }
++
++    .section-head,
++    .detail-top {
++      display: flex;
++      justify-content: space-between;
++      align-items: center;
++      gap: 12px;
++      margin-bottom: 14px;
++      flex-wrap: wrap;
++    }
++
++    .count-badge {
++      background: #eef2ff;
++      color: #4338ca;
++      font-size: 13px;
++      font-weight: 700;
++      padding: 8px 12px;
++      border-radius: 999px;
++    }
++
++    .school-grid {
++      display: grid;
++      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
++      gap: 16px;
++    }
++
++    .school-card {
++      border: 1px solid #e5e7eb;
++      border-radius: 16px;
++      padding: 18px;
++      background: linear-gradient(180deg, #ffffff 0%, #fafbff 100%);
++      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
++      cursor: pointer;
++    }
++
++    .school-card:hover {
++      transform: translateY(-2px);
++      box-shadow: 0 8px 18px rgba(79, 70, 229, 0.08);
++      border-color: #c7d2fe;
++    }
++
++    .school-card h3 {
++      margin: 0 0 8px;
++      font-size: 22px;
++      line-height: 1.35;
++    }
++
++    .school-card p {
++      margin: 0;
++      color: #6b7280;
++      font-size: 14px;
++      line-height: 1.6;
++    }
++
++    .school-meta {
++      margin-top: 14px;
++      display: flex;
++      justify-content: space-between;
++      align-items: center;
++      gap: 8px;
++      flex-wrap: wrap;
++    }
++
++    .school-tag {
++      display: inline-block;
++      padding: 6px 10px;
++      border-radius: 999px;
++      background: #f3f4f6;
++      color: #374151;
++      font-size: 12px;
++      font-weight: 600;
++      margin-right: 6px;
++      margin-bottom: 6px;
++    }
++
++    .open-text {
++      color: #4f46e5;
++      font-size: 13px;
++      font-weight: 700;
++    }
++
++    .hidden {
++      display: none;
++    }
++
++    .major-list {
++      display: grid;
++      gap: 14px;
++      margin-top: 16px;
++    }
++
++    .major-card {
++      border: 1px solid #e5e7eb;
++      border-radius: 16px;
++      padding: 18px;
++      background: #fff;
++      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
++    }
++
++    .major-title {
++      margin: 0 0 8px;
++      font-size: 20px;
++      line-height: 1.4;
++    }
++
++    .major-subtitle {
++      margin: 0 0 14px;
++      font-size: 14px;
++      color: #6b7280;
++    }
++
++    .info-row {
++      display: grid;
++      grid-template-columns: repeat(2, minmax(0, 1fr));
++      gap: 10px;
++      margin-bottom: 14px;
++    }
++
++    .info-box {
++      background: #f9fafb;
++      border: 1px solid #eef2f7;
++      border-radius: 12px;
++      padding: 12px;
++      font-size: 14px;
++      overflow-wrap: anywhere;
++    }
++
++    .info-box strong {
++      display: block;
++      margin-bottom: 6px;
++      color: #111827;
++    }
++
++    .tag-row {
++      display: flex;
++      gap: 8px;
++      flex-wrap: wrap;
++      margin-bottom: 14px;
++    }
++
++    .tag {
++      display: inline-block;
++      padding: 6px 10px;
++      border-radius: 999px;
++      font-size: 12px;
++      font-weight: 700;
++    }
++
++    .tag-blue {
++      background: #dbeafe;
++      color: #1d4ed8;
++    }
++
++    .tag-gray {
++      background: #f3f4f6;
++      color: #4b5563;
++    }
++
++    .content-block {
++      margin-top: 14px;
++      padding-top: 14px;
++      border-top: 1px dashed #e5e7eb;
++    }
++
++    .content-block h4 {
++      margin: 0 0 8px;
++      font-size: 15px;
++    }
++
++    .content-block p {
++      margin: 0;
++      line-height: 1.7;
++      color: #374151;
++      font-size: 14px;
++      white-space: pre-wrap;
++    }
++
++    .contact-list {
++      margin: 0;
++      padding-left: 18px;
++      color: #374151;
++      line-height: 1.8;
++      font-size: 14px;
++    }
++
++    .contact-list a {
++      color: #4f46e5;
++      text-decoration: none;
++      word-break: break-all;
++    }
++
++    .contact-list a:hover {
++      text-decoration: underline;
++    }
++
++    .empty-box {
++      padding: 28px 16px;
++      text-align: center;
++      color: #6b7280;
++      background: #f9fafb;
++      border: 1px dashed #d1d5db;
++      border-radius: 14px;
++    }
++
++    @media (max-width: 768px) {
++      .hero h1 {
++        font-size: 30px;
++      }
++
++      .search-row,
++      .detail-toolbar {
++        flex-direction: column;
++        align-items: stretch;
++      }
++
++      .action-inline {
++        width: 100%;
++      }
++
++      .action-inline button {
++        flex: 1;
++      }
++
++      .info-row {
++        grid-template-columns: 1fr;
++      }
++
++      .school-grid {
++        grid-template-columns: 1fr;
++      }
++    }
++  </style>
++</head>
++<body>
++  <div class="container">
++    <header class="hero">
++      <h1>&#x65e5;&#x672c;&#x4fee;&#x58eb;&#x7814;&#x7a76;&#x79d1;&#x68c0;&#x7d22;&#x7cfb;&#x7edf;</h1>
++      <p class="subtitle">&#x6309;&#x7814;&#x7a76;&#x79d1;&#x6574;&#x7406;&#x52df;&#x96c6;&#x8981;&#x9879;&#xff0c;&#x70b9;&#x51fb;&#x540e;&#x67e5;&#x770b;&#x8be5;&#x7814;&#x7a76;&#x79d1;&#x4e0b;&#x7684;&#x4e13;&#x4e1a;&#x4e0e;&#x8003;&#x8bd5;&#x4fe1;&#x606f;</p>
++    </header>
++
++    <section class="panel search-panel">
++      <h2>&#x6a21;&#x7cca;&#x67e5;&#x8be2;</h2>
++
++      <div class="search-row">
++        <div class="field grow">
++          <label for="keywordInput">&#x8f93;&#x5165;&#x5173;&#x952e;&#x8bcd;</label>
++          <input
++            id="keywordInput"
++            type="text"
++            placeholder="&#x4f8b;&#x5982;&#xff1a;&#x5de5;&#x5b66;&#x7814;&#x7a76;&#x79d1; / &#x60c5;&#x62a5;&#x5b66;&#x7814;&#x7a76;&#x79d1; / &#x7535;&#x6c14; / &#x673a;&#x68b0; / &#x540d;&#x53e4;&#x5c4b;&#x5927;&#x5b66;"
++          >
++        </div>
++
++        <div class="action-inline">
++          <button id="searchBtn" class="primary-btn" type="button">&#x641c;&#x7d22;</button>
++          <button id="resetBtn" class="secondary-btn" type="button">&#x91cd;&#x7f6e;</button>
++        </div>
++      </div>
++
++      <div id="searchHint" class="hint">
++        &#x53ef;&#x641c;&#x7d22;&#x5927;&#x5b66;&#x540d;&#x3001;&#x7814;&#x7a76;&#x79d1;&#x540d;&#x3001;&#x4e13;&#x4e1a;&#x65b9;&#x5411;&#x3001;&#x8003;&#x8bd5;&#x5185;&#x5bb9;&#x7b49;&#x5173;&#x952e;&#x8bcd;&#x3002;
++      </div>
++    </section>
++
++    <section class="panel">
++      <div class="section-head">
++        <h2>&#x7814;&#x7a76;&#x79d1;&#x5217;&#x8868;</h2>
++        <span id="resultCount" class="count-badge">0 &#x4e2a;&#x7814;&#x7a76;&#x79d1;</span>
++      </div>
++      <div id="schoolList" class="school-grid"></div>
++    </section>
++
++    <section id="detailSection" class="panel detail-section hidden">
++      <div class="detail-top">
++        <button id="backBtn" class="back-btn" type="button">&#x2190; &#x8fd4;&#x56de;&#x7814;&#x7a76;&#x79d1;&#x5217;&#x8868;</button>
++        <div>
++          <h2 id="detailTitle">&#x7814;&#x7a76;&#x79d1;&#x8be6;&#x60c5;</h2>
++          <p id="detailSubtitle" class="subtitle small"></p>
++        </div>
++      </div>
++
++      <div class="detail-toolbar">
++        <div class="field grow">
++          <label for="detailKeywordInput">&#x5f53;&#x524d;&#x7814;&#x7a76;&#x79d1;&#x5185;&#x68c0;&#x7d22;</label>
++          <input
++            id="detailKeywordInput"
++            type="text"
++            placeholder="&#x641c;&#x7d22;&#x4e13;&#x4e1a; / &#x8bfe;&#x7a0b; / &#x8003;&#x8bd5;&#x5185;&#x5bb9; / &#x8054;&#x7cfb;&#x65b9;&#x5f0f;"
++          >
++        </div>
++      </div>
++
++      <div id="majorList" class="major-list"></div>
++    </section>
++  </div>
++
++  <script>
++    let graduateSchoolsData = [];
++    let currentGraduateSchoolData = null;
++
++    const text = {
++      loadFailed: "\u7814\u7a76\u79d1\u5217\u8868\u52a0\u8f7d\u5931\u8d25\uff0c\u8bf7\u68c0\u67e5 data/graduate-schools.json \u662f\u5426\u5b58\u5728\u4e14\u683c\u5f0f\u6b63\u786e\u3002",
++      noMatch: "\u6ca1\u6709\u627e\u5230\u5339\u914d\u7814\u7a76\u79d1\uff0c\u8bf7\u6362\u4e2a\u5173\u952e\u8bcd\u8bd5\u8bd5\u3002",
++      countSuffix: " \u4e2a\u7814\u7a76\u79d1",
++      defaultDesc: "\u70b9\u51fb\u67e5\u770b\u8be5\u7814\u7a76\u79d1\u4e0b\u7684\u4e13\u4e1a\u4fe1\u606f\u3002",
++      emptyKeyword: "\u8bf7\u8f93\u5165\u5173\u952e\u8bcd\u540e\u518d\u641c\u7d22\u3002",
++      searching: "\u6b63\u5728\u68c0\u7d22\u7814\u7a76\u79d1\u6570\u636e...",
++      foundPrefix: "\u627e\u5230 ",
++      foundSuffix: " \u4e2a\u5339\u914d\u7814\u7a76\u79d1\u3002",
++      resetHint: "\u53ef\u641c\u7d22\u5927\u5b66\u540d\u3001\u7814\u7a76\u79d1\u540d\u3001\u4e13\u4e1a\u65b9\u5411\u3001\u8003\u8bd5\u5185\u5bb9\u7b49\u5173\u952e\u8bcd\u3002",
++      detailFallback: "\u8be5\u7814\u7a76\u79d1\u4e0b\u7684\u4e13\u4e1a\u4e0e\u8003\u8bd5\u4fe1\u606f",
++      detailLoadFailed: "\u7814\u7a76\u79d1\u6570\u636e\u52a0\u8f7d\u5931\u8d25\uff0c\u8bf7\u68c0\u67e5\u5bf9\u5e94 json \u6587\u4ef6\u662f\u5426\u5b58\u5728\u4e14\u683c\u5f0f\u6b63\u786e\u3002",
++      noMajors: "\u5f53\u524d\u7814\u7a76\u79d1\u4e0b\u6682\u65e0\u4e13\u4e1a\u6570\u636e\u3002",
++      missing: "\u672a\u586b\u5199",
++      noExamContent: "\u6682\u65e0\u8be6\u7ec6\u8bf4\u660e",
++      noEnglish: "\u82f1\u8bed\u8981\u6c42\u672a\u5199\u660e"
++    };
++
++    async function loadGraduateSchools() {
++      try {
++        const data = await fetchJson("./data/graduate-schools.json");
++        graduateSchoolsData = Array.isArray(data) ? data : [];
++        renderGraduateSchoolCards(graduateSchoolsData);
++      } catch (err) {
++        document.getElementById("schoolList").innerHTML = emptyBox(text.loadFailed);
++        console.error(err);
++      }
++    }
++
++    async function fetchJson(url) {
++      const res = await fetch(url, { cache: "no-store" });
++      if (!res.ok) throw new Error(url + " HTTP " + res.status);
++      return res.json();
++    }
++
++    function getGraduateSchoolName(item) {
++      if (item.graduate_school) return item.graduate_school;
++      if (item.name && item.university) return item.name.replace(item.university, "").trim();
++      return item.name || "";
++    }
++
++    function renderGraduateSchoolCards(data) {
++      const schoolList = document.getElementById("schoolList");
++      const resultCount = document.getElementById("resultCount");
++      schoolList.innerHTML = "";
++
++      if (!data.length) {
++        schoolList.innerHTML = emptyBox(text.noMatch);
++        resultCount.textContent = "0" + text.countSuffix;
++        return;
++      }
++
++      resultCount.textContent = String(data.length) + text.countSuffix;
++
++      data.forEach(function(item) {
++        const graduateSchool = getGraduateSchoolName(item);
++        const card = document.createElement("div");
++        card.className = "school-card";
++        card.innerHTML =
++          "<h3>" + escapeHtml(item.university || "") + "</h3>" +
++          "<p>" + escapeHtml(graduateSchool) + "</p>" +
++          '<p style="margin-top:8px;">' + escapeHtml(item.desc || text.defaultDesc) + "</p>" +
++          '<div class="school-meta">' +
++            "<div><span class=\"school-tag\">\u7814\u7a76\u79d1</span></div>" +
++            '<span class="open-text">\u67e5\u770b\u4e13\u4e1a \u2192</span>' +
++          "</div>";
++        card.addEventListener("click", function() {
++          openGraduateSchool(item.id || "", item.university || "", graduateSchool, item.desc || "");
++        });
++        schoolList.appendChild(card);
++      });
++    }
++
++    async function openGraduateSchool(id, university, graduateSchool, desc) {
++      document.getElementById("detailSection").classList.remove("hidden");
++      document.getElementById("detailTitle").textContent = university + " · " + graduateSchool;
++      document.getElementById("detailSubtitle").textContent = desc || text.detailFallback;
++
++      try {
++        const data = await fetchJson("./data/" + id + ".json");
++        currentGraduateSchoolData = data;
++        document.getElementById("detailKeywordInput").value = "";
++        renderMajorList(data);
++        document.getElementById("detailSection").scrollIntoView({ behavior: "smooth", block: "start" });
++      } catch (err) {
++        document.getElementById("majorList").innerHTML = emptyBox(text.detailLoadFailed);
++        console.error(err);
++      }
++    }
++
++    function renderMajorList(data) {
++      const container = document.getElementById("majorList");
++      container.innerHTML = "";
++
++      if (!data || !Array.isArray(data.majors) || !data.majors.length) {
++        container.innerHTML = emptyBox(text.noMajors);
++        return;
++      }
++
++      data.majors.forEach(function(item) {
++        const englishTags = Array.isArray(item.english_tests) && item.english_tests.length
++          ? item.english_tests.map(function(test) {
++              return '<span class="tag tag-blue">' + escapeHtml(test) + "</span>";
++            }).join("")
++          : '<span class="tag tag-gray">' + text.noEnglish + "</span>";
++
++        const card = document.createElement("div");
++        card.className = "major-card";
++        card.innerHTML =
++          '<h3 class="major-title">' + escapeHtml(item.major || text.missing) + " · " + escapeHtml(item.course || text.missing) + "</h3>" +
++          '<p class="major-subtitle">' + escapeHtml(data.university || "") + " / " + escapeHtml(data.graduate_school || "") + "</p>" +
++          '<div class="info-row">' +
++            infoBox("\u51fa\u613f\u65f6\u95f4", (item.apply_start || text.missing) + " ~ " + (item.apply_end || text.missing)) +
++            infoBox("\u8003\u8bd5\u65f6\u95f4", (item.exam_start || text.missing) + " ~ " + (item.exam_end || text.missing)) +
++            infoBox("\u8003\u8bd5\u65b9\u5f0f", item.exam_method || text.missing) +
++            infoBox("\u5b66\u8d39", item.tuition || text.missing) +
++          "</div>" +
++          '<div class="info-row">' +
++            infoBox("\u52df\u96c6\u4eba\u6570", item.capacity == null ? text.missing : item.capacity) +
++            infoBox("\u68c0\u5b9a\u6599 / \u5165\u5b66\u6599", (item.application_fee || text.missing) + " / " + (item.admission_fee || text.missing)) +
++          "</div>" +
++          '<div class="tag-row">' + englishTags + "</div>" +
++          '<div class="content-block"><h4>\u8003\u8bd5\u5185\u5bb9</h4><p>' + escapeHtml(item.exam_content || text.noExamContent) + "</p></div>" +
++          '<div class="content-block"><h4>\u8054\u7cfb\u65b9\u5f0f</h4>' +
++            '<ul class="contact-list">' +
++              "<li>\u8054\u7cfb\u4eba / \u65b9\u5411\uff1a" + escapeHtml(item.contact_name || text.missing) + "</li>" +
++              "<li>\u7535\u8bdd\uff1a" + escapeHtml(item.contact_phone || text.missing) + "</li>" +
++              "<li>\u90ae\u7bb1\uff1a" + escapeHtml(item.contact_email || text.missing) + "</li>" +
++              "<li>\u5b98\u7f51\uff1a" + buildLink(item.contact_url) + "</li>" +
++            "</ul>" +
++          "</div>";
++        container.appendChild(card);
++      });
++    }
++
++    function infoBox(title, value) {
++      return '<div class="info-box"><strong>' + escapeHtml(title) + "</strong>" + escapeHtml(value) + "</div>";
++    }
++
++    function buildLink(url) {
++      if (!url) return text.missing;
++      return '<a href="' + escapeAttr(url) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(url) + "</a>";
++    }
++
++    function backToList() {
++      document.getElementById("detailSection").classList.add("hidden");
++      document.getElementById("majorList").innerHTML = "";
++      document.getElementById("detailKeywordInput").value = "";
++    }
++
++    async function runSearch() {
++      const keyword = document.getElementById("keywordInput").value.trim().toLowerCase();
++      const hint = document.getElementById("searchHint");
++
++      if (!keyword) {
++        hint.textContent = text.emptyKeyword;
++        renderGraduateSchoolCards(graduateSchoolsData);
++        return;
++      }
++
++      hint.textContent = text.searching;
++      const matchedIds = [];
++
++      for (const item of graduateSchoolsData) {
++        try {
++          const cardText = [
++            item.id,
++            item.name,
++            item.university,
++            item.graduate_school,
++            item.desc
++          ].concat(item.tags || []).filter(Boolean).join(" ").toLowerCase();
++
++          if (cardText.includes(keyword)) {
++            matchedIds.push(item.id);
++            continue;
++          }
++
++          const data = await fetchJson("./data/" + item.id + ".json");
++          if (matchesGraduateSchoolData(data, keyword)) {
++            matchedIds.push(item.id);
++          }
++        } catch (err) {
++          console.error("\u8bfb\u53d6 " + item.id + ".json \u5931\u8d25", err);
++        }
++      }
++
++      const filtered = graduateSchoolsData.filter(function(item) {
++        return matchedIds.includes(item.id);
++      });
++
++      hint.textContent = filtered.length ? text.foundPrefix + filtered.length + text.foundSuffix : text.noMatch;
++      renderGraduateSchoolCards(filtered);
++    }
++
++    function matchesGraduateSchoolData(data, keyword) {
++      if (!data) return false;
++
++      const headText = [data.university, data.graduate_school, data.name]
++        .filter(Boolean)
++        .join(" ")
++        .toLowerCase();
++
++      if (headText.includes(keyword)) return true;
++
++      const majors = Array.isArray(data.majors) ? data.majors : [];
++      return majors.some(function(item) {
++        const searchable = [
++          item.major,
++          item.course,
++          item.exam_method,
++          item.exam_content,
++          item.contact_name,
++          item.contact_email
++        ].concat(item.english_tests || []).filter(Boolean).join(" ").toLowerCase();
++        return searchable.includes(keyword);
++      });
++    }
++
++    function resetSearch() {
++      document.getElementById("keywordInput").value = "";
++      document.getElementById("searchHint").textContent = text.resetHint;
++      renderGraduateSchoolCards(graduateSchoolsData);
++    }
++
++    function filterCurrentGraduateSchool() {
++      const keyword = document.getElementById("detailKeywordInput").value.trim().toLowerCase();
++      if (!currentGraduateSchoolData) return;
++
++      if (!keyword) {
++        renderMajorList(currentGraduateSchoolData);
++        return;
++      }
++
++      const filteredMajors = (currentGraduateSchoolData.majors || []).filter(function(item) {
++        const searchable = [
++          item.major,
++          item.course,
++          item.exam_method,
++          item.exam_content,
++          item.contact_name,
++          item.contact_email
++        ].concat(item.english_tests || []).filter(Boolean).join(" ").toLowerCase();
++        return searchable.includes(keyword);
++      });
++
++      renderMajorList(Object.assign({}, currentGraduateSchoolData, { majors: filteredMajors }));
++    }
++
++    function emptyBox(message) {
++      return '<div class="empty-box">' + escapeHtml(message) + "</div>";
++    }
++
++    function escapeHtml(value) {
++      return String(value)
++        .replace(/&/g, "&amp;")
++        .replace(/</g, "&lt;")
++        .replace(/>/g, "&gt;")
++        .replace(/"/g, "&quot;")
++        .replace(/'/g, "&#39;");
++    }
++
++    function escapeAttr(value) {
++      return String(value)
++        .replace(/&/g, "&amp;")
++        .replace(/"/g, "&quot;")
++        .replace(/</g, "&lt;");
++    }
++
++    document.getElementById("searchBtn").addEventListener("click", runSearch);
++    document.getElementById("resetBtn").addEventListener("click", resetSearch);
++    document.getElementById("backBtn").addEventListener("click", backToList);
++    document.getElementById("keywordInput").addEventListener("keydown", function(e) {
++      if (e.key === "Enter") runSearch();
++    });
++    document.getElementById("detailKeywordInput").addEventListener("input", filterCurrentGraduateSchool);
++
++    loadGraduateSchools();
++  </script>
++</body>
++</html>
