@@ -1,0 +1,90 @@
+{
+  "id": "tohoku-eng",
+  "name": "东北大学 工学研究科",
+  "university": "东北大学",
+  "majors": [
+    {
+      "major_name": "机械系（机器人 / 航空宇宙等）",
+      "degree": "修士（博士前期）",
+      "language": "日语/部分英语",
+
+      "exam_subjects": "数学A+B + 专业课（热力学/流体/材料/控制等选2）+ 面试 + 英语成绩",
+      "application_period": "2025-07-03 ～ 2025-07-11",
+      "exam_date": "2025-08-26 ～ 08-28",
+
+      "tuition": "535,800日元/年",
+      "application_fee": "30,000日元",
+
+      "requirements": "本科毕业或预计毕业（16年教育）",
+      "english_requirement": "TOEIC / TOEFL（2年内）",
+
+      "notes": "部分学生根据成绩可免笔试",
+      "contacts": [
+        "https://www.eng.tohoku.ac.jp/"
+      ]
+    },
+
+    {
+      "major_name": "电气系（电子 / 通信 / 电力）",
+      "degree": "修士",
+      "language": "日语",
+
+      "exam_subjects": "基础专业课（电磁/电路/计算机等选3）+ 英语成绩",
+      "application_period": "2025-07-03 ～ 2025-07-11",
+      "exam_date": "2025-08-26",
+
+      "tuition": "535,800日元/年",
+      "application_fee": "30,000日元",
+
+      "requirements": "理工科背景",
+      "english_requirement": "TOEIC / TOEFL",
+
+      "notes": "部分人可免笔试",
+      "contacts": [
+        "https://www.ecei.tohoku.ac.jp/"
+      ]
+    },
+
+    {
+      "major_name": "材料科学系",
+      "degree": "修士",
+      "language": "日语",
+
+      "exam_subjects": "数学 + 专业课（材料/物理/化学等选4）+ 面试 + 英语",
+      "application_period": "2025-07-03 ～ 2025-07-11",
+      "exam_date": "2025-08-26 ～ 08-28",
+
+      "tuition": "535,800日元/年",
+      "application_fee": "30,000日元",
+
+      "requirements": "理工科背景",
+      "english_requirement": "TOEIC / TOEFL",
+
+      "notes": "考试范围广，需要提前准备",
+      "contacts": [
+        "https://www.material.tohoku.ac.jp/"
+      ]
+    },
+
+    {
+      "major_name": "土木工程",
+      "degree": "修士",
+      "language": "日语",
+
+      "exam_subjects": "小论文 + 数学/统计 + 专业课 + 面试 + 英语",
+      "application_period": "2025-07-03 ～ 2025-07-11",
+      "exam_date": "2025-08-26",
+
+      "tuition": "535,800日元/年",
+      "application_fee": "30,000日元",
+
+      "requirements": "相关专业背景",
+      "english_requirement": "TOEIC / TOEFL",
+
+      "notes": "需要提前联系导师",
+      "contacts": [
+        "https://www.civil.tohoku.ac.jp/"
+      ]
+    }
+  ]
+}
