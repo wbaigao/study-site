@@ -1,90 +1,194 @@
 {
   "id": "tohoku-eng",
-  "name": "东北大学 工学研究科",
   "university": "东北大学",
+  "graduate_school": "工学研究科",
+  "name": "东北大学 工学研究科",
+  "degree": "博士前期2年课程",
+  "admission_year": "2026年4月入学",
+  "selection": "一般选拔",
+  "apply_start": "2025-07-03 09:00",
+  "apply_end": "2025-07-11 16:00",
+  "exam_start": "2025-08-26",
+  "exam_end": "2025-08-28",
+  "result_announcement": "2025-09-03 17:00左右",
+  "application_fee": "30,000日元",
+  "admission_fee": "282,000日元",
+  "tuition": "535,800日元/年",
+  "contact_name": "工学部・工学研究科教务课 大学院教务係",
+  "contact_phone": "022-795-5820",
+  "contact_email": "eng-in@grp.tohoku.ac.jp",
+  "contact_url": "https://www.eng.tohoku.ac.jp/admission/grad/master.html",
   "majors": [
     {
-      "major_name": "机械系（机器人 / 航空宇宙等）",
-      "degree": "修士（博士前期）",
-      "language": "日语/部分英语",
-
-      "exam_subjects": "数学A+B + 专业课（热力学/流体/材料/控制等选2）+ 面试 + 英语成绩",
-      "application_period": "2025-07-03 ～ 2025-07-11",
-      "exam_date": "2025-08-26 ～ 08-28",
-
-      "tuition": "535,800日元/年",
+      "major": "机械系4专攻",
+      "course": "机械机能创成 / 精密机械 / 机器人 / 航空宇宙工学",
+      "apply_start": "2025-07-03 09:00",
+      "apply_end": "2025-07-11 16:00",
+      "exam_start": "2025-08-26",
+      "exam_end": "2025-08-28",
+      "exam_method": "笔试 + 面试 + 书面材料综合评价",
+      "capacity": "183名",
       "application_fee": "30,000日元",
-
-      "requirements": "本科毕业或预计毕业（16年教育）",
-      "english_requirement": "TOEIC / TOEFL（2年内）",
-
-      "notes": "部分学生根据成绩可免笔试",
-      "contacts": [
-        "https://www.eng.tohoku.ac.jp/"
-      ]
+      "admission_fee": "282,000日元",
+      "tuition": "535,800日元/年",
+      "english_tests": ["TOEFL iBT", "TOEIC L&R", "TOEFL iBT Home Edition可"],
+      "exam_content": "英语提交成绩单。数学A：微积分、线性代数、向量解析。数学B：常微分方程、偏微分方程、傅里叶变换・级数、拉普拉斯变换。专业科目：热力学、流体力学、材料力学、机械力学、控制工学中选2科。面试：2025年8月28日。",
+      "contact_name": "机械・知能系事务室 教务担当",
+      "contact_phone": "022-795-7030",
+      "contact_email": "eng-in@grp.tohoku.ac.jp",
+      "contact_url": "https://www.mech.tohoku.ac.jp/"
     },
-
     {
-      "major_name": "电气系（电子 / 通信 / 电力）",
-      "degree": "修士",
-      "language": "日语",
-
-      "exam_subjects": "基础专业课（电磁/电路/计算机等选3）+ 英语成绩",
-      "application_period": "2025-07-03 ～ 2025-07-11",
-      "exam_date": "2025-08-26",
-
-      "tuition": "535,800日元/年",
+      "major": "量子能源工学专攻",
+      "course": "博士前期2年课程",
+      "apply_start": "2025-07-03 09:00",
+      "apply_end": "2025-07-11 16:00",
+      "exam_start": "2025-08-26",
+      "exam_end": "2025-08-28",
+      "exam_method": "笔试 + 面试 + 书面材料综合评价",
+      "capacity": "38名",
       "application_fee": "30,000日元",
-
-      "requirements": "理工科背景",
-      "english_requirement": "TOEIC / TOEFL",
-
-      "notes": "部分人可免笔试",
-      "contacts": [
-        "https://www.ecei.tohoku.ac.jp/"
-      ]
+      "admission_fee": "282,000日元",
+      "tuition": "535,800日元/年",
+      "english_tests": ["TOEFL iBT", "TOEIC L&R", "TOEFL iBT Home Edition可"],
+      "exam_content": "英语提交成绩单。数学A：微积分、线性代数、向量解析。数学B：常微分方程、偏微分方程、傅里叶变换・级数、拉普拉斯变换。专业科目：流体力学、电磁气学、量子力学、材料力学、放射线基础中选2科。面试：2025年8月28日。",
+      "contact_name": "机械・知能系事务室 教务担当",
+      "contact_phone": "022-795-7030",
+      "contact_email": "eng-in@grp.tohoku.ac.jp",
+      "contact_url": "https://www.qse.tohoku.ac.jp/admission/admission_graduate.html"
     },
-
     {
-      "major_name": "材料科学系",
-      "degree": "修士",
-      "language": "日语",
-
-      "exam_subjects": "数学 + 专业课（材料/物理/化学等选4）+ 面试 + 英语",
-      "application_period": "2025-07-03 ～ 2025-07-11",
-      "exam_date": "2025-08-26 ～ 08-28",
-
-      "tuition": "535,800日元/年",
+      "major": "电气系3专攻",
+      "course": "电气能源系统 / 通信工学 / 电子工学",
+      "apply_start": "2025-07-03 09:00",
+      "apply_end": "2025-07-11 16:00",
+      "exam_start": "2025-08-26",
+      "exam_end": "2025-08-26",
+      "exam_method": "基础专业科目 + 英语成绩 + 书面材料综合评价",
+      "capacity": "126名",
       "application_fee": "30,000日元",
-
-      "requirements": "理工科背景",
-      "english_requirement": "TOEIC / TOEFL",
-
-      "notes": "考试范围广，需要提前准备",
-      "contacts": [
-        "https://www.material.tohoku.ac.jp/"
-      ]
+      "admission_fee": "282,000日元",
+      "tuition": "535,800日元/年",
+      "english_tests": ["TOEFL iBT", "TOEIC L&R"],
+      "exam_content": "英语提交成绩单，TOEFL iBT Home Edition不认可。基础专业科目：电磁气学、电气回路、计算机硬件、计算机软件、物理、数学基础6题中选3题。",
+      "contact_name": "电子信息系统・应用物理系事务室 教务担当",
+      "contact_phone": "022-795-7186",
+      "contact_email": "eng-in@grp.tohoku.ac.jp",
+      "contact_url": "https://www.ecei.tohoku.ac.jp/ecei_web/admission/"
     },
-
     {
-      "major_name": "土木工程",
-      "degree": "修士",
-      "language": "日语",
-
-      "exam_subjects": "小论文 + 数学/统计 + 专业课 + 面试 + 英语",
-      "application_period": "2025-07-03 ～ 2025-07-11",
-      "exam_date": "2025-08-26",
-
-      "tuition": "535,800日元/年",
+      "major": "应用物理学专攻",
+      "course": "博士前期2年课程",
+      "apply_start": "2025-07-03 09:00",
+      "apply_end": "2025-07-11 16:00",
+      "exam_start": "2025-08-26",
+      "exam_end": "2025-08-26",
+      "exam_method": "基础科目 + 专业科目 + 英语成绩",
+      "capacity": "32名",
       "application_fee": "30,000日元",
-
-      "requirements": "相关专业背景",
-      "english_requirement": "TOEIC / TOEFL",
-
-      "notes": "需要提前联系导师",
-      "contacts": [
-        "https://www.civil.tohoku.ac.jp/"
-      ]
+      "admission_fee": "282,000日元",
+      "tuition": "535,800日元/年",
+      "english_tests": ["TOEFL iBT", "TOEIC L&R", "IELTS Academic"],
+      "exam_content": "英语提交成绩单，TOEFL iBT Home Edition不认可。基础科目：力学、电磁气学、量子力学。专业科目：统计力学、物性物理。",
+      "contact_name": "电子信息系统・应用物理系事务室 教务担当",
+      "contact_phone": "022-795-7186",
+      "contact_email": "eng-in@grp.tohoku.ac.jp",
+      "contact_url": "https://www.eng.tohoku.ac.jp/admission/grad/master.html"
+    },
+    {
+      "major": "化学・生物系3专攻",
+      "course": "应用化学 / 化学工学 / 生物工学",
+      "apply_start": "2025-07-03 09:00",
+      "apply_end": "2025-07-11 16:00",
+      "exam_start": "2025-08-26",
+      "exam_end": "2025-08-27",
+      "exam_method": "基础科目 + 专业科目 + 面试 + 英语成绩",
+      "capacity": "79名",
+      "application_fee": "30,000日元",
+      "admission_fee": "282,000日元",
+      "tuition": "535,800日元/年",
+      "english_tests": ["TOEFL iBT", "TOEIC L&R"],
+      "exam_content": "英语提交成绩单，TOEFL iBT Home Edition不认可。基础科目包括无机・物理化学、有机化学、生物化学、化学工学。专业科目从无机・物理化学、有机化学、生物化学、化学工学等领域中选择。面试时间由专攻通知。",
+      "contact_name": "化学・生物系事务室 教务担当",
+      "contact_phone": "022-795-7205",
+      "contact_email": "che-kyom@grp.tohoku.ac.jp",
+      "contact_url": "https://www.che.tohoku.ac.jp/index-j.html"
+    },
+    {
+      "major": "材料科学系3专攻",
+      "course": "金属前沿工学 / 智能器件材料学 / 材料系统工学",
+      "apply_start": "2025-07-03 09:00",
+      "apply_end": "2025-07-11 16:00",
+      "exam_start": "2025-08-26",
+      "exam_end": "2025-08-28",
+      "exam_method": "数学 + 专业科目 + 面试 + 英语成绩",
+      "capacity": "93名",
+      "application_fee": "30,000日元",
+      "admission_fee": "282,000日元",
+      "tuition": "535,800日元/年",
+      "english_tests": ["TOEFL iBT", "TOEIC L&R"],
+      "exam_content": "数学：微积分、常微分方程、线性代数、向量解析、复变函数、傅里叶级数・变换、拉普拉斯变换等。专业科目从物理、化学、材料化学、材料物性学、材料加工学5科目10题中任选4题。面试：2025年8月28日。",
+      "contact_name": "材料・开发系事务室 教务担当",
+      "contact_phone": "022-795-7373",
+      "contact_email": "eng-in@grp.tohoku.ac.jp",
+      "contact_url": "https://www.material.tohoku.ac.jp/admission/index.html"
+    },
+    {
+      "major": "土木工学专攻",
+      "course": "博士前期2年课程",
+      "apply_start": "2025-07-03 09:00",
+      "apply_end": "2025-07-11 16:00",
+      "exam_start": "2025-08-26",
+      "exam_end": "2025-08-27",
+      "exam_method": "小论文 + 基础科目 + 专业科目 + 面试 + 英语成绩",
+      "capacity": "49名",
+      "application_fee": "30,000日元",
+      "admission_fee": "282,000日元",
+      "tuition": "535,800日元/年",
+      "english_tests": ["TOEFL iBT", "TOEIC L&R"],
+      "exam_content": "英语提交成绩单，TOEFL iBT Home Edition不认可。小论文：土木工学相关主题。基础科目：微积分、线性代数、概率统计、生物・生态学中选2题。专业科目：社会基础设计学、水环境设计学、都市系统计划学中选1科目，并在所选科目内选2题。面试：2025年8月26日或27日。",
+      "contact_name": "人间・环境系事务室 教务担当",
+      "contact_phone": "022-795-7489",
+      "contact_email": "eng-in@grp.tohoku.ac.jp",
+      "contact_url": "https://www.civil.tohoku.ac.jp/admission.html"
+    },
+    {
+      "major": "都市・建筑学专攻",
+      "course": "博士前期2年课程",
+      "apply_start": "2025-07-03 09:00",
+      "apply_end": "2025-07-11 16:00",
+      "exam_start": "2025-08-26",
+      "exam_end": "2025-08-26",
+      "exam_method": "共通科目 + 专业科目 + 英语成绩",
+      "capacity": "45名",
+      "application_fee": "30,000日元",
+      "admission_fee": "282,000日元",
+      "tuition": "535,800日元/年",
+      "english_tests": ["TOEFL iBT", "TOEIC L&R"],
+      "exam_content": "英语提交成绩单，TOEFL iBT Home Edition不认可。共通科目考查都市・建筑设计、都市・建筑计划、建筑史、建筑环境・设备工学、建筑材料、建筑构造等基础知识。专业科目根据志愿讲座不同，包括设计制图、建筑计划、都市计划、建筑史、建筑环境・设备、建筑材料、建筑构造等。",
+      "contact_name": "人间・环境系事务室 教务担当",
+      "contact_phone": "022-795-7489",
+      "contact_email": "eng-in@grp.tohoku.ac.jp",
+      "contact_url": "https://www.archi.tohoku.ac.jp"
+    },
+    {
+      "major": "技术社会系统专攻",
+      "course": "博士前期2年课程",
+      "apply_start": "2025-07-03 09:00",
+      "apply_end": "2025-07-11 16:00",
+      "exam_start": "2025-08-26",
+      "exam_end": "2025-08-28",
+      "exam_method": "小论文 + 口头试问 + 英语成绩",
+      "capacity": "21名",
+      "application_fee": "30,000日元",
+      "admission_fee": "282,000日元",
+      "tuition": "535,800日元/年",
+      "english_tests": ["TOEFL iBT", "TOEIC L&R", "TOEFL iBT Home Edition可"],
+      "exam_content": "英语提交成绩单。小论文：围绕一般常识、本专攻覆盖的专业领域及相关社会问题，评价逻辑思考力、表达力和基础学力。口头试问：2025年8月26日至28日之间由专攻指定，围绕小论文内容发表并接受试问，同时评价基础学力和研究适性。",
+      "contact_name": "技术社会系统专攻事务室",
+      "contact_phone": "022-795-3863",
+      "contact_email": "eng-in@grp.tohoku.ac.jp",
+      "contact_url": "https://www.most.tohoku.ac.jp"
     }
   ]
 }
