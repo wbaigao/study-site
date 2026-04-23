@@ -1,26 +1,26 @@
 [
   {
     "id": "kyoto-u-engineering",
-    "name": "京都大学 工学研究科",
     "university": "京都大学",
-    "tags": ["工学", "机械", "材料"]
+    "graduate_school": "工学研究科",
+    "desc": "日本顶级工学研究科之一，包含机械、电气、材料、化学等多个方向"
   },
   {
     "id": "osaka-u-engineering",
-    "name": "大阪大学 工学研究科",
     "university": "大阪大学",
-    "tags": ["工学", "电子", "通信"]
+    "graduate_school": "工学研究科",
+    "desc": "包含生物工学、应化、机械、电气电子信息通信、环境能源、建筑等方向"
   },
   {
     "id": "nagoya-eng",
-    "name": "名古屋大学 工学研究科",
     "university": "名古屋大学",
-    "tags": ["工学", "机械", "材料"]
+    "graduate_school": "工学研究科",
+    "desc": "工学研究科，含机械、材料、电气电子信息等方向"
   },
   {
     "id": "tohoku-eng",
-    "name": "东北大学 工学研究科",
     "university": "东北大学",
-    "tags": ["工学", "机械", "电子", "材料"]
+    "graduate_school": "工学研究科",
+    "desc": "工学研究科，含机械、电气、材料、土木、建筑等方向"
   }
 ]
