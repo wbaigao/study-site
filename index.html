@@ -19,8 +19,8 @@
         </div>
 
         <div class="action-inline">
-          <button id="searchBtn" class="primary-btn">搜索</button>
-          <button id="resetBtn" class="secondary-btn">重置</button>
+          <button id="searchBtn" class="primary-btn" type="button">搜索</button>
+          <button id="resetBtn" class="secondary-btn" type="button">重置</button>
         </div>
       </div>
 
@@ -32,14 +32,14 @@
     <section class="panel">
       <div class="section-head">
         <h2>🏫 研究科列表</h2>
-        <span id="resultCount" class="count-badge">0 个研究科</span>
+        <span id="resultCount" class="count-badge">加载中...</span>
       </div>
       <div id="schoolList" class="school-grid"></div>
     </section>
 
     <section id="detailSection" class="panel detail-section hidden">
       <div class="detail-top">
-        <button onclick="backToList()" class="back-btn">← 返回研究科列表</button>
+        <button id="backBtn" class="back-btn" type="button">← 返回研究科列表</button>
         <div>
           <h2 id="detailTitle">研究科详情</h2>
           <p id="detailSubtitle" class="subtitle small"></p>
@@ -52,7 +52,7 @@
           <input
             id="detailKeywordInput"
             type="text"
-            placeholder="搜索专业 / 课程 / 考试内容 / 联系方式"
+            placeholder="搜索专业 / 考试科目 / 要求 / 备注 / 联系方式"
           />
         </div>
       </div>
@@ -200,6 +200,7 @@
       margin-top: 14px;
       font-size: 14px;
       color: #6b7280;
+      line-height: 1.6;
     }
 
     .section-head,
@@ -272,8 +273,6 @@
       color: #374151;
       font-size: 12px;
       font-weight: 600;
-      margin-right: 6px;
-      margin-bottom: 6px;
     }
 
     .open-text {
@@ -325,6 +324,7 @@
       border-radius: 12px;
       padding: 12px;
       font-size: 14px;
+      line-height: 1.6;
     }
 
     .info-box strong {
@@ -395,13 +395,31 @@
       text-decoration: underline;
     }
 
+    .empty-box,
+    .error-box {
+      padding: 18px 16px;
+      text-align: left;
+      border-radius: 14px;
+      line-height: 1.7;
+    }
+
     .empty-box {
-      padding: 28px 16px;
-      text-align: center;
       color: #6b7280;
       background: #f9fafb;
       border: 1px dashed #d1d5db;
-      border-radius: 14px;
+    }
+
+    .error-box {
+      color: #991b1b;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+    }
+
+    code {
+      background: #f3f4f6;
+      padding: 2px 6px;
+      border-radius: 6px;
+      font-size: 0.95em;
     }
 
     @media (max-width: 768px) {
@@ -435,238 +453,253 @@
 
   <script>
     let graduateSchoolsData = [];
-    let currentGraduateSchoolId = "";
     let currentGraduateSchoolData = null;
+
+    const schoolListEl = document.getElementById("schoolList");
+    const resultCountEl = document.getElementById("resultCount");
+    const searchHintEl = document.getElementById("searchHint");
+    const keywordInputEl = document.getElementById("keywordInput");
+    const detailSectionEl = document.getElementById("detailSection");
+    const detailTitleEl = document.getElementById("detailTitle");
+    const detailSubtitleEl = document.getElementById("detailSubtitle");
+    const detailKeywordInputEl = document.getElementById("detailKeywordInput");
+    const majorListEl = document.getElementById("majorList");
 
     async function loadGraduateSchools() {
       try {
-        const res = await fetch("data/graduate-schools.json");
+        const res = await fetch("data/graduate-schools.json?v=" + Date.now());
+        if (!res.ok) {
+          throw new Error("无法读取 data/graduate-schools.json，状态码：" + res.status);
+        }
+
         const data = await res.json();
-        graduateSchoolsData = Array.isArray(data) ? data : [];
+
+        if (!Array.isArray(data)) {
+          throw new Error("graduate-schools.json 的最外层必须是数组 []");
+        }
+
+        graduateSchoolsData = data;
         renderGraduateSchoolCards(graduateSchoolsData);
+        searchHintEl.textContent = "可搜索大学名、研究科名、专业方向、考试内容等关键词。";
       } catch (err) {
-        document.getElementById("schoolList").innerHTML =
-          '<div class="empty-box">研究科列表加载失败，请检查 data/graduate-schools.json 是否存在且格式正确。</div>';
+        resultCountEl.textContent = "加载失败";
+        schoolListEl.innerHTML = `
+          <div class="error-box">
+            <strong>研究科列表加载失败</strong><br>
+            ${escapeHtml(err.message)}<br><br>
+            请检查：<br>
+            1. <code>data/graduate-schools.json</code> 是否存在<br>
+            2. JSON 是否为数组格式<br>
+            3. 每条数据是否包含 <code>id</code>、<code>university</code>、<code>graduate_school</code>
+          </div>
+        `;
         console.error(err);
       }
     }
 
     function renderGraduateSchoolCards(data) {
-      const schoolList = document.getElementById("schoolList");
-      const resultCount = document.getElementById("resultCount");
-      schoolList.innerHTML = "";
+      schoolListEl.innerHTML = "";
 
       if (!data.length) {
-        schoolList.innerHTML = '<div class="empty-box">没有找到匹配研究科，请换个关键词试试。</div>';
-        resultCount.textContent = "0 个研究科";
+        resultCountEl.textContent = "0 个研究科";
+        schoolListEl.innerHTML = '<div class="empty-box">没有找到匹配研究科，请换个关键词试试。</div>';
         return;
       }
 
-      resultCount.textContent = ${data.length} 个研究科;
+      resultCountEl.textContent = `${data.length} 个研究科`;
 
       data.forEach((item) => {
-        schoolList.innerHTML += 
-          <div class="school-card" onclick="openGraduateSchool('${escapeJs(item.id || "")}', '${escapeJs(item.university || "")}', '${escapeJs(item.graduate_school || "")}', '${escapeJs(item.desc || "")}')">
-            <h3>${escapeHtml(item.university || "")}</h3>
-            <p>${escapeHtml(item.graduate_school || "")}</p>
-            <p style="margin-top:8px;">${escapeHtml(item.desc || "点击查看该研究科下的专业信息。")}</p>
-            <div class="school-meta">
-              <div>
-                <span class="school-tag">研究科</span>
-              </div>
-              <span class="open-text">查看专业 →</span>
-            </div>
+        const title = item.name || `${item.university || ""} ${item.graduate_school || ""}`.trim();
+        const desc = item.desc || "点击查看该研究科下的专业与考试信息";
+
+        const card = document.createElement("div");
+        card.className = "school-card";
+        card.innerHTML = `
+          <h3>${escapeHtml(title)}</h3>
+          <p>${escapeHtml(item.university || "")}</p>
+          <p>${escapeHtml(item.graduate_school || "")}</p>
+          <p style="margin-top:8px;">${escapeHtml(desc)}</p>
+          <div class="school-meta">
+            <span class="school-tag">研究科</span>
+            <span class="open-text">查看专业 →</span>
           </div>
-        ;
+        `;
+
+        card.addEventListener("click", () => openGraduateSchool(item));
+        schoolListEl.appendChild(card);
       });
     }
 
-    async function openGraduateSchool(id, university, graduateSchool, desc) {
-      currentGraduateSchoolId = id;
+    async function openGraduateSchool(item) {
+      const id = item.id;
+      const title = item.name || `${item.university || ""} ${item.graduate_school || ""}`.trim();
+      const subtitle = item.desc || "该研究科下的专业与考试信息";
 
-      document.getElementById("detailSection").classList.remove("hidden");
-      document.getElementById("detailTitle").textContent = ${university} · ${graduateSchool};
-      document.getElementById("detailSubtitle").textContent = desc || "该研究科下的专业与考试信息";
+      detailSectionEl.classList.remove("hidden");
+      detailTitleEl.textContent = title;
+      detailSubtitleEl.textContent = subtitle;
+      majorListEl.innerHTML = '<div class="empty-box">正在加载研究科详情...</div>';
+      detailKeywordInputEl.value = "";
 
       try {
-        const res = await fetch(data/${id}.json);
+        const res = await fetch(`data/${id}.json?v=` + Date.now());
+        if (!res.ok) {
+          throw new Error(`无法读取 data/${id}.json，状态码：${res.status}`);
+        }
+
         const data = await res.json();
+
+        if (!data || typeof data !== "object") {
+          throw new Error(`${id}.json 必须是对象格式`);
+        }
+
+        if (!Array.isArray(data.majors)) {
+          throw new Error(`${id}.json 中必须存在 majors 数组`);
+        }
+
         currentGraduateSchoolData = data;
-        document.getElementById("detailKeywordInput").value = "";
-        renderMajorList(data);
-        document.getElementById("detailSection").scrollIntoView({ behavior: "smooth", block: "start" });
+        renderMajorList(currentGraduateSchoolData);
+        detailSectionEl.scrollIntoView({ behavior: "smooth", block: "start" });
       } catch (err) {
-        document.getElementById("majorList").innerHTML =
-          '<div class="empty-box">研究科数据加载失败，请检查对应 json 文件是否存在且格式正确。</div>';
+        majorListEl.innerHTML = `
+          <div class="error-box">
+            <strong>研究科详情加载失败</strong><br>
+            ${escapeHtml(err.message)}<br><br>
+            当前文件：<code>data/${escapeHtml(id)}.json</code>
+          </div>
+        `;
         console.error(err);
       }
     }
 
     function renderMajorList(data) {
-      const container = document.getElementById("majorList");
-      container.innerHTML = "";
+      majorListEl.innerHTML = "";
 
       if (!data || !Array.isArray(data.majors) || !data.majors.length) {
-        container.innerHTML = '<div class="empty-box">当前研究科下暂无专业数据。</div>';
+        majorListEl.innerHTML = '<div class="empty-box">当前研究科下暂无专业数据。</div>';
         return;
       }
 
       data.majors.forEach((item) => {
-        const englishTags = (item.english_tests || []).length
-          ? (item.english_tests || []).map(
-              test => <span class="tag tag-blue">${escapeHtml(test)}</span>
-            ).join("")
-          : '<span class="tag tag-gray">英语要求未写明</span>';
+        const englishTag = item.english_requirement
+          ? `<span class="tag tag-blue">${escapeHtml(item.english_requirement)}</span>`
+          : `<span class="tag tag-gray">英语要求未写明</span>`;
 
-        container.innerHTML += 
-          <div class="major-card">
-            <h3 class="major-title">${escapeHtml(item.major || "未填写")} · ${escapeHtml(item.course || "未填写")}</h3>
-            <p class="major-subtitle">${escapeHtml(data.university || "")} / ${escapeHtml(data.graduate_school || "")}</p>
+        const contacts = Array.isArray(item.contacts) ? item.contacts : [];
 
-            <div class="info-row">
-              <div class="info-box">
-                <strong>出愿时间</strong>
-                ${escapeHtml(item.apply_start || "未填写")} ~ ${escapeHtml(item.apply_end || "未填写")}
-              </div>
-              <div class="info-box">
-                <strong>考试时间</strong>
-                ${escapeHtml(item.exam_start || "未填写")} ~ ${escapeHtml(item.exam_end || "未填写")}
-              </div>
-              <div class="info-box">
-                <strong>考试方式</strong>
-                ${escapeHtml(item.exam_method || "未填写")}
-              </div>
-              <div class="info-box">
-                <strong>学费</strong>
-                ${escapeHtml(item.tuition || "未填写")}
-              </div>
+        const contactHtml = contacts.length
+          ? contacts.map(link => {
+              const safe = escapeHtml(link);
+              return `<li><a href="${escapeAttr(link)}" target="_blank" rel="noopener noreferrer">${safe}</a></li>`;
+            }).join("")
+          : "<li>未填写</li>";
+
+        const card = document.createElement("div");
+        card.className = "major-card";
+        card.innerHTML = `
+          <h3 class="major-title">${escapeHtml(item.major_name || "未填写")}</h3>
+          <p class="major-subtitle">${escapeHtml(data.name || "")}</p>
+
+          <div class="info-row">
+            <div class="info-box">
+              <strong>学位</strong>
+              ${escapeHtml(item.degree || "未填写")}
             </div>
-
-            <div class="info-row">
-              <div class="info-box">
-                <strong>募集人数</strong>
-                ${item.capacity ?? "未填写"}
-              </div>
-              <div class="info-box">
-                <strong>检定料 / 入学料</strong>
-                ${escapeHtml(item.application_fee || "未填写")} / ${escapeHtml(item.admission_fee || "未填写")}
-              </div>
+            <div class="info-box">
+              <strong>授课语言</strong>
+              ${escapeHtml(item.language || "未填写")}
             </div>
-
-            <div class="tag-row">
-              ${englishTags}
+            <div class="info-box">
+              <strong>出愿时间</strong>
+              ${escapeHtml(item.application_period || "未填写")}
             </div>
-
-            <div class="content-block">
-              <h4>考试内容</h4>
-              <p>${escapeHtml(item.exam_content || "暂无详细说明")}</p>
-            </div>
-
-            <div class="content-block">
-              <h4>联系方式</h4>
-              <ul class="contact-list">
-                <li>联系人 / 方向：${escapeHtml(item.contact_name || "未填写")}</li>
-                <li>电话：${escapeHtml(item.contact_phone || "未填写")}</li>
-                <li>邮箱：${escapeHtml(item.contact_email || "未填写")}</li>
-                <li>官网：${
-                  item.contact_url
-                    ? <a href="${escapeAttr(item.contact_url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.contact_url)}</a>
-                    : "未填写"
-                }</li>
-              </ul>
+            <div class="info-box">
+              <strong>考试时间</strong>
+              ${escapeHtml(item.exam_date || "未填写")}
             </div>
           </div>
-        ;
+
+          <div class="info-row">
+            <div class="info-box">
+              <strong>学费</strong>
+              ${escapeHtml(item.tuition || "未填写")}
+            </div>
+            <div class="info-box">
+              <strong>检定料</strong>
+              ${escapeHtml(item.application_fee || "未填写")}
+            </div>
+          </div>
+
+          <div class="tag-row">
+            ${englishTag}
+          </div>
+
+          <div class="content-block">
+            <h4>考试科目</h4>
+            <p>${escapeHtml(item.exam_subjects || "未填写")}</p>
+          </div>
+
+          <div class="content-block">
+            <h4>申请要求</h4>
+            <p>${escapeHtml(item.requirements || "未填写")}</p>
+          </div>
+
+          <div class="content-block">
+            <h4>备注</h4>
+            <p>${escapeHtml(item.notes || "未填写")}</p>
+          </div>
+
+          <div class="content-block">
+            <h4>联系方式 / 链接</h4>
+            <ul class="contact-list">
+              ${contactHtml}
+            </ul>
+          </div>
+        `;
+
+        majorListEl.appendChild(card);
       });
     }
 
-    function backToList() {
-      document.getElementById("detailSection").classList.add("hidden");
-      document.getElementById("majorList").innerHTML = "";
-      document.getElementById("detailKeywordInput").value = "";
-    }
-
-    async function runSearch() {
-      const keyword = document.getElementById("keywordInput").value.trim().toLowerCase();
-      const hint = document.getElementById("searchHint");
+    function runSearch() {
+      const keyword = keywordInputEl.value.trim().toLowerCase();
 
       if (!keyword) {
-        hint.textContent = "请输入关键词后再搜索。";
         renderGraduateSchoolCards(graduateSchoolsData);
+        searchHintEl.textContent = "可搜索大学名、研究科名、专业方向、考试内容等关键词。";
         return;
       }
 
-      hint.textContent = "正在检索研究科数据…";
-
-      const matchedIds = [];
-
-      for (const item of graduateSchoolsData) {
-        try {
-          const cardText = [
-            item.university,
-            item.graduate_school,
-            item.desc
-          ].filter(Boolean).join(" ").toLowerCase();
-
-          if (cardText.includes(keyword)) {
-            matchedIds.push(item.id);
-            continue;
-          }
-
-          const res = await fetch(data/${item.id}.json);
-          const data = await res.json();
-
-          if (matchesGraduateSchoolData(data, keyword)) {
-            matchedIds.push(item.id);
-          }
-        } catch (err) {
-          console.error(读取 ${item.id}.json 失败, err);
-        }
-      }
-
-      const filtered = graduateSchoolsData.filter(item => matchedIds.includes(item.id));
-
-      hint.textContent = filtered.length
-        ? 找到 ${filtered.length} 个匹配研究科。
-        : "没有找到匹配研究科，请换个关键词试试。";
-
-      renderGraduateSchoolCards(filtered);
-    }
-
-    function matchesGraduateSchoolData(data, keyword) {
-      if (!data) return false;
-
-      const headText = [
-        data.university,
-        data.graduate_school
-      ].filter(Boolean).join(" ").toLowerCase();
-
-      if (headText.includes(keyword)) return true;
-
-      const majors = Array.isArray(data.majors) ? data.majors : [];
-
-      return majors.some(item => {
+      const filtered = graduateSchoolsData.filter(item => {
         const text = [
-          item.major,
-          item.course,
-          item.exam_method,
-          item.exam_content,
-          item.contact_name,
-          item.contact_email
-        ].filter(Boolean).join(" ").toLowerCase();
+          item.id,
+          item.name,
+          item.university,
+          item.graduate_school,
+          item.desc,
+          ...(Array.isArray(item.tags) ? item.tags : [])
+        ]
+          .filter(Boolean)
+          .join(" ")
+          .toLowerCase();
 
         return text.includes(keyword);
       });
+
+      renderGraduateSchoolCards(filtered);
+      searchHintEl.textContent = filtered.length
+        ? `找到 ${filtered.length} 个匹配研究科。`
+        : "没有找到匹配研究科，请换个关键词试试。";
     }
 
     function resetSearch() {
-      document.getElementById("keywordInput").value = "";
-      document.getElementById("searchHint").textContent = "可搜索大学名、研究科名、专业方向、考试内容等关键词。";
+      keywordInputEl.value = "";
       renderGraduateSchoolCards(graduateSchoolsData);
+      searchHintEl.textContent = "可搜索大学名、研究科名、专业方向、考试内容等关键词。";
     }
 
     function filterCurrentGraduateSchool() {
-      const keyword = document.getElementById("detailKeywordInput").value.trim().toLowerCase();
+      const keyword = detailKeywordInputEl.value.trim().toLowerCase();
 
       if (!currentGraduateSchoolData) return;
 
@@ -675,15 +708,24 @@
         return;
       }
 
-      const filteredMajors = (currentGraduateSchoolData.majors || []).filter(item => {
+      const filteredMajors = currentGraduateSchoolData.majors.filter(item => {
         const text = [
-          item.major,
-          item.course,
-          item.exam_method,
-          item.exam_content,
-          item.contact_name,
-          item.contact_email
-        ].filter(Boolean).join(" ").toLowerCase();
+          item.major_name,
+          item.degree,
+          item.language,
+          item.exam_subjects,
+          item.application_period,
+          item.exam_date,
+          item.tuition,
+          item.application_fee,
+          item.requirements,
+          item.english_requirement,
+          item.notes,
+          ...(Array.isArray(item.contacts) ? item.contacts : [])
+        ]
+          .filter(Boolean)
+          .join(" ")
+          .toLowerCase();
 
         return text.includes(keyword);
       });
@@ -692,6 +734,12 @@
         ...currentGraduateSchoolData,
         majors: filteredMajors
       });
+    }
+
+    function backToList() {
+      detailSectionEl.classList.add("hidden");
+      majorListEl.innerHTML = "";
+      detailKeywordInputEl.value = "";
     }
 
     function escapeHtml(value) {
@@ -704,22 +752,20 @@
     }
 
     function escapeAttr(value) {
-      return String(value).replace(/"/g, "&quot;");
-    }
-
-    function escapeJs(value) {
       return String(value)
-        .replace(/\\/g, "\\\\")
-        .replace(/'/g, "\\'")
-        .replace(/"/g, '\\"');
+        .replace(/&/g, "&amp;")
+        .replace(/"/g, "&quot;");
     }
 
     document.getElementById("searchBtn").addEventListener("click", runSearch);
     document.getElementById("resetBtn").addEventListener("click", resetSearch);
-    document.getElementById("keywordInput").addEventListener("keydown", (e) => {
+    document.getElementById("backBtn").addEventListener("click", backToList);
+
+    keywordInputEl.addEventListener("keydown", (e) => {
       if (e.key === "Enter") runSearch();
     });
-    document.getElementById("detailKeywordInput").addEventListener("input", filterCurrentGraduateSchool);
+
+    detailKeywordInputEl.addEventListener("input", filterCurrentGraduateSchool);
 
     loadGraduateSchools();
   </script>
