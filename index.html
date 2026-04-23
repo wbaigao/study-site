@@ -2,7 +2,7 @@
   <div class="container">
     <header class="hero">
       <h1>🎓 日本修士选校系统</h1>
-      <p class="subtitle">按学校整理募集要项，支持模糊检索学校、研究科、专业方向</p>
+      <p class="subtitle">按学校整理募集要项，支持学校 / 研究科 / 专业方向模糊检索</p>
     </header>
 
     <section class="panel search-panel">
@@ -14,7 +14,7 @@
           <input
             id="keywordInput"
             type="text"
-            placeholder="例如：名古屋 / 工学研究科 / 电气 / 信息通信 / 机械"
+            placeholder="例如：名古屋 / 工学研究科 / 电气 / 情报 / 机械"
           />
         </div>
 
@@ -25,7 +25,7 @@
       </div>
 
       <div id="searchHint" class="hint">
-        可搜索学校名、研究科名、major、course 等关键词。
+        可搜索学校名称、研究科、专业方向、考试内容等关键词。
       </div>
     </section>
 
@@ -42,7 +42,7 @@
         <button onclick="backToSchools()" class="back-btn">← 返回学校列表</button>
         <div>
           <h2 id="schoolTitle">学校详情</h2>
-          <p id="schoolSubtitle" class="subtitle small">按研究科展示</p>
+          <p id="schoolSubtitle" class="subtitle small">点击研究科查看具体专业</p>
         </div>
       </div>
 
@@ -57,7 +57,7 @@
         </div>
       </div>
 
-      <div id="majorList" class="major-list"></div>
+      <div id="graduateSchoolList" class="graduate-school-list"></div>
     </section>
   </div>
 
@@ -167,7 +167,8 @@
 
     .primary-btn,
     .secondary-btn,
-    .back-btn {
+    .back-btn,
+    .toggle-btn {
       border: none;
       border-radius: 12px;
       padding: 12px 16px;
@@ -194,6 +195,17 @@
     .secondary-btn:hover,
     .back-btn:hover {
       background: #e0e7ff;
+    }
+
+    .toggle-btn {
+      background: #f3f4f6;
+      color: #374151;
+      padding: 10px 14px;
+      font-size: 14px;
+    }
+
+    .toggle-btn:hover {
+      background: #e5e7eb;
     }
 
     .hint {
@@ -285,29 +297,45 @@
       display: none;
     }
 
-    .major-list {
+    .graduate-school-list {
       display: grid;
       gap: 16px;
       margin-top: 16px;
     }
 
-    .graduate-group {
+    .graduate-card {
       border: 1px solid #e5e7eb;
       border-radius: 18px;
       background: #fcfcff;
       padding: 18px;
     }
 
-    .graduate-group-title {
-      margin: 0 0 14px;
+    .graduate-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .graduate-title-wrap h3 {
+      margin: 0;
       font-size: 22px;
     }
 
-    .graduate-count {
+    .graduate-meta {
+      margin-top: 6px;
       color: #6b7280;
       font-size: 13px;
-      margin-left: 8px;
-      font-weight: 500;
+    }
+
+    .major-list {
+      display: none;
+      margin-top: 16px;
+    }
+
+    .major-list.show {
+      display: block;
     }
 
     .major-card {
@@ -458,27 +486,27 @@
     let schoolsData = [];
     let currentSchoolId = "";
     let currentSchoolName = "";
-    let currentSchoolEntries = [];
+    let currentSchoolData = null;
 
     const schoolMetaMap = {
       "osaka-u": {
-        desc: "学校维度整理，适合后续逐步扩展多个研究科。",
-        tags: ["国立", "工学强校"]
+        desc: "点击查看该校已整理的研究科与专业信息。",
+        tags: ["国立", "研究型"]
       },
       "tohoku-u": {
-        desc: "工学实力强，机械、材料、电电方向都很有代表性。",
+        desc: "点击查看该校已整理的研究科与专业信息。",
         tags: ["国立", "研究型"]
       },
       "nagoya-u": {
-        desc: "覆盖多个研究科与工学方向，适合做学校级汇总。",
+        desc: "点击查看该校已整理的研究科与专业信息。",
         tags: ["国立", "工学强校"]
       },
       "tokyo-u": {
-        desc: "适合后续逐步加入工学、情报理工等不同研究科数据。",
+        desc: "点击查看该校已整理的研究科与专业信息。",
         tags: ["国立", "顶尖院校"]
       },
       "kyoto-u": {
-        desc: "学校级整理更适合后续持续补充多个研究科。",
+        desc: "点击查看该校已整理的研究科与专业信息。",
         tags: ["国立", "研究型"]
       }
     };
@@ -487,8 +515,8 @@
       try {
         const res = await fetch("data/schools.json");
         const data = await res.json();
-        schoolsData = data;
-        renderSchools(data);
+        schoolsData = Array.isArray(data) ? data : [];
+        renderSchools(schoolsData);
       } catch (err) {
         document.getElementById("schoolList").innerHTML =
           '<div class="empty-box">学校列表加载失败，请检查 data/schools.json 是否存在且格式正确。</div>';
@@ -511,15 +539,14 @@
 
       data.forEach((school) => {
         const meta = schoolMetaMap[school.id] || {
-          desc: "点击查看该校已整理的研究科与专业信息。",
+          desc: school.desc || "点击查看该校已整理的研究科与专业信息。",
           tags: ["学校"]
         };
 
         schoolList.innerHTML += `
-          <div class="school-card" onclick="openSchool('${school.id}', '${school.name}', '${school.graduate_school || ""}')">
+          <div class="school-card" onclick="openSchool('${escapeJs(school.id)}', '${escapeJs(school.name || "")}', '${escapeJs(school.desc || "")}')">
             <h3>${escapeHtml(school.name || "")}</h3>
-            <p>${escapeHtml(school.graduate_school || "")}</p>
-            <p style="margin-top:8px;">${escapeHtml(meta.desc)}</p>
+            <p>${escapeHtml(school.desc || meta.desc || "")}</p>
             <div class="school-meta">
               <div>
                 ${(meta.tags || []).map(tag => `<span class="school-tag">${escapeHtml(tag)}</span>`).join("")}
@@ -531,23 +558,23 @@
       });
     }
 
-    async function openSchool(id, name, graduateSchool) {
+    async function openSchool(id, name, desc) {
       currentSchoolId = id;
       currentSchoolName = name;
 
       document.getElementById("detailSection").classList.remove("hidden");
       document.getElementById("schoolTitle").textContent = name;
-      document.getElementById("schoolSubtitle").textContent = graduateSchool || "按研究科展示";
+      document.getElementById("schoolSubtitle").textContent = desc || "点击研究科查看具体专业";
 
       try {
         const res = await fetch(`data/${id}.json`);
         const data = await res.json();
-        currentSchoolEntries = Array.isArray(data) ? data : [];
+        currentSchoolData = data;
         document.getElementById("detailKeywordInput").value = "";
-        renderSchoolEntries(currentSchoolEntries);
+        renderGraduateSchools(data);
         document.getElementById("detailSection").scrollIntoView({ behavior: "smooth", block: "start" });
       } catch (err) {
-        document.getElementById("majorList").innerHTML =
+        document.getElementById("graduateSchoolList").innerHTML =
           '<div class="empty-box">该学校数据加载失败，请检查对应 json 文件是否存在且格式正确。</div>';
         console.error(err);
       }
@@ -555,115 +582,113 @@
 
     function backToSchools() {
       document.getElementById("detailSection").classList.add("hidden");
-      document.getElementById("majorList").innerHTML = "";
+      document.getElementById("graduateSchoolList").innerHTML = "";
       document.getElementById("detailKeywordInput").value = "";
     }
 
-    function renderSchoolEntries(data) {
-      const container = document.getElementById("majorList");
+    function renderGraduateSchools(data) {
+      const container = document.getElementById("graduateSchoolList");
       container.innerHTML = "";
 
-      if (!data.length) {
-        container.innerHTML = '<div class="empty-box">当前学校下没有匹配内容。</div>';
+      if (!data || !Array.isArray(data.graduate_schools) || !data.graduate_schools.length) {
+        container.innerHTML = '<div class="empty-box">当前学校下没有研究科数据。</div>';
         return;
       }
 
-      const groups = groupByGraduateSchool(data);
+      data.graduate_schools.forEach((gs, index) => {
+        const majors = Array.isArray(gs.majors) ? gs.majors : [];
+        const card = document.createElement("div");
+        card.className = "graduate-card";
 
-      Object.keys(groups).forEach((graduateSchool) => {
-        const items = groups[graduateSchool];
-        const groupDiv = document.createElement("div");
-        groupDiv.className = "graduate-group";
-
-        let cardsHtml = "";
-
-        items.forEach((item) => {
-          const englishTags = (item.english_tests || []).length
-            ? (item.english_tests || []).map(
-                test => `<span class="tag tag-blue">${escapeHtml(test)}</span>`
-              ).join("")
-            : '<span class="tag tag-gray">英语要求未写明</span>';
-
-          cardsHtml += `
-            <div class="major-card">
-              <h3 class="major-title">${escapeHtml(item.major || "未填写")} · ${escapeHtml(item.course || "未填写")}</h3>
-              <p class="major-subtitle">${escapeHtml(item.university || currentSchoolName)} / ${escapeHtml(item.graduate_school || "未填写")}</p>
-
-              <div class="info-row">
-                <div class="info-box">
-                  <strong>出愿时间</strong>
-                  ${escapeHtml(item.apply_start || "未填写")} ~ ${escapeHtml(item.apply_end || "未填写")}
-                </div>
-                <div class="info-box">
-                  <strong>考试时间</strong>
-                  ${escapeHtml(item.exam_start || "未填写")} ~ ${escapeHtml(item.exam_end || "未填写")}
-                </div>
-                <div class="info-box">
-                  <strong>考试方式</strong>
-                  ${escapeHtml(item.exam_method || "未填写")}
-                </div>
-                <div class="info-box">
-                  <strong>学费</strong>
-                  ${escapeHtml(item.tuition || "未填写")}
-                </div>
-              </div>
-
-              <div class="info-row">
-                <div class="info-box">
-                  <strong>募集人数</strong>
-                  ${item.capacity ?? "未填写"}
-                </div>
-                <div class="info-box">
-                  <strong>检定料 / 入学料</strong>
-                  ${escapeHtml(item.application_fee || "未填写")} / ${escapeHtml(item.admission_fee || "未填写")}
-                </div>
-              </div>
-
-              <div class="tag-row">
-                ${englishTags}
-              </div>
-
-              <div class="content-block">
-                <h4>考试内容</h4>
-                <p>${escapeHtml(item.exam_content || "暂无详细说明")}</p>
-              </div>
-
-              <div class="content-block">
-                <h4>联系方式</h4>
-                <ul class="contact-list">
-                  <li>联系人 / 方向：${escapeHtml(item.contact_name || "未填写")}</li>
-                  <li>电话：${escapeHtml(item.contact_phone || "未填写")}</li>
-                  <li>邮箱：${escapeHtml(item.contact_email || "未填写")}</li>
-                  <li>官网：${
-                    item.contact_url
-                      ? `<a href="${escapeAttr(item.contact_url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.contact_url)}</a>`
-                      : "未填写"
-                  }</li>
-                </ul>
-              </div>
+        card.innerHTML = `
+          <div class="graduate-header">
+            <div class="graduate-title-wrap">
+              <h3>${escapeHtml(gs.name || "未命名研究科")}</h3>
+              <div class="graduate-meta">${majors.length} 个专业</div>
             </div>
-          `;
-        });
-
-        groupDiv.innerHTML = `
-          <h3 class="graduate-group-title">
-            ${escapeHtml(graduateSchool || "未分类研究科")}
-            <span class="graduate-count">${items.length} 条</span>
-          </h3>
-          ${cardsHtml}
+            <button class="toggle-btn" onclick="toggleGraduateSchool(${index})">展开专业</button>
+          </div>
+          <div class="major-list" id="majorList-${index}">
+            ${majors.length ? majors.map(item => renderMajorCard(item)).join("") : '<div class="empty-box">该研究科下暂无专业数据。</div>'}
+          </div>
         `;
 
-        container.appendChild(groupDiv);
+        container.appendChild(card);
       });
     }
 
-    function groupByGraduateSchool(data) {
-      return data.reduce((acc, item) => {
-        const key = item.graduate_school || "未分类研究科";
-        if (!acc[key]) acc[key] = [];
-        acc[key].push(item);
-        return acc;
-      }, {});
+    function renderMajorCard(item) {
+      const englishTags = (item.english_tests || []).length
+        ? (item.english_tests || []).map(
+            test => `<span class="tag tag-blue">${escapeHtml(test)}</span>`
+          ).join("")
+        : '<span class="tag tag-gray">英语要求未写明</span>';
+
+      return `
+        <div class="major-card">
+          <h3 class="major-title">${escapeHtml(item.major || "未填写")} · ${escapeHtml(item.course || "未填写")}</h3>
+          <p class="major-subtitle">${escapeHtml(item.graduate_school || "")}</p>
+
+          <div class="info-row">
+            <div class="info-box">
+              <strong>出愿时间</strong>
+              ${escapeHtml(item.apply_start || "未填写")} ~ ${escapeHtml(item.apply_end || "未填写")}
+            </div>
+            <div class="info-box">
+              <strong>考试时间</strong>
+              ${escapeHtml(item.exam_start || "未填写")} ~ ${escapeHtml(item.exam_end || "未填写")}
+            </div>
+            <div class="info-box">
+              <strong>考试方式</strong>
+              ${escapeHtml(item.exam_method || "未填写")}
+            </div>
+            <div class="info-box">
+              <strong>学费</strong>
+              ${escapeHtml(item.tuition || "未填写")}
+            </div>
+          </div>
+
+          <div class="info-row">
+            <div class="info-box">
+              <strong>募集人数</strong>
+              ${item.capacity ?? "未填写"}
+            </div>
+            <div class="info-box">
+              <strong>检定料 / 入学料</strong>
+              ${escapeHtml(item.application_fee || "未填写")} / ${escapeHtml(item.admission_fee || "未填写")}
+            </div>
+          </div>
+
+          <div class="tag-row">
+            ${englishTags}
+          </div>
+
+          <div class="content-block">
+            <h4>考试内容</h4>
+            <p>${escapeHtml(item.exam_content || "暂无详细说明")}</p>
+          </div>
+
+          <div class="content-block">
+            <h4>联系方式</h4>
+            <ul class="contact-list">
+              <li>联系人 / 方向：${escapeHtml(item.contact_name || "未填写")}</li>
+              <li>电话：${escapeHtml(item.contact_phone || "未填写")}</li>
+              <li>邮箱：${escapeHtml(item.contact_email || "未填写")}</li>
+              <li>官网：${
+                item.contact_url
+                  ? `<a href="${escapeAttr(item.contact_url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.contact_url)}</a>`
+                  : "未填写"
+              }</li>
+            </ul>
+          </div>
+        </div>
+      `;
+    }
+
+    function toggleGraduateSchool(index) {
+      const el = document.getElementById(`majorList-${index}`);
+      if (!el) return;
+      el.classList.toggle("show");
     }
 
     async function runSearch() {
@@ -682,31 +707,16 @@
 
       for (const school of schoolsData) {
         try {
-          const baseText = `${school.name || ""} ${school.graduate_school || ""}`.toLowerCase();
+          const baseText = `${school.name || ""} ${school.desc || ""}`.toLowerCase();
           if (baseText.includes(keyword)) {
             matchedSchoolIds.push(school.id);
             continue;
           }
 
           const res = await fetch(`data/${school.id}.json`);
-          const entries = await res.json();
-          const list = Array.isArray(entries) ? entries : [];
+          const data = await res.json();
 
-          const hasMatch = list.some(item => {
-            const text = [
-              item.university,
-              item.graduate_school,
-              item.major,
-              item.course,
-              item.exam_method,
-              item.exam_content,
-              item.contact_name
-            ].filter(Boolean).join(" ").toLowerCase();
-
-            return text.includes(keyword);
-          });
-
-          if (hasMatch) {
+          if (matchesSchoolData(data, keyword)) {
             matchedSchoolIds.push(school.id);
           }
         } catch (err) {
@@ -723,36 +733,82 @@
       renderSchools(filteredSchools);
     }
 
+    function matchesSchoolData(data, keyword) {
+      if (!data) return false;
+
+      const schoolText = [
+        data.university,
+        data.desc
+      ].filter(Boolean).join(" ").toLowerCase();
+
+      if (schoolText.includes(keyword)) return true;
+
+      const graduateSchools = Array.isArray(data.graduate_schools) ? data.graduate_schools : [];
+
+      return graduateSchools.some(gs => {
+        const gsText = [gs.name].filter(Boolean).join(" ").toLowerCase();
+        if (gsText.includes(keyword)) return true;
+
+        const majors = Array.isArray(gs.majors) ? gs.majors : [];
+        return majors.some(item => {
+          const text = [
+            item.major,
+            item.course,
+            item.exam_method,
+            item.exam_content,
+            item.contact_name,
+            item.contact_email
+          ].filter(Boolean).join(" ").toLowerCase();
+
+          return text.includes(keyword);
+        });
+      });
+    }
+
     function resetSearch() {
       document.getElementById("keywordInput").value = "";
-      document.getElementById("searchHint").textContent = "可搜索学校名、研究科名、major、course 等关键词。";
+      document.getElementById("searchHint").textContent = "可搜索学校名称、研究科、专业方向、考试内容等关键词。";
       renderSchools(schoolsData);
     }
 
     function filterCurrentSchoolEntries() {
       const keyword = document.getElementById("detailKeywordInput").value.trim().toLowerCase();
 
+      if (!currentSchoolData) return;
+
       if (!keyword) {
-        renderSchoolEntries(currentSchoolEntries);
+        renderGraduateSchools(currentSchoolData);
         return;
       }
 
-      const filtered = currentSchoolEntries.filter(item => {
-        const text = [
-          item.university,
-          item.graduate_school,
-          item.major,
-          item.course,
-          item.exam_method,
-          item.exam_content,
-          item.contact_name,
-          item.contact_email
-        ].filter(Boolean).join(" ").toLowerCase();
+      const filteredGraduateSchools = (currentSchoolData.graduate_schools || []).map(gs => {
+        const majors = (gs.majors || []).filter(item => {
+          const text = [
+            gs.name,
+            item.major,
+            item.course,
+            item.exam_method,
+            item.exam_content,
+            item.contact_name,
+            item.contact_email
+          ].filter(Boolean).join(" ").toLowerCase();
 
-        return text.includes(keyword);
+          return text.includes(keyword);
+        });
+
+        return {
+          ...gs,
+          majors
+        };
+      }).filter(gs => {
+        const gsName = (gs.name || "").toLowerCase();
+        return gs.majors.length || gsName.includes(keyword);
       });
 
-      renderSchoolEntries(filtered);
+      renderGraduateSchools({
+        ...currentSchoolData,
+        graduate_schools: filteredGraduateSchools
+      });
     }
 
     function escapeHtml(value) {
@@ -766,6 +822,13 @@
 
     function escapeAttr(value) {
       return String(value).replace(/"/g, "&quot;");
+    }
+
+    function escapeJs(value) {
+      return String(value)
+        .replace(/\\/g, "\\\\")
+        .replace(/'/g, "\\'")
+        .replace(/"/g, '\\"');
     }
 
     document.getElementById("searchBtn").addEventListener("click", runSearch);
