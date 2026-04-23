@@ -581,72 +581,131 @@
       }
 
       data.majors.forEach((item) => {
-        const englishTag = item.english_requirement
-          ? `<span class="tag tag-blue">${escapeHtml(item.english_requirement)}</span>`
-          : `<span class="tag tag-gray">英语要求未写明</span>`;
+        const title =
+          item.major_name ||
+          [item.major, item.course].filter(Boolean).join(" · ") ||
+          "未填写";
 
-        const contacts = Array.isArray(item.contacts) ? item.contacts : [];
+        const degree =
+          item.degree || data.degree || "未填写";
 
-        const contactHtml = contacts.length
-          ? contacts.map(link => {
-              const safe = escapeHtml(link);
-              return `<li><a href="${escapeAttr(link)}" target="_blank" rel="noopener noreferrer">${safe}</a></li>`;
-            }).join("")
-          : "<li>未填写</li>";
+        const language =
+          item.language || "未填写";
+
+        const applicationPeriod =
+          item.application_period ||
+          ([item.apply_start, item.apply_end].filter(Boolean).join(" ~ ")) ||
+          ([data.apply_start, data.apply_end].filter(Boolean).join(" ~ ")) ||
+          "未填写";
+
+        const examDate =
+          item.exam_date ||
+          ([item.exam_start, item.exam_end].filter(Boolean).join(" ~ ")) ||
+          ([data.exam_start, data.exam_end].filter(Boolean).join(" ~ ")) ||
+          "未填写";
+
+        const tuition =
+          item.tuition || data.tuition || "未填写";
+
+        const applicationFee =
+          item.application_fee || data.application_fee || "未填写";
+
+        const englishText =
+          item.english_requirement ||
+          (Array.isArray(item.english_tests) && item.english_tests.length
+            ? item.english_tests.join(" / ")
+            : "英语要求未写明");
+
+        const requirements =
+          item.requirements || "未填写";
+
+        const notes =
+          item.notes || data.notes || "未填写";
+
+        const examSubjects =
+          item.exam_subjects || item.exam_content || "未填写";
+
+        const contactItems = [];
+
+        if (Array.isArray(item.contacts) && item.contacts.length) {
+          item.contacts.forEach(link => {
+            contactItems.push(
+              `<li><a href="${escapeAttr(link)}" target="_blank" rel="noopener noreferrer">${escapeHtml(link)}</a></li>`
+            );
+          });
+        } else {
+          if (item.contact_name || data.contact_name) {
+            contactItems.push(`<li>联系人：${escapeHtml(item.contact_name || data.contact_name)}</li>`);
+          }
+          if (item.contact_phone || data.contact_phone) {
+            contactItems.push(`<li>电话：${escapeHtml(item.contact_phone || data.contact_phone)}</li>`);
+          }
+          if (item.contact_email || data.contact_email) {
+            contactItems.push(`<li>邮箱：${escapeHtml(item.contact_email || data.contact_email)}</li>`);
+          }
+          const url = item.contact_url || data.contact_url;
+          if (url) {
+            contactItems.push(
+              `<li>链接：<a href="${escapeAttr(url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(url)}</a></li>`
+            );
+          }
+        }
+
+        const contactHtml = contactItems.length ? contactItems.join("") : "<li>未填写</li>";
 
         const card = document.createElement("div");
         card.className = "major-card";
         card.innerHTML = `
-          <h3 class="major-title">${escapeHtml(item.major_name || "未填写")}</h3>
+          <h3 class="major-title">${escapeHtml(title)}</h3>
           <p class="major-subtitle">${escapeHtml(data.name || "")}</p>
 
           <div class="info-row">
             <div class="info-box">
               <strong>学位</strong>
-              ${escapeHtml(item.degree || "未填写")}
+              ${escapeHtml(degree)}
             </div>
             <div class="info-box">
               <strong>授课语言</strong>
-              ${escapeHtml(item.language || "未填写")}
+              ${escapeHtml(language)}
             </div>
             <div class="info-box">
               <strong>出愿时间</strong>
-              ${escapeHtml(item.application_period || "未填写")}
+              ${escapeHtml(applicationPeriod)}
             </div>
             <div class="info-box">
               <strong>考试时间</strong>
-              ${escapeHtml(item.exam_date || "未填写")}
+              ${escapeHtml(examDate)}
             </div>
           </div>
 
           <div class="info-row">
             <div class="info-box">
               <strong>学费</strong>
-              ${escapeHtml(item.tuition || "未填写")}
+              ${escapeHtml(tuition)}
             </div>
             <div class="info-box">
               <strong>检定料</strong>
-              ${escapeHtml(item.application_fee || "未填写")}
+              ${escapeHtml(applicationFee)}
             </div>
           </div>
 
           <div class="tag-row">
-            ${englishTag}
+            <span class="tag tag-blue">${escapeHtml(englishText)}</span>
           </div>
 
           <div class="content-block">
-            <h4>考试科目</h4>
-            <p>${escapeHtml(item.exam_subjects || "未填写")}</p>
+            <h4>考试科目 / 内容</h4>
+            <p>${escapeHtml(examSubjects)}</p>
           </div>
 
           <div class="content-block">
             <h4>申请要求</h4>
-            <p>${escapeHtml(item.requirements || "未填写")}</p>
+            <p>${escapeHtml(requirements)}</p>
           </div>
 
           <div class="content-block">
             <h4>备注</h4>
-            <p>${escapeHtml(item.notes || "未填写")}</p>
+            <p>${escapeHtml(notes)}</p>
           </div>
 
           <div class="content-block">
@@ -711,16 +770,28 @@
       const filteredMajors = currentGraduateSchoolData.majors.filter(item => {
         const text = [
           item.major_name,
+          item.major,
+          item.course,
           item.degree,
           item.language,
           item.exam_subjects,
+          item.exam_content,
           item.application_period,
+          item.apply_start,
+          item.apply_end,
           item.exam_date,
+          item.exam_start,
+          item.exam_end,
           item.tuition,
           item.application_fee,
           item.requirements,
           item.english_requirement,
+          ...(Array.isArray(item.english_tests) ? item.english_tests : []),
           item.notes,
+          item.contact_name,
+          item.contact_phone,
+          item.contact_email,
+          item.contact_url,
           ...(Array.isArray(item.contacts) ? item.contacts : [])
         ]
           .filter(Boolean)
