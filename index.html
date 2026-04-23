@@ -462,10 +462,10 @@
         return;
       }
 
-      resultCount.textContent = `${data.length} 个研究科`;
+      resultCount.textContent = ${data.length} 个研究科;
 
       data.forEach((item) => {
-        schoolList.innerHTML += `
+        schoolList.innerHTML += 
           <div class="school-card" onclick="openGraduateSchool('${escapeJs(item.id || "")}', '${escapeJs(item.university || "")}', '${escapeJs(item.graduate_school || "")}', '${escapeJs(item.desc || "")}')">
             <h3>${escapeHtml(item.university || "")}</h3>
             <p>${escapeHtml(item.graduate_school || "")}</p>
@@ -477,7 +477,7 @@
               <span class="open-text">查看专业 →</span>
             </div>
           </div>
-        `;
+        ;
       });
     }
 
@@ -485,11 +485,11 @@
       currentGraduateSchoolId = id;
 
       document.getElementById("detailSection").classList.remove("hidden");
-      document.getElementById("detailTitle").textContent = `${university} · ${graduateSchool}`;
+      document.getElementById("detailTitle").textContent = ${university} · ${graduateSchool};
       document.getElementById("detailSubtitle").textContent = desc || "该研究科下的专业与考试信息";
 
       try {
-        const res = await fetch(`data/${id}.json`);
+        const res = await fetch(data/${id}.json);
         const data = await res.json();
         currentGraduateSchoolData = data;
         document.getElementById("detailKeywordInput").value = "";
@@ -514,11 +514,11 @@
       data.majors.forEach((item) => {
         const englishTags = (item.english_tests || []).length
           ? (item.english_tests || []).map(
-              test => `<span class="tag tag-blue">${escapeHtml(test)}</span>`
+              test => <span class="tag tag-blue">${escapeHtml(test)}</span>
             ).join("")
           : '<span class="tag tag-gray">英语要求未写明</span>';
 
-        container.innerHTML += `
+        container.innerHTML += 
           <div class="major-card">
             <h3 class="major-title">${escapeHtml(item.major || "未填写")} · ${escapeHtml(item.course || "未填写")}</h3>
             <p class="major-subtitle">${escapeHtml(data.university || "")} / ${escapeHtml(data.graduate_school || "")}</p>
@@ -570,13 +570,13 @@
                 <li>邮箱：${escapeHtml(item.contact_email || "未填写")}</li>
                 <li>官网：${
                   item.contact_url
-                    ? `<a href="${escapeAttr(item.contact_url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.contact_url)}</a>`
+                    ? <a href="${escapeAttr(item.contact_url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.contact_url)}</a>
                     : "未填写"
                 }</li>
               </ul>
             </div>
           </div>
-        `;
+        ;
       });
     }
 
@@ -613,21 +613,21 @@
             continue;
           }
 
-          const res = await fetch(`data/${item.id}.json`);
+          const res = await fetch(data/${item.id}.json);
           const data = await res.json();
 
           if (matchesGraduateSchoolData(data, keyword)) {
             matchedIds.push(item.id);
           }
         } catch (err) {
-          console.error(`读取 ${item.id}.json 失败`, err);
+          console.error(读取 ${item.id}.json 失败, err);
         }
       }
 
       const filtered = graduateSchoolsData.filter(item => matchedIds.includes(item.id));
 
       hint.textContent = filtered.length
-        ? `找到 ${filtered.length} 个匹配研究科。`
+        ? 找到 ${filtered.length} 个匹配研究科。
         : "没有找到匹配研究科，请换个关键词试试。";
 
       renderGraduateSchoolCards(filtered);
