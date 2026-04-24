@@ -1909,6 +1909,52 @@ function renderHome() {
   `;
 }
 
+function renderSchoolResults(list) {
+  const wrap = document.getElementById("resultList");
+  const keyword = document.getElementById("searchInput").value.trim();
+  document.querySelector(".results-head h2").textContent = "匹配院校";
+
+  if (!list.length) {
+    document.getElementById("resultCount").textContent = "0 所";
+    wrap.innerHTML = `<div class="empty">没有找到匹配院校。<br>可以换关键词，或者切回“全部”院校查看。</div>`;
+    return;
+  }
+
+  const groups = Object.values(schoolGroups(list))
+    .map(group => {
+      const cards = schoolMajorCards(group.items, keyword);
+      return { ...group, matchCount: cards.count };
+    })
+    .filter(group => group.matchCount > 0)
+    .sort((a, b) => b.matchCount - a.matchCount || a.university.localeCompare(b.university, "zh-CN"));
+
+  if (!groups.length) {
+    document.getElementById("resultCount").textContent = "0 所";
+    wrap.innerHTML = `<div class="empty">没有找到匹配院校。<br>可以换关键词，或者切回“全部”院校查看。</div>`;
+    return;
+  }
+
+  document.getElementById("resultCount").textContent = `${groups.length} 所`;
+  wrap.innerHTML = `
+    <div class="school-index">
+      ${groups.map(group => {
+        const summary = schoolSummary(group);
+        const modalKeyword = keywordTopicTerms(keyword).join(" ").replace(/'/g, "\\'");
+        return `
+          <article class="school-card" onclick="openSchoolModal('${group.key}', '${modalKeyword}')">
+            <h3>${group.university}</h3>
+            <p>${summary.text}</p>
+            <div class="school-card-meta">
+              ${tag(`${group.matchCount} 个匹配方向`, "tag-blue")}
+              ${tag(summary.categories, "tag-purple")}
+            </div>
+          </article>
+        `;
+      }).join("")}
+    </div>
+  `;
+}
+
 function renderList(list) {
   const wrap = document.getElementById("resultList");
   document.querySelector(".results-head h2").textContent = "检索结果";
@@ -1960,10 +2006,11 @@ function renderAll() {
     renderHome();
     return;
   }
-  renderList(applyFilters());
+  renderSchoolResults(applyFilters());
   const school = findSchoolByKeyword(keyword);
-  if (school && !needInterviewEnglish && !needEnglishScore && !needJapaneseScore) {
-    openSchoolModal(school.key);
+  const hasOnlySchoolKeyword = school && !keywordTopicTerms(keyword).some(term => !keywordTerms(school.university).includes(term));
+  if (hasOnlySchoolKeyword && !needInterviewEnglish && !needEnglishScore && !needJapaneseScore) {
+    openSchoolModal(school.key, "");
   }
 }
 
@@ -1986,15 +2033,15 @@ function renderSchoolModalBody(keyword = "") {
   document.getElementById("modalBody").innerHTML = `<div class="item-list">${cards.html}</div>`;
 }
 
-function openSchoolModal(key) {
+function openSchoolModal(key, initialKeyword = "") {
   const group = schoolGroups()[key];
   if (!group) return;
   const summary = schoolSummary(group);
   currentModalSchool = key;
   document.getElementById("modalTitle").textContent = group.university;
   document.getElementById("modalSubtitle").textContent = `${summary.text}`;
-  document.getElementById("modalSearchInput").value = "";
-  renderSchoolModalBody("");
+  document.getElementById("modalSearchInput").value = initialKeyword;
+  renderSchoolModalBody(initialKeyword);
   document.getElementById("schoolModal").classList.add("active");
   document.getElementById("schoolModal").setAttribute("aria-hidden", "false");
 }
