@@ -3,795 +3,1004 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>日本大学院 理工类修士检索推荐系统</title>
+<title>日本修士募集要项检索系统</title>
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --bg: #f8f7fc;
-    --surface: #ffffff;
-    --surface2: #f3f2f8;
-    --border: rgba(0,0,0,0.08);
-    --text: #1a1825;
-    --text2: #5c5870;
-    --text3: #9590aa;
-    --purple: #534ab7;
-    --purple-light: #eeedfe;
-    --purple-dark: #3c3489;
-    --teal: #0f6e56;
-    --teal-light: #e1f5ee;
-    --amber: #633806;
-    --amber-light: #faeeda;
-    --red: #8a2e2e;
-    --red-light: #fcebec;
-    --blue: #0c447c;
-    --blue-light: #e6f1fb;
-  }
+  * { box-sizing: border-box; }
   body {
-    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic UI", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    font-size: 15px;
-    line-height: 1.6;
-    min-height: 100vh;
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC",
+      "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: #f6f7fb;
+    color: #111827;
   }
   .page {
-    max-width: 1100px;
+    max-width: 1160px;
     margin: 0 auto;
-    padding: 32px 16px 64px;
+    padding: 28px 16px 60px;
   }
   .hero {
-    margin-bottom: 20px;
-  }
-  .hero-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 8px;
-    flex-wrap: wrap;
+    margin-bottom: 18px;
   }
   .hero h1 {
-    font-size: 28px;
-    font-weight: 700;
-  }
-  .ai-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 11px;
-    font-weight: 700;
-    background: var(--purple-light);
-    color: var(--purple-dark);
-    padding: 4px 9px;
-    border-radius: 999px;
+    margin: 0 0 8px;
+    font-size: 34px;
+    line-height: 1.15;
   }
   .hero p {
-    font-size: 14px;
-    color: var(--text2);
-  }
-  .stats-bar {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-bottom: 16px;
-  }
-  .stat-pill {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 12px;
-    font-weight: 500;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    padding: 6px 12px;
-    border-radius: 999px;
-    color: var(--text2);
-  }
-  .stat-pill span {
+    margin: 0;
+    color: #6b7280;
+    line-height: 1.75;
     font-size: 15px;
-    font-weight: 700;
-    color: var(--purple);
   }
-  .search-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
+  .stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 16px 0 18px;
+  }
+  .stat {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 999px;
+    padding: 8px 12px;
+    font-size: 13px;
+    color: #4b5563;
+  }
+  .stat strong { color: #4f46e5; }
+  .panel {
+    background: #fff;
+    border: 1px solid #e5e7eb;
     border-radius: 18px;
-    padding: 20px 22px;
+    padding: 18px;
+    box-shadow: 0 10px 28px rgba(15, 23, 42, 0.05);
     margin-bottom: 18px;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  }
+  .section-title {
+    margin: 0 0 10px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #6b7280;
   }
   .search-row {
     display: flex;
-    gap: 8px;
+    gap: 10px;
     margin-bottom: 14px;
   }
-  .search-input {
+  input[type="text"] {
     flex: 1;
-    font-size: 15px;
-    font-family: inherit;
-    padding: 12px 16px;
+    min-width: 0;
+    border: 1px solid #d1d5db;
     border-radius: 12px;
-    border: 1px solid var(--border);
-    background: var(--surface2);
-    color: var(--text);
+    padding: 12px 14px;
+    font: inherit;
+    color: #111827;
     outline: none;
+    background: #fff;
   }
-  .search-input:focus {
-    background: var(--surface);
-    border-color: #a79ff3;
-    box-shadow: 0 0 0 3px rgba(83,74,183,0.12);
+  input[type="text"]:focus {
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
   }
-  .btn {
-    padding: 12px 18px;
+  button {
+    font: inherit;
+    border: 0;
     border-radius: 12px;
-    border: 1px solid var(--border);
-    background: var(--surface);
-    color: var(--text);
+    padding: 12px 16px;
     cursor: pointer;
-    font-size: 14px;
-    font-family: inherit;
-    font-weight: 600;
+    font-weight: 700;
     white-space: nowrap;
   }
-  .btn:hover { background: var(--surface2); }
-  .btn-primary {
-    background: var(--purple);
-    border-color: var(--purple);
+  .primary-btn {
+    background: #4f46e5;
     color: #fff;
   }
-  .btn-primary:hover { background: var(--purple-dark); }
-  .quick-row, .filter-row {
+  .secondary-btn {
+    background: #eef2ff;
+    color: #3730a3;
+  }
+  .row {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
     align-items: center;
   }
-  .quick-row { margin-bottom: 14px; }
-  .quick-label, .filter-label {
-    font-size: 12px;
-    color: var(--text3);
-  }
-  .quick-btn, .pill, .univ-tab {
-    font-family: inherit;
-    font-size: 12px;
-    padding: 5px 11px;
-    border-radius: 999px;
-    border: 1px solid var(--border);
-    background: var(--surface2);
-    color: var(--text2);
-    cursor: pointer;
-  }
-  .quick-btn {
-    border-color: #c7c2ff;
-    background: var(--purple-light);
-    color: var(--purple-dark);
-  }
-  .pill.on {
-    background: var(--purple-light);
-    border-color: #b9b1ff;
-    color: var(--purple-dark);
-    font-weight: 700;
-  }
-  .pill.on-teal {
-    background: var(--teal-light);
-    border-color: #8fdcc0;
-    color: var(--teal);
-    font-weight: 700;
-  }
-  .divider {
-    height: 1px;
-    background: var(--border);
-    margin: 14px 0;
-  }
-  .filters {
-    display: grid;
-    gap: 12px;
-  }
-  .toggle-label {
+  .tab, .chip, .quick-chip {
     display: inline-flex;
     align-items: center;
     gap: 6px;
+    border: 1px solid #d1d5db;
+    border-radius: 999px;
+    padding: 7px 12px;
     font-size: 13px;
-    color: var(--text2);
+    background: #f9fafb;
+    color: #4b5563;
     cursor: pointer;
+    user-select: none;
   }
-  .toggle-label input {
-    accent-color: var(--purple);
+  .tab.active, .chip.active, .quick-chip:hover {
+    background: #eef2ff;
+    border-color: #c7d2fe;
+    color: #3730a3;
   }
-  .loading-row {
-    display: none;
+  .hint {
+    margin-top: 12px;
+    color: #6b7280;
     font-size: 13px;
-    color: var(--text3);
-    margin: 8px 0 12px;
   }
-  .loading-row.show { display: block; }
-  .results-header {
+  .results-head {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px;
-    gap: 10px;
+    gap: 12px;
+    margin-bottom: 14px;
   }
-  .results-header h2 {
-    font-size: 16px;
+  .results-head h2 {
+    margin: 0;
+    font-size: 20px;
+  }
+  .badge {
+    background: #eef2ff;
+    color: #4338ca;
+    border-radius: 999px;
+    padding: 7px 12px;
+    font-size: 12px;
     font-weight: 700;
   }
-  .count-badge {
-    font-size: 12px;
-    color: var(--text2);
-    background: var(--surface);
-    border: 1px solid var(--border);
-    padding: 4px 10px;
-    border-radius: 999px;
-  }
-  .results-list {
+  .result-list {
     display: grid;
-    gap: 12px;
+    gap: 14px;
   }
-  .result-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-left: 4px solid #dad8e8;
+  .school-group {
+    border: 1px solid #e5e7eb;
+    border-left: 4px solid #6366f1;
     border-radius: 16px;
-    padding: 16px 18px;
-    cursor: pointer;
-    transition: box-shadow 0.15s ease, transform 0.15s ease;
+    background: #fff;
+    padding: 18px;
   }
-  .result-card:hover {
-    box-shadow: 0 8px 24px rgba(83,74,183,0.08);
-    transform: translateY(-1px);
-  }
-  .card-head {
+  .school-head {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
     gap: 12px;
-    margin-bottom: 10px;
+    margin-bottom: 14px;
   }
-  .card-major {
-    font-size: 17px;
-    font-weight: 700;
-    line-height: 1.4;
+  .school-head h3 {
+    margin: 0;
+    font-size: 26px;
+    line-height: 1.2;
   }
-  .card-univ {
-    font-size: 12px;
-    color: var(--text3);
-    margin-top: 4px;
+  .school-head p {
+    margin: 6px 0 0;
+    color: #6b7280;
+    font-size: 14px;
+    line-height: 1.7;
   }
-  .card-univ-badge {
-    display: inline-block;
-    font-size: 11px;
-    font-weight: 700;
-    padding: 2px 8px;
-    border-radius: 999px;
-    margin-left: 6px;
-    vertical-align: middle;
-  }
-  .relevance-badge {
+  .school-badge {
     flex-shrink: 0;
+    background: #eef2ff;
+    color: #3730a3;
+    border-radius: 999px;
+    padding: 6px 10px;
     font-size: 12px;
     font-weight: 700;
-    padding: 4px 10px;
-    border-radius: 999px;
   }
-  .rel-high { background: var(--purple-light); color: var(--purple-dark); }
-  .rel-mid  { background: var(--teal-light); color: var(--teal); }
-  .rel-low  { background: var(--blue-light); color: var(--blue); }
-  .card-tags {
+  .item-list {
+    display: grid;
+    gap: 12px;
+  }
+  .item-block {
+    border-top: 1px dashed #e5e7eb;
+    padding-top: 12px;
+  }
+  .item-block:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+  .item-title {
+    margin: 0 0 4px;
+    font-size: 20px;
+    line-height: 1.35;
+  }
+  .item-subtitle {
+    margin: 0 0 10px;
+    color: #6b7280;
+    font-size: 14px;
+    line-height: 1.7;
+  }
+  .card {
+    border: 1px solid #e5e7eb;
+    border-left: 4px solid #6366f1;
+    border-radius: 16px;
+    background: #fff;
+    padding: 18px;
+  }
+  .card-top {
     display: flex;
-    gap: 6px;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 12px;
+  }
+  .card-title {
+    margin: 0;
+    font-size: 21px;
+    line-height: 1.35;
+  }
+  .card-subtitle {
+    margin: 4px 0 0;
+    color: #6b7280;
+    font-size: 14px;
+    line-height: 1.7;
+  }
+  .meta-tag {
+    flex-shrink: 0;
+    border-radius: 999px;
+    padding: 6px 10px;
+    font-size: 12px;
+    font-weight: 700;
+    background: #eef2ff;
+    color: #3730a3;
+  }
+  .tag-row {
+    display: flex;
+    gap: 8px;
     flex-wrap: wrap;
     margin-bottom: 12px;
   }
-  .ctag {
-    font-size: 11px;
-    padding: 2px 8px;
+  .tag {
+    display: inline-block;
     border-radius: 999px;
-    border: 1px solid var(--border);
-    background: var(--surface2);
-    color: var(--text2);
+    padding: 5px 9px;
+    font-size: 12px;
+    font-weight: 700;
   }
-  .ctag-jp { background: var(--amber-light); border-color: #f2c46d; color: var(--amber); }
-  .ctag-ok { background: var(--teal-light); border-color: #93dbbf; color: var(--teal); }
-  .ctag-ng { background: var(--red-light); border-color: #efc0c3; color: var(--red); }
-  .ctag-info { background: var(--blue-light); border-color: #b6d7f1; color: var(--blue); }
-  .meta-grid {
+  .tag-purple { background: #ede9fe; color: #6d28d9; }
+  .tag-blue { background: #dbeafe; color: #1d4ed8; }
+  .tag-green { background: #dcfce7; color: #166534; }
+  .tag-red { background: #fee2e2; color: #b91c1c; }
+  .tag-amber { background: #fef3c7; color: #92400e; }
+  .grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 10px;
-    margin-bottom: 12px;
+    margin-bottom: 14px;
   }
-  .meta-box {
-    background: var(--surface2);
-    border: 1px solid #ece8f7;
+  .box {
+    background: #f9fafb;
+    border: 1px solid #eef2f7;
     border-radius: 12px;
-    padding: 10px 12px;
-    font-size: 13px;
-    color: var(--text2);
+    padding: 12px;
+    font-size: 14px;
+    color: #374151;
+    line-height: 1.75;
   }
-  .meta-box strong {
+  .box strong {
     display: block;
-    font-size: 12px;
-    color: var(--text);
-    margin-bottom: 4px;
-  }
-  .summary-line {
+    margin-bottom: 5px;
+    color: #111827;
     font-size: 13px;
-    color: var(--text2);
-    margin-bottom: 6px;
   }
-  .summary-line strong {
-    color: var(--text);
-    font-weight: 700;
-  }
-  .detail-drawer {
-    overflow: hidden;
-    max-height: 0;
-    transition: max-height 0.25s ease;
-    border-top: 1px solid transparent;
-  }
-  .detail-drawer.open {
-    max-height: 900px;
-    border-top: 1px solid var(--border);
-    margin-top: 12px;
+  .detail {
+    border-top: 1px dashed #e5e7eb;
     padding-top: 12px;
-  }
-  .detail-inner {
     display: grid;
-    gap: 8px;
-  }
-  .detail-row {
-    display: flex;
     gap: 10px;
-    font-size: 13px;
-    align-items: flex-start;
   }
-  .detail-key {
-    min-width: 86px;
-    color: var(--text);
-    font-weight: 700;
-    flex-shrink: 0;
+  .detail-line {
+    font-size: 14px;
+    color: #374151;
+    line-height: 1.8;
   }
-  .detail-val {
-    color: var(--text2);
-    line-height: 1.7;
+  .detail-line strong {
+    color: #111827;
   }
-  .detail-val a {
-    color: var(--purple);
+  .detail-line a {
+    color: #4f46e5;
     text-decoration: none;
     word-break: break-all;
   }
-  .detail-val a:hover { text-decoration: underline; }
+  .detail-line a:hover {
+    text-decoration: underline;
+  }
   .empty {
     text-align: center;
-    padding: 48px 0;
-    color: var(--text3);
-    font-size: 14px;
+    padding: 48px 18px;
+    border: 1px dashed #d1d5db;
+    border-radius: 16px;
+    color: #6b7280;
+    background: #f9fafb;
     line-height: 1.8;
   }
-  @media (max-width: 720px) {
-    .search-row { flex-direction: column; }
-    .meta-grid { grid-template-columns: 1fr; }
-    .card-head { flex-direction: column; }
-    .hero h1 { font-size: 24px; }
+  @media (max-width: 760px) {
+    .search-row, .school-head { flex-direction: column; }
+    .grid { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 28px; }
   }
 </style>
 </head>
 <body>
 <div class="page">
   <div class="hero">
-    <div class="hero-row">
-      <h1>🎓 日本大学院 理工类修士推荐系统</h1>
-      <span class="ai-badge">✦ 语义相关度分析</span>
-    </div>
-    <p>支持中文 / 日文 / 英文混合搜索。按专业方向、考试科目、英语要求、选拔方式做匹配推荐，点开卡片可继续看考试内容和官网入口。</p>
+    <h1>日本修士募集要项检索系统</h1>
+    <p>这版把工科和计算机相关项目合并在一起了，并且按<strong>学校</strong>来展示。点某个学校时，会直接显示这所学校当前收录的全部专业信息；不再以研究科作为第一层。筛选条件只保留 <strong>需要英语成绩</strong> 和 <strong>需要日语能力</strong>。</p>
   </div>
 
-  <div class="stats-bar">
-    <div class="stat-pill">院校 <span id="univCount">-</span> 所</div>
-    <div class="stat-pill">项目 <span id="totalCount">-</span> 条</div>
-    <div class="stat-pill">覆盖 <span id="fieldCount">理工类硕士</span></div>
+  <div class="stats">
+    <div class="stat">院校 <strong id="schoolCount">0</strong> 所</div>
+    <div class="stat">项目 <strong id="itemCount">0</strong> 条</div>
+    <div class="stat">资料目录 <strong>工学募集要项</strong></div>
   </div>
 
-  <div class="search-card">
+  <div class="panel">
     <div class="search-row">
-      <input class="search-input" id="queryInput" placeholder="例：机械工学、材料、电气电子、建筑、情报、化学工学、原子力、控制..." onkeydown="if(event.key==='Enter') doSearch()" />
-      <button class="btn btn-primary" onclick="doSearch()">✦ 推荐</button>
-      <button class="btn" onclick="resetAll()">重置</button>
+      <input id="searchInput" type="text" placeholder="例如：机械 / 材料 / 电气电子 / 情报工学 / AI / 数据科学 / 建筑 / 土木 / TOEFL / 口试" />
+      <button class="primary-btn" id="searchBtn">搜索</button>
+      <button class="secondary-btn" id="resetBtn">重置</button>
     </div>
 
-    <div class="quick-row">
-      <span class="quick-label">快速搜索：</span>
-      <button class="quick-btn" onclick="qs('機械工学')">機械工学</button>
-      <button class="quick-btn" onclick="qs('材料科学')">材料科学</button>
-      <button class="quick-btn" onclick="qs('電気電子')">電気電子</button>
-      <button class="quick-btn" onclick="qs('情報通信')">情報通信</button>
-      <button class="quick-btn" onclick="qs('建築')">建築</button>
-      <button class="quick-btn" onclick="qs('化学工学')">化学工学</button>
-      <button class="quick-btn" onclick="qs('応用物理')">応用物理</button>
-      <button class="quick-btn" onclick="qs('原子力・量子')">原子力・量子</button>
-      <button class="quick-btn" onclick="qs('生命・バイオ')">生命・バイオ</button>
-      <button class="quick-btn" onclick="qs('都市・土木')">都市・土木</button>
+    <div class="section-title">快速搜索</div>
+    <div class="row" id="quickRow"></div>
+
+    <div class="section-title" style="margin-top:16px;">院校</div>
+    <div class="row" id="schoolTabs"></div>
+
+    <div class="section-title" style="margin-top:16px;">筛选条件</div>
+    <div class="row">
+      <span class="chip" data-filter="english">需要英语成绩</span>
+      <span class="chip" data-filter="japanese">需要日语能力</span>
     </div>
 
-    <div class="divider"></div>
-
-    <div class="filters">
-      <div class="filter-row">
-        <span class="filter-label">院校</span>
-        <div id="univTabs" class="filter-row"></div>
-      </div>
-
-      <div class="filter-row">
-        <span class="filter-label">英语</span>
-        <span class="pill on" id="p-toefl" onclick="tp('toefl')">TOEFL 可</span>
-        <span class="pill on" id="p-ielts" onclick="tp('ielts')">IELTS 可</span>
-      </div>
-
-      <div class="filter-row">
-        <span class="filter-label">条件</span>
-        <span class="pill on-teal" id="p-any" onclick="th('any')">不限</span>
-        <span class="pill" id="p-461" onclick="th('461')">仅看 TOEIC 461+</span>
-        <span class="pill" id="p-550" onclick="th('550')">仅看 TOEIC 550+</span>
-        <label class="toggle-label"><input type="checkbox" id="filterNoJP" /> 仅看日语要求相对低</label>
-      </div>
-    </div>
+    <div class="hint">说明：院校栏是单选查看。点学校后会展示该校当前收录的全部工科和计算机专业信息；点“全部”可回到总表。</div>
   </div>
 
-  <div class="loading-row" id="loadingRow">✦ 正在分析语义相关度...</div>
-
-  <div class="results-header">
-    <h2>推荐结果</h2>
-    <span class="count-badge" id="countBadge">请输入关键词</span>
+  <div class="results-head">
+    <h2>检索结果</h2>
+    <span class="badge" id="resultCount">0 条</span>
   </div>
-  <div class="results-list" id="resultsList"></div>
+
+  <div class="result-list" id="resultList"></div>
 </div>
 
 <script>
-const DB = [
-  {id:"hoku-mech",univ:"北海道大学",univKey:"hoku",dept:"大学院工学院",major:"机械宇宙工学 / 人间机械 / 能源环境系统",keywords:["机械","机械工学","航空宇宙","流体力学","热力学","控制工学","机器人","mechanical","aerospace"],zhKeywords:["机械","航空宇宙","流体力学","热力学","控制","机器人"],apply:"2026年6月15日-19日",exam:"2026年8月18日-19日",capacity:"99名（4专攻合计）",route:"一般入试",englishMin:550,toeflOK:true,ieltsOK:true,langJP:true,englishPolicy:"TOEIC / TOEFL / IELTS 可。TOEIC 550 为最低线。",examSubjects:"数学、热力学、流体力学、材料力学、机械力学、控制工学。",notes:"适合机械、航天、机器人、热流体方向。",url:"https://mech-ise.eng.hokudai.ac.jp/info/entrance.html"},
-  {id:"hoku-material",univ:"北海道大学",univKey:"hoku",dept:"大学院工学院",major:"材料科学专攻",keywords:["材料","金属","高分子","陶瓷","复合材料","materials","polymer"],zhKeywords:["材料","金属","高分子","陶瓷","复合材料"],apply:"2026年6月15日-19日",exam:"2026年8月18日-19日",capacity:"39名",route:"一般入试",englishMin:null,toeflOK:true,ieltsOK:false,langJP:true,englishPolicy:"TOEFL 可，IELTS 不可。",examSubjects:"材料科学基础、材料组织、材料物性、材料过程。",notes:"偏材料与制造。",url:"https://www.eng.hokudai.ac.jp/graduate/examinfo/"},
-  {id:"hoku-env",univ:"北海道大学",univKey:"hoku",dept:"大学院工学院",major:"环境土木 / 建筑都市 / 空间性能系统",keywords:["土木","环境工学","建筑","都市计划","结构力学","HVAC","architecture","civil"],zhKeywords:["土木","环境","建筑","都市","结构","暖通"],apply:"2026年6月15日-19日",exam:"2026年8月18日-19日",capacity:"73名（相关专攻合计）",route:"一般入试",englishMin:461,toeflOK:true,ieltsOK:true,langJP:true,englishPolicy:"TOEIC / TOEFL / IELTS。部分专攻最低线为 461。",examSubjects:"结构、土质、水理、建筑环境、都市规划、防灾、环境工学。",notes:"适合建筑、土木、环境、都市方向。",url:"https://www.eng.hokudai.ac.jp/graduate/examinfo/"},
-
-  {id:"osaka-mech",univ:"大阪大学",univKey:"osaka",dept:"大学院工学研究科",major:"机械工学专攻",keywords:["机械","热力学","流体力学","控制工学","材料力学","mechanical"],zhKeywords:["机械","热力学","流体力学","控制","材料力学"],apply:"2026年7月6日-17日",exam:"2026年8月18日-19日",capacity:"96名",route:"一般选拔",englishMin:null,toeflOK:true,ieltsOK:false,langJP:true,englishPolicy:"TOEIC / TOEFL 可，IELTS 不可。",examSubjects:"力学、机械力学、材料力学、热力学、流体力学、控制工学。",notes:"在留资格为留学者不能报一般选拔。",url:"http://www.mech.eng.osaka-u.ac.jp/"},
-  {id:"osaka-eei",univ:"大阪大学",univKey:"osaka",dept:"大学院工学研究科",major:"电气电子信息通信工学专攻",keywords:["电气","电子","信息通信","电磁气学","回路","communication","electronics"],zhKeywords:["电气","电子","信息通信","电磁","回路"],apply:"2026年7月6日-17日",exam:"2026年8月18日、20日",capacity:"141名",route:"一般选拔",englishMin:null,toeflOK:true,ieltsOK:true,langJP:true,englishPolicy:"TOEIC / TOEFL / IELTS 可。",examSubjects:"数学、电磁理论、电气电子回路、口头试问。",notes:"适合电气、电子、通信、信息方向。",url:"http://www.eei.eng.osaka-u.ac.jp/graduateschool-html"},
-  {id:"osaka-chem",univ:"大阪大学",univKey:"osaka",dept:"大学院工学研究科",major:"应用化学 / 材料生产科学 / 生物工学",keywords:["应用化学","材料","生物工学","高分子","biotechnology","chemistry"],zhKeywords:["应用化学","材料","生物工学","高分子","化学"],apply:"2026年7月6日-17日",exam:"2026年8月18日-20日",capacity:"278名（相关专攻合计）",route:"一般选拔",englishMin:null,toeflOK:true,ieltsOK:true,langJP:true,englishPolicy:"应用化学可 IELTS；材料、生物多为 TOEIC / TOEFL。",examSubjects:"化学 I / II、材料科学、物理化学、生物工学基础、口头试问。",notes:"不同专攻英语要求差异较大。",url:"https://www.eng.osaka-u.ac.jp/ja/entrance/g_admissions/"},
-  {id:"osaka-civil",univ:"大阪大学",univKey:"osaka",dept:"大学院工学研究科",major:"地球综合工学 / 环境能源工学",keywords:["建筑","土木","船舶海洋","社会基础","环境工学","原子力","civil","architecture"],zhKeywords:["建筑","土木","船舶海洋","社会基础","环境","原子力"],apply:"2026年7月6日-17日",exam:"2026年8月18日-20日",capacity:"186名（相关专攻合计）",route:"一般选拔",englishMin:null,toeflOK:true,ieltsOK:true,langJP:true,englishPolicy:"多数专攻 TOEIC / TOEFL / IELTS 可。",examSubjects:"结构、流体、土质、建筑设计、环境工学、量子工学、小论文。",notes:"适合建筑、土木、环境、能源。",url:"https://see.eng.osaka-u.ac.jp/"},
-
-  {id:"nagoya-mech",univ:"名古屋大学",univKey:"nagoya",dept:"大学院工学研究科",major:"机械 / 微纳机械 / 航空宇宙工学系",keywords:["机械","微纳","航空宇宙","流体力学","热工学","控制工学","aerospace","mechanical"],zhKeywords:["机械","微纳","航空宇宙","流体力学","热工学","控制"],apply:"2026年7月3日截止",exam:"2026年8月18日-20日",capacity:"140名",route:"博士前期一般选拔",englishMin:null,toeflOK:true,ieltsOK:false,langJP:true,englishPolicy:"TOEIC / TOEFL 可，IELTS 不可。",examSubjects:"数学全答，专业从热工、流体、机械力学、控制、材料力学中选答。",notes:"工学热门组。",url:"https://www.mae.nagoya-u.ac.jp/ja/admission"},
-  {id:"nagoya-eei",univ:"名古屋大学",univKey:"nagoya",dept:"大学院工学研究科",major:"电气 / 电子 / 信息通信工学系",keywords:["电气","电子","信息通信","电磁气学","电子回路","信息理论","electronics","communication"],zhKeywords:["电气","电子","信息通信","电磁","电子回路","信息理论"],apply:"2026年7月3日截止",exam:"2026年8月18日-20日",capacity:"114名",route:"博士前期一般选拔",englishMin:null,toeflOK:true,ieltsOK:false,langJP:true,englishPolicy:"TOEIC / TOEFL 可，IELTS 不可。",examSubjects:"数学、电磁气学、回路、逻辑回路、电子物性、信息理论。",notes:"适合电气电子信息方向。",url:"https://www.nuee.nagoya-u.ac.jp/g_admission/index.html"},
-  {id:"nagoya-material",univ:"名古屋大学",univKey:"nagoya",dept:"大学院工学研究科",major:"材料设计 / 物质过程 / 化学系统工学系",keywords:["材料","化工","物质过程","反应工学","传热","materials","process"],zhKeywords:["材料","化工","物质过程","反应工程","传热"],apply:"2026年7月3日截止",exam:"2026年8月18日-20日",capacity:"103名",route:"博士前期一般选拔",englishMin:null,toeflOK:true,ieltsOK:false,langJP:true,englishPolicy:"TOEIC / TOEFL 可，IELTS 不可。",examSubjects:"数学、物理化学，专业从固体物理、流动与传热、反应工学、材料力学中选答。",notes:"偏材料和过程工程。",url:"https://www.engg.nagoya-u.ac.jp/prospective/doc/attention2.pdf"},
-  {id:"nagoya-chemphys",univ:"名古屋大学",univKey:"nagoya",dept:"大学院工学研究科",major:"化学生命 / 应用物理 / 物质科学系",keywords:["化学","生命分子","高分子","应用物理","量子力学","applied physics","chemistry"],zhKeywords:["化学","生命分子","高分子","应用物理","量子力学"],apply:"2026年7月3日截止",exam:"2026年8月18日-20日",capacity:"174名（相关系合计）",route:"博士前期一般选拔",englishMin:null,toeflOK:true,ieltsOK:false,langJP:true,englishPolicy:"TOEIC / TOEFL 可，IELTS 不可。",examSubjects:"无机 / 物理化学、有机、生化学、量子、热统计、物性物理等。",notes:"适合化学、生物、应用物理方向。",url:"https://www.engg.nagoya-u.ac.jp/prospective/doc/attention2.pdf"},
-
-  {id:"kyoto-mech",univ:"京都大学",univKey:"kyoto",dept:"大学院工学研究科",major:"机械工学群",keywords:["机械","微工程","航空宇宙","mechanical","aerospace"],zhKeywords:["机械","微工程","航空宇宙"],apply:"2026年5月27日-6月10日 17:00",exam:"2026年7月30日-8月7日",capacity:"113名",route:"修士课程",englishMin:null,toeflOK:false,ieltsOK:false,langJP:true,englishPolicy:"英语和书类要求以专攻详细页为准。",examSubjects:"数学、专业基础、口试。",notes:"群内统一募集，录取后再分属。",url:"https://www.t.kyoto-u.ac.jp/ja/admissions/graduate/"},
-  {id:"kyoto-eechem",univ:"京都大学",univKey:"kyoto",dept:"大学院工学研究科",major:"电气电子数字理工 / 化学理工学",keywords:["电气","电子","数字","化学","高分子","electronics","chemistry"],zhKeywords:["电气","电子","数字","化学","高分子"],apply:"2026年5月27日-6月10日 17:00",exam:"2026年7月30日-8月7日",capacity:"308名（相关专攻合计）",route:"修士课程",englishMin:null,toeflOK:false,ieltsOK:false,langJP:true,englishPolicy:"总募集要项未统一写明外语换算方式，需看专攻页。",examSubjects:"电气电子回路、数字系统、化学基础、应用化学等。",notes:"适合电气电子和化学方向。",url:"https://www.t.kyoto-u.ac.jp/ja/admissions/graduate/"},
-  {id:"kyoto-civilarch",univ:"京都大学",univKey:"kyoto",dept:"大学院工学研究科",major:"社会基盘 / 都市环境 / 建筑学",keywords:["土木","城市","环境工学","建筑","civil","architecture"],zhKeywords:["土木","城市","环境","建筑"],apply:"2026年5月27日-6月10日 17:00",exam:"2026年7月30日-8月7日",capacity:"226名（相关专攻合计）",route:"修士课程",englishMin:null,toeflOK:false,ieltsOK:false,langJP:true,englishPolicy:"以专攻别详细募集为准。",examSubjects:"结构、水环境、都市基础、建筑设计、建筑环境。",notes:"适合土木、环境、建筑。",url:"https://www.t.kyoto-u.ac.jp/ja/admissions/graduate/"},
-
-  {id:"tohoku-mech",univ:"东北大学",univKey:"tohoku",dept:"大学院工学研究科",major:"机械系4专攻",keywords:["机械","机器人","航空宇宙","流体力学","热力学","控制工学","robotics","aerospace"],zhKeywords:["机械","机器人","航空宇宙","流体力学","热力学","控制"],apply:"2025年7月3日-11日 16:00",exam:"2025年8月26日-28日",capacity:"183名",route:"博士前期2年课程 一般选拔",englishMin:null,toeflOK:true,ieltsOK:false,langJP:true,englishPolicy:"TOEFL / TOEIC，可用 TOEFL iBT Home Edition。",examSubjects:"数学 A / B，专业从热、流、材、机、控中选答，另有面试。",notes:"东北工学里机械体量最大。",url:"https://www.eng.tohoku.ac.jp/admission/grad/master.html"},
-  {id:"tohoku-ee",univ:"东北大学",univKey:"tohoku",dept:"大学院工学研究科",major:"电气系3专攻",keywords:["电气","电子","通信","电磁气学","回路","electronics","communication"],zhKeywords:["电气","电子","通信","电磁","回路"],apply:"2025年7月3日-11日 16:00",exam:"2025年8月26日",capacity:"126名",route:"博士前期2年课程 一般选拔",englishMin:null,toeflOK:true,ieltsOK:false,langJP:true,englishPolicy:"TOEFL / TOEIC，Home Edition 不可。",examSubjects:"电磁气学、电气回路、计算机硬件 / 软件、物理、数学基础。",notes:"偏电气电子信息。",url:"https://www.eng.tohoku.ac.jp/admission/grad/master.html"},
-  {id:"tohoku-chem-material",univ:"东北大学",univKey:"tohoku",dept:"大学院工学研究科",major:"化学 / 生物 / 材料科学系",keywords:["应用化学","化学工学","生物工学","材料","金属","materials","chemical engineering"],zhKeywords:["应用化学","化学工学","生物工学","材料","金属"],apply:"2025年7月3日-11日 16:00",exam:"2025年8月26日-28日",capacity:"172名（相关专攻合计）",route:"博士前期2年课程 一般选拔",englishMin:null,toeflOK:true,ieltsOK:false,langJP:true,englishPolicy:"多为 TOEFL / TOEIC；Home Edition 多数不认可。",examSubjects:"无机 / 物理化学、有机、生化学、化工，或材料科学、材料物性、加工学。",notes:"适合化学、化工、生物、材料方向。",url:"https://www.eng.tohoku.ac.jp/admission/grad/master.html"},
-  {id:"tohoku-civilarch",univ:"东北大学",univKey:"tohoku",dept:"大学院工学研究科",major:"土木工学 / 都市建筑学",keywords:["土木","建筑","都市","结构","水环境","architecture","civil"],zhKeywords:["土木","建筑","都市","结构","水环境"],apply:"2025年7月3日-11日 16:00",exam:"2025年8月26日-27日",capacity:"94名",route:"博士前期2年课程 一般选拔",englishMin:null,toeflOK:true,ieltsOK:false,langJP:true,englishPolicy:"TOEFL / TOEIC，Home Edition 不可。",examSubjects:"小论文、基础科目、专业科目、共通科目、面试。",notes:"适合土木、建筑、城市规划方向。",url:"https://www.eng.tohoku.ac.jp/admission/grad/master.html"},
-  {id:"tohoku-appquant",univ:"东北大学",univKey:"tohoku",dept:"大学院工学研究科",major:"应用物理 / 量子能源工学",keywords:["应用物理","量子","原子力","热统计","量子力学","applied physics","nuclear"],zhKeywords:["应用物理","量子","原子力","热统计","量子力学"],apply:"2025年7月3日-11日 16:00",exam:"2025年8月26日-28日",capacity:"70名",route:"博士前期2年课程 一般选拔",englishMin:null,toeflOK:true,ieltsOK:true,langJP:true,englishPolicy:"应用物理接受 TOEFL / TOEIC / IELTS Academic；量子能源为 TOEFL / TOEIC。",examSubjects:"力学、电磁、量子、统计、物性，或核工学、放射线基础。",notes:"偏物理与核能。",url:"https://www.eng.tohoku.ac.jp/admission/grad/master.html"},
-
-  {id:"kanazawa-mechfrontier",univ:"金泽大学",univKey:"kanazawa",dept:"大学院自然科学研究科",major:"机械科学 / 前沿工学",keywords:["机械","振动","流体","热力学","电子机械","frontier engineering","mechanical"],zhKeywords:["机械","振动","流体","热力学","电子机械","前沿工学"],apply:"2026年6月4日-10日",exam:"A试验 2026年8月18日-19日 / B试验 2026年7月4日",capacity:"155名",route:"博士前期 一般选拔",englishMin:null,toeflOK:true,ieltsOK:true,langJP:true,englishPolicy:"TOEIC / TOEFL / IELTS。",examSubjects:"英语、数学、专业课。机械含材料力学、振动、流体、热力学；前沿工学含机电、化工、电子信息。",notes:"A / B 两次选拔。",url:"https://www.nst.kanazawa-u.ac.jp/admission/master/"},
-  {id:"kanazawa-eechem",univ:"金泽大学",univKey:"kanazawa",dept:"大学院自然科学研究科",major:"电子信息通信 / 物质化学",keywords:["电子","信息通信","电磁","回路","化学","有机","communication","chemistry"],zhKeywords:["电子","信息通信","电磁","回路","化学","有机"],apply:"2026年6月4日-10日",exam:"A试验 2026年8月18日-19日 / B试验 2026年7月4日",capacity:"126名",route:"博士前期 一般选拔",englishMin:null,toeflOK:true,ieltsOK:true,langJP:true,englishPolicy:"电子信息 A 可 IELTS；物质化学一般看 TOEIC / TOEFL。",examSubjects:"英语、数学、专业课。电子信息覆盖回路、电磁、信息；化学覆盖有机 / 无机 / 物理化学。",notes:"电子和化学都适合补进理工检索。",url:"https://www.nst.kanazawa-u.ac.jp/labp/electrical/"},
-  {id:"kanazawa-civillife",univ:"金泽大学",univKey:"kanazawa",dept:"大学院自然科学研究科",major:"地球社会基盘 / 生命理工学",keywords:["土木","地球","防灾","生命","生物工学","civil","life science"],zhKeywords:["土木","地球","防灾","生命","生物工学"],apply:"2026年6月4日-10日",exam:"A试验 2026年8月18日 / B试验 2026年7月4日",capacity:"110名",route:"博士前期 一般选拔",englishMin:null,toeflOK:true,ieltsOK:true,langJP:true,englishPolicy:"TOEIC / TOEFL / IELTS。",examSubjects:"土木、地球科学、生命科学、生物工学相关口试或专业考试。",notes:"地学和生命也可检索。",url:"https://www.nst.kanazawa-u.ac.jp/labp/geosciences/"},
-
-  {id:"kobe-mechee",univ:"神户大学",univKey:"kobe",dept:"大学院工学研究科",major:"机械工学 / 电气电子工学",keywords:["机械","流体","热工","电气","电子","回路","mechanical","electronics"],zhKeywords:["机械","流体","热工","电气","电子","回路"],apply:"2026年7月15日-24日",exam:"2026年8月（专攻别实施）",capacity:"140名",route:"博士前期 一般入试",englishMin:null,toeflOK:true,ieltsOK:false,langJP:true,englishPolicy:"机械：TOEIC / TOEFL；电电：仅日本国内 TOEIC L&R。",examSubjects:"机械看专业笔试与口试；电电看英语成绩、专业笔试与面试。",notes:"神户电电英语要求相对严格。",url:"https://www.eng.kobe-u.ac.jp/examinee/master_202604.html"},
-  {id:"kobe-chem",univ:"神户大学",univKey:"kobe",dept:"大学院工学研究科",major:"应用化学专攻",keywords:["应用化学","化学","有机","高分子","chemistry"],zhKeywords:["应用化学","化学","有机","高分子"],apply:"2026年7月15日-24日",exam:"2026年8月（专攻别实施）",capacity:"70名",route:"博士前期 一般入试",englishMin:null,toeflOK:false,ieltsOK:false,langJP:true,englishPolicy:"仅接受日本国内 TOEIC L&R 公开测试。",examSubjects:"有机、无机、物理化学、高分子等相关专业考核。",notes:"不接受 TOEFL / IELTS。",url:"https://www.eng.kobe-u.ac.jp/examinee/master_202604.html"},
-  {id:"kobe-archcivil",univ:"神户大学",univKey:"kobe",dept:"大学院工学研究科",major:"建筑学 / 市民工学",keywords:["建筑","土木","社会基础","结构","architecture","civil"],zhKeywords:["建筑","土木","社会基础","结构"],apply:"2026年7月15日-24日",exam:"2026年8月（专攻别实施）",capacity:"106名",route:"博士前期 一般入试",englishMin:null,toeflOK:true,ieltsOK:false,langJP:true,englishPolicy:"TOEIC / TOEFL，可用 iBT；Home Edition 不可。",examSubjects:"建筑设计、结构、环境，或土木与基础设施相关笔试和口试。",notes:"适合建筑、土木方向。",url:"https://www.eng.kobe-u.ac.jp/examinee/master_202604.html"},
-
-  {id:"hiroshima-dev",univ:"广岛大学",univKey:"hiroshima",dept:"大学院先進理工系科学研究科",major:"理工学融合项目（开发科学分野）",keywords:["理工融合","开发科学","国际协力","可持续","development science"],zhKeywords:["理工融合","开发科学","国际协力","可持续"],apply:"4月入学：2025年10月30日-11月10日 / 10月入学：2026年5月7日-15日",exam:"书类审查 + 口述试验",capacity:"若干名",route:"外国人留学生特别选拔",englishMin:null,toeflOK:true,ieltsOK:true,langJP:false,englishPolicy:"可提交 TOEFL 等英语成绩；英语母语者可免。",examSubjects:"无统一专业笔试，以书类和口述为主。",notes:"这份 PDF 不是广岛理工全部一般选拔，只是开发科学分野。",url:"https://www.hiroshima-u.ac.jp/adse/admission/m_admission"},
-
-  {id:"scitokyo-mech",univ:"东京科学大学",univKey:"scitokyo",dept:"工学院",major:"机械系 / 系统控制系",keywords:["机械","系统控制","机器人","最优化","热力学","control","robotics"],zhKeywords:["机械","系统控制","机器人","最优化","热力学"],apply:"2026年6月4日-10日",exam:"A日程 2026年7月11日 / B日程 8月18日-25日",capacity:"241名",route:"修士课程",englishMin:null,toeflOK:true,ieltsOK:false,langJP:true,englishPolicy:"TOEIC / TOEFL iBT / Home Edition，依系确认。",examSubjects:"机械 B 日程考材料力学、机械力学、热力学、流体力学；系统控制 B 日程主考数学与口试。",notes:"工学院热门组合。",url:"https://educ.titech.ac.jp/mech/"},
-  {id:"scitokyo-eeict",univ:"东京科学大学",univKey:"scitokyo",dept:"工学院",major:"电气电子系 / 信息通信系",keywords:["电气","电子","信息通信","信号处理","网络","electronics","communication"],zhKeywords:["电气","电子","信息通信","信号处理","网络"],apply:"2026年6月4日-10日",exam:"A日程 2026年7月11日或15日 / B日程 8月18日-25日",capacity:"221名",route:"修士课程",englishMin:null,toeflOK:true,ieltsOK:false,langJP:true,englishPolicy:"英语成绩需出愿时提交。",examSubjects:"电电系考数学、电磁、专业选答；情报通信系考数学、论述、英语并有口试。",notes:"信息通信口试可用日语或英语回答。",url:"https://educ.titech.ac.jp/ict/"},
-  {id:"scitokyo-iee",univ:"东京科学大学",univKey:"scitokyo",dept:"工学院",major:"经营工学系",keywords:["经营工学","最优化","运筹学","机器学习","management engineering"],zhKeywords:["经营工学","最优化","运筹学","机器学习"],apply:"2026年6月4日-10日",exam:"A日程 2026年7月15日 / B日程 8月18日、25日",capacity:"62名",route:"修士课程",englishMin:null,toeflOK:true,ieltsOK:false,langJP:true,englishPolicy:"英语成绩需出愿时提交。",examSubjects:"数理基础、专业笔试、研究计划与面试。",notes:"适合 OR / 数据分析 / 管理科学。",url:"https://educ.titech.ac.jp/iee/"},
-
-  {id:"utokyo-archcivil",univ:"东京大学",univKey:"utokyo",dept:"大学院工学系研究科",major:"建筑学 / 社会基盘学",keywords:["建筑","土木","结构","城市","architecture","civil"],zhKeywords:["建筑","土木","结构","城市"],apply:"A日程 / B日程，见募集要项",exam:"2026年度 A、B 两个日程分开实施",capacity:"专攻别实施",route:"修士课程 A / B 日程",englishMin:null,toeflOK:false,ieltsOK:false,langJP:true,englishPolicy:"外语及书类依专攻页与日程要求。",examSubjects:"建筑设计、建筑环境、结构、社会基盘、都市系统。",notes:"东大工学系研究科按专攻分开很细，这里先按大方向收录。",url:"https://www.t.u-tokyo.ac.jp/foe/admission/general"},
-  {id:"utokyo-mech",univ:"东京大学",univKey:"utokyo",dept:"大学院工学系研究科",major:"机械工学 / 航空宇宙工学",keywords:["机械","航空宇宙","流体","热力学","控制","mechanical","aerospace"],zhKeywords:["机械","航空宇宙","流体","热力学","控制"],apply:"A日程 / B日程，见募集要项",exam:"2026年度 A、B 两个日程分开实施",capacity:"专攻别实施",route:"修士课程 A / B 日程",englishMin:null,toeflOK:false,ieltsOK:false,langJP:true,englishPolicy:"按专攻要求提交。",examSubjects:"数学、专业基础、机械 / 航天相关专业科目及口试。",notes:"适合机械与航天方向。",url:"https://www.t.u-tokyo.ac.jp/foe/admission/general"},
-  {id:"utokyo-eeinfo",univ:"东京大学",univKey:"utokyo",dept:"大学院工学系研究科",major:"电气系 / 电子信息工学",keywords:["电气","电子","信息","回路","通信","electronics","information"],zhKeywords:["电气","电子","信息","回路","通信"],apply:"A日程 / B日程，见募集要项",exam:"2026年度 A、B 两个日程分开实施",capacity:"专攻别实施",route:"修士课程 A / B 日程",englishMin:null,toeflOK:false,ieltsOK:false,langJP:true,englishPolicy:"按专攻页确认。",examSubjects:"数学、电磁、回路、信息工学、电子物性及面试。",notes:"适合电气电子信息方向。",url:"https://www.t.u-tokyo.ac.jp/foe/admission/general"},
-  {id:"utokyo-chemmat",univ:"东京大学",univKey:"utokyo",dept:"大学院工学系研究科",major:"化学生命 / 材料工学",keywords:["化学","生命","材料","高分子","chemistry","materials"],zhKeywords:["化学","生命","材料","高分子"],apply:"A日程 / B日程，见募集要项",exam:"2026年度 A、B 两个日程分开实施",capacity:"专攻别实施",route:"修士课程 A / B 日程",englishMin:null,toeflOK:false,ieltsOK:false,langJP:true,englishPolicy:"按专攻页确认。",examSubjects:"化学基础、材料、生命化学相关专业内容与面试。",notes:"材料和化学生命方向可一起检索。",url:"https://www.t.u-tokyo.ac.jp/foe/admission/general"},
-
-  {id:"kyushu-mechaero",univ:"九州大学",univKey:"kyushu",dept:"大学院工学府",major:"机械工学 / 航空宇宙工学 / 氢能源系统",keywords:["机械","航空宇宙","氢能源","热流体","控制","aerospace","hydrogen"],zhKeywords:["机械","航空宇宙","氢能源","热流体","控制"],apply:"见工学府修士募集要项 2026",exam:"见工学府修士募集要项 2026",capacity:"专攻别实施",route:"修士课程",englishMin:null,toeflOK:true,ieltsOK:true,langJP:true,englishPolicy:"英语一般接受 TOEIC / TOEFL / IELTS。",examSubjects:"通常围绕数学、机械基础、热工流体、控制、航天基础等。",notes:"这次用的是工学府修士正式募集要项。",url:"https://www.eng.kyushu-u.ac.jp/admissions.html"},
-  {id:"kyushu-chemmat",univ:"九州大学",univKey:"kyushu",dept:"大学院工学府",major:"应用化学 / 化学工学 / 材料工学",keywords:["应用化学","化工","材料","高分子","chemistry","chemical engineering"],zhKeywords:["应用化学","化工","材料","高分子"],apply:"见工学府修士募集要项 2026",exam:"见工学府修士募集要项 2026",capacity:"专攻别实施",route:"修士课程",englishMin:null,toeflOK:true,ieltsOK:true,langJP:true,englishPolicy:"英语一般接受 TOEIC / TOEFL / IELTS。",examSubjects:"化学基础、物理化学、有机、材料与化工相关专业课。",notes:"适合化学、化工、材料方向。",url:"https://www.eng.kyushu-u.ac.jp/admissions.html"},
-  {id:"kyushu-eeinfo",univ:"九州大学",univKey:"kyushu",dept:"大学院工学府",major:"电气电子 / 信息 / 量子物理工学",keywords:["电气","电子","信息","量子","回路","electronics","information"],zhKeywords:["电气","电子","信息","量子","回路"],apply:"见工学府修士募集要项 2026",exam:"见工学府修士募集要项 2026",capacity:"专攻别实施",route:"修士课程",englishMin:null,toeflOK:true,ieltsOK:true,langJP:true,englishPolicy:"英语一般接受 TOEIC / TOEFL / IELTS。",examSubjects:"数学、电磁、回路、信息基础、量子与物理工学相关科目。",notes:"适合电气电子信息和量子方向。",url:"https://www.eng.kyushu-u.ac.jp/admissions.html"},
-  {id:"kyushu-resourcecivil",univ:"九州大学",univKey:"kyushu",dept:"大学院工学府",major:"地球资源系统 / 土木工学 / 船舶海洋",keywords:["资源","采矿","土木","船舶海洋","civil","resources","naval"],zhKeywords:["资源","采矿","土木","船舶海洋"],apply:"见工学府修士募集要项 2026",exam:"见工学府修士募集要项 2026",capacity:"专攻别实施",route:"修士课程",englishMin:null,toeflOK:true,ieltsOK:true,langJP:true,englishPolicy:"英语一般接受 TOEIC / TOEFL / IELTS。",examSubjects:"资源工程、地学、土木基础、结构 / 水理、船舶海洋相关内容。",notes:"资源、土木、海洋工程都可检索到。",url:"https://www.eng.kyushu-u.ac.jp/admissions.html"},
-
-  {id:"tsukuba-sie",univ:"筑波大学",univKey:"tsukuba",dept:"系统信息工学研究群",major:"系统信息工学研究群（当前已收录：海外居住者特别选拔）",keywords:["信息工学","系统信息","控制","计算机","电子","systems","information"],zhKeywords:["信息工学","系统信息","控制","计算机","电子"],apply:"2026年度 海外居住者特别选拔",exam:"见官方 PDF",capacity:"研究群别实施",route:"硕士课程 特别选拔",englishMin:null,toeflOK:true,ieltsOK:true,langJP:false,englishPolicy:"依据特别选拔 PDF 执行。",examSubjects:"以书类与面试要求为主，具体见官方 PDF。",notes:"目前补进网站的是系统信息工学研究群海外居住者特别选拔 PDF，不是一般入试完整 PDF。",url:"https://www.ap-graduate.tsukuba.ac.jp/course/sie/first_all/"},
-
-  {id:"naist-info",univ:"奈良先端科学技术大学院大学",univKey:"naist",dept:"先端科学技术研究科",major:"信息科学领域",keywords:["信息科学","人工智能","网络","软件","信息论","computer science","ai"],zhKeywords:["信息科学","人工智能","网络","软件","信息论"],apply:"2026年春季 / 秋季入学分轮实施",exam:"博士前期课程 2026 募集要项",capacity:"领域别实施",route:"博士前期课程",englishMin:null,toeflOK:false,ieltsOK:false,langJP:false,englishPolicy:"以校方轮次要求为准，重书类与面试。",examSubjects:"书类、口头发表与口头试问为主。",notes:"NAIST 没有学部，偏研究型，信息方向很强。",url:"https://www.naist.jp/admission/examinee/"},
-  {id:"naist-bio",univ:"奈良先端科学技术大学院大学",univKey:"naist",dept:"先端科学技术研究科",major:"生物科学领域",keywords:["生物","生命科学","分子生物","bio","life science"],zhKeywords:["生物","生命科学","分子生物"],apply:"2026年春季 / 秋季入学分轮实施",exam:"博士前期课程 2026 募集要项",capacity:"领域别实施",route:"博士前期课程",englishMin:null,toeflOK:false,ieltsOK:false,langJP:false,englishPolicy:"看轮次要求。",examSubjects:"书类、口头发表与口头试问。",notes:"偏生命科学和生物技术。",url:"https://www.naist.jp/admission/examinee/"},
-  {id:"naist-material",univ:"奈良先端科学技术大学院大学",univKey:"naist",dept:"先端科学技术研究科",major:"物质创成科学领域",keywords:["材料","物质创成","化学","器件","materials","chemistry"],zhKeywords:["材料","物质创成","化学","器件"],apply:"2026年春季 / 秋季入学分轮实施",exam:"博士前期课程 2026 募集要项",capacity:"领域别实施",route:"博士前期课程",englishMin:null,toeflOK:false,ieltsOK:false,langJP:false,englishPolicy:"看轮次要求。",examSubjects:"书类、口头发表与口头试问。",notes:"偏材料、化学、器件。",url:"https://www.naist.jp/admission/examinee/"},
-
-  {id:"jaist-info",univ:"北陆先端科学技术大学院大学",univKey:"jaist",dept:"先端科学技术研究科",major:"先端科学技术专攻（信息科学方向）",keywords:["信息科学","人工智能","数据","网络","information science","ai"],zhKeywords:["信息科学","人工智能","数据","网络"],apply:"2027年4月入学 分轮实施",exam:"一般选拔 / 特别选拔分轮",capacity:"专攻统一实施",route:"博士前期课程",englishMin:null,toeflOK:false,ieltsOK:false,langJP:false,englishPolicy:"以轮次要求为准。",examSubjects:"多为书类、面试、口头试问。",notes:"JAIST 以专攻统一招生，内部再分研究领域。",url:"https://www.jaist.ac.jp/admissions/"},
-  {id:"jaist-material",univ:"北陆先端科学技术大学院大学",univKey:"jaist",dept:"先端科学技术研究科",major:"先端科学技术专攻（材料化学方向）",keywords:["材料","化学","器件","高分子","materials","chemistry"],zhKeywords:["材料","化学","器件","高分子"],apply:"2027年4月入学 分轮实施",exam:"一般选拔 / 特别选拔分轮",capacity:"专攻统一实施",route:"博士前期课程",englishMin:null,toeflOK:false,ieltsOK:false,langJP:false,englishPolicy:"以轮次要求为准。",examSubjects:"书类、面试、口头试问。",notes:"适合材料、化学、器件方向。",url:"https://www.jaist.ac.jp/admissions/"},
-  {id:"jaist-fusion",univ:"北陆先端科学技术大学院大学",univKey:"jaist",dept:"融合科学共同专攻",major:"融合科学共同专攻",keywords:["融合科学","交叉","数据","design","transdisciplinary"],zhKeywords:["融合科学","交叉","数据","设计"],apply:"2027年4月入学",exam:"融合科学共同专攻募集要项",capacity:"专攻别实施",route:"博士前期课程",englishMin:null,toeflOK:false,ieltsOK:false,langJP:false,englishPolicy:"以专攻募集要项为准。",examSubjects:"以书类和面试为主。",notes:"更偏交叉融合，不完全等同传统工科。",url:"https://www.jaist.ac.jp/admissions/"},
-
-  {id:"chiba-info",univ:"千叶大学",univKey:"chiba",dept:"大学院融合理工学府",major:"数学信息科学相关方向",keywords:["信息","数学","计算机","数理","information","mathematics"],zhKeywords:["信息","数学","计算机","数理"],apply:"2025年10月入学 / 2026年4月入学共通募集",exam:"博士前期一般选拔 2026",capacity:"课程别实施",route:"博士前期课程 一般选拔",englishMin:null,toeflOK:false,ieltsOK:false,langJP:true,englishPolicy:"需按课程与指导教员要求确认。",examSubjects:"课程别实施，通常含专业基础与口试。",notes:"融合理工学府按课程招生，出愿前需先联系意向指导教员。",url:"https://www.se.chiba-u.jp/admission/index.html"},
-  {id:"chiba-engineering",univ:"千叶大学",univKey:"chiba",dept:"大学院融合理工学府",major:"机械工学 / 智能机械 / 医工学相关方向",keywords:["机械","智能机械","医工","控制","mechatronics","biomedical"],zhKeywords:["机械","智能机械","医工","控制"],apply:"2025年10月入学 / 2026年4月入学共通募集",exam:"博士前期一般选拔 2026",capacity:"课程别实施",route:"博士前期课程 一般选拔",englishMin:null,toeflOK:false,ieltsOK:false,langJP:true,englishPolicy:"依课程要求执行。",examSubjects:"专业基础、口试、研究计划确认等。",notes:"适合机械、机电、医工方向。",url:"https://www.se.chiba-u.jp/admission/index.html"},
-  {id:"chiba-urban",univ:"千叶大学",univKey:"chiba",dept:"大学院融合理工学府",major:"都市环境系统 / 建筑设计相关方向",keywords:["建筑","都市","环境","结构","architecture","urban"],zhKeywords:["建筑","都市","环境","结构"],apply:"2025年10月入学 / 2026年4月入学共通募集",exam:"博士前期一般选拔 2026",capacity:"课程别实施",route:"博士前期课程 一般选拔",englishMin:null,toeflOK:false,ieltsOK:false,langJP:true,englishPolicy:"依课程要求执行。",examSubjects:"专业笔试或口试，课程差异较大。",notes:"建筑与都市方向可检索。",url:"https://www.se.chiba-u.jp/admission/index.html"},
-  {id:"chiba-materialchem",univ:"千叶大学",univKey:"chiba",dept:"大学院融合理工学府",major:"物质科学 / 化学相关方向",keywords:["材料","化学","物质","高分子","materials","chemistry"],zhKeywords:["材料","化学","物质","高分子"],apply:"2025年10月入学 / 2026年4月入学共通募集",exam:"博士前期一般选拔 2026",capacity:"课程别实施",route:"博士前期课程 一般选拔",englishMin:null,toeflOK:false,ieltsOK:false,langJP:true,englishPolicy:"依课程要求执行。",examSubjects:"课程别实施，通常结合专业基础与口试。",notes:"适合材料、化学、物质方向。",url:"https://www.se.chiba-u.jp/admission/index.html"}
+const DATA = [
+  {
+    id: "hoku-eng",
+    university: "北海道大学",
+    key: "hokudai",
+    category: "工科",
+    title: "工学院（机械、材料、环境、建筑、资源）",
+    directions: ["应用物理学", "材料科学", "机械宇宙工学", "人间机械系统设计", "能源环境系统", "量子理工学", "环境フィールド工学", "北方圏環境政策工学", "环境創生工学", "建築都市空間デザイン", "空間性能システム", "環境循環システム", "共同資源工学"],
+    apply: "2026-06-15 至 2026-06-19",
+    exam: "2026-08-18 至 2026-08-19",
+    englishRequired: true,
+    japaneseRequired: true,
+    englishNote: "多专攻要求 TOEIC / TOEFL / IELTS。机械系最低线常见为 TOEIC 550；环境方向有的在 461 左右。",
+    japaneseNote: "常规修士项目默认需要对应日语出愿与笔试口试能力。",
+    examSubjects: "数学、热力学、流体力学、材料力学、控制、材料科学、结构与环境基础等，按志望专攻组合实施。",
+    note: "适合机械、材料、建筑、土木、环境、资源方向。",
+    url: "https://www.eng.hokudai.ac.jp/graduate/examinfo/"
+  },
+  {
+    id: "hoku-info",
+    university: "北海道大学",
+    key: "hokudai",
+    category: "计算机",
+    title: "信息科学院（信息科学、计算机、媒体网络）",
+    directions: ["情報理工学コース", "複雑系情報科学コース", "知能情報学コース", "情報エレクトロニクスコース", "メディアネットワークコース"],
+    apply: "英语成绩证明提交期 2026-07-21 至 2026-07-23；其余出愿见正式 PDF",
+    exam: "2027 年 4 月入学向け；志望课程对应专业试验科目",
+    englishRequired: true,
+    japaneseRequired: true,
+    englishNote: "明确要求 TOEIC / TOEFL / IELTS；未按期提交则总分不评价。",
+    japaneseNote: "常规修士项目默认需要日语应试能力。",
+    examSubjects: "按志望课程参加对应专业试验科目，PDF 单列专业试验科目章节。",
+    note: "信息科学院的 PDF 很完整，后面可以继续细拆到 course 级别。",
+    url: "https://www.ist.hokudai.ac.jp/examinfo/files/2028/R9_master_Apr.pdf"
+  },
+  {
+    id: "tohoku-eng",
+    university: "东北大学",
+    key: "tohoku",
+    category: "工科",
+    title: "工学研究科（机械、电气、化学、材料、土木、建筑）",
+    directions: ["机械智能航空工学", "量子能源工学", "电气能源系统", "通信工学", "电子工学", "应用物理学", "应用化学", "化学工学", "生物工学", "金属前沿工学", "知能デバイス材料学", "材料系统工学", "土木工学", "都市建筑学", "技术社会系统"],
+    apply: "2025-07-03 至 2025-07-11 16:00",
+    exam: "2025-08-26 至 2025-08-28（专攻不同略有差异）",
+    englishRequired: true,
+    japaneseRequired: true,
+    englishNote: "多数专攻接受 TOEFL / TOEIC，个别专攻接受 IELTS Academic。",
+    japaneseNote: "常规前期课程默认按日语项目准备。",
+    examSubjects: "数学、专业课、共通科目、小论文、口试等，按专攻分开实施。",
+    note: "适合机械、电子、材料、化工、建筑、土木等大部分工科方向。",
+    url: "https://www.eng.tohoku.ac.jp/admission/grad/master.html"
+  },
+  {
+    id: "tohoku-info",
+    university: "东北大学",
+    key: "tohoku",
+    category: "计算机",
+    title: "信息科学研究科（信息基础、系统信息、人间社会信息、应用信息）",
+    directions: ["情報基礎科学", "システム情報科学", "人間社会情報科学", "応用情報科学", "データ科学", "知能システム", "アルゴリズム", "ソフトウェア科学", "ネットワーク科学"],
+    apply: "日程 I / II 分组实施；详见 2026 募集要项",
+    exam: "日程 I：2026-01-31 至 2026-02-01；日程 II：2026-03-03 至 2026-03-05",
+    englishRequired: false,
+    japaneseRequired: true,
+    englishNote: "当前拿到的研究科总 PDF 里，没有像九州、北大那样把统一外部英语成绩写成硬门槛。",
+    japaneseNote: "常规一般选拔按日语体系运行。",
+    examSubjects: "研究科层面写法为笔试、小论文、口述试验等中选取适当方式；不同群组不同。",
+    note: "后续如果继续细拆到 group 1-7，搜索会更准。",
+    url: "https://www.is.tohoku.ac.jp/media/files/entrance/summary/first202604_20251010_1_1_ja.pdf"
+  },
+  {
+    id: "tokyo-info",
+    university: "东京大学",
+    key: "utokyo",
+    category: "计算机",
+    title: "信息理工学系研究科（计算机、电子信息、知能机械信息、创造信息）",
+    directions: ["コンピュータ科学", "数理情報学", "システム情報学", "電子情報学", "知能機械情報学", "創造情報学"],
+    apply: "夏入试、冬入试两轮；个别资格审查分别到 2025-05-12、2025-10-27",
+    exam: "夏入试笔试起始日为 2025-08-19；专攻口试见各专攻 PDF",
+    englishRequired: true,
+    japaneseRequired: true,
+    englishNote: "总募集要项明确使用 TOEFL；知能机械信息专攻也明确用 TOEFL 成绩。",
+    japaneseNote: "默认按日语修学能力准备；个别专攻口试可日语或英语。",
+    examSubjects: "笔试、口述试验等综合评价；知能机械信息专攻含数学、英文发表与口试。",
+    note: "这次主要收了信息理工，不单独加工学系研究科其他工科条目。",
+    url: "https://www.i.u-tokyo.ac.jp/edu/entra/2026_admission-g_m_j.pdf"
+  },
+  {
+    id: "kyoto-eng",
+    university: "京都大学",
+    key: "kyoto",
+    category: "工科",
+    title: "工学研究科（机械、化学、材料、电气、建筑、社会基盘）",
+    directions: ["社会基盤工学", "都市社会工学", "都市環境工学", "建築学", "機械理工学", "マイクロエンジニアリング", "航空宇宙工学", "原子核工学", "材料工学", "電気電子工学", "物理工学", "化学工学", "高分子化学", "合成・生物化学", "材料化学", "分子工学"],
+    apply: "2026-05-27 至 2026-06-10 17:00",
+    exam: "2026-07-30 至 2026-08-07",
+    englishRequired: false,
+    japaneseRequired: true,
+    englishNote: "总募集要项里未统一成一个所有专攻共享的英语硬门槛，专攻差异较大。",
+    japaneseNote: "常规修士项目默认按日语项目准备。",
+    examSubjects: "机械群、化学理工、电气电子数字理工、建筑、都市环境、材料等分别实施。",
+    note: "京都工学适合继续细拆到专攻群。",
+    url: "https://www.t.kyoto-u.ac.jp/ja/admissions/graduate/"
+  },
+  {
+    id: "kyoto-info",
+    university: "京都大学",
+    key: "kyoto",
+    category: "计算机",
+    title: "信息学研究科（信息学、通信信息系统、系统科学、社会信息学）",
+    directions: ["知能情報学", "社会情報学", "先端数理科学", "数理工学", "システム科学", "通信情報システム", "知覚情報システム", "生体情報工学"],
+    apply: "第 2 次募集资格审查到 2025-12-17 17:00",
+    exam: "2026 年 2 月实施；笔试与口头试问结合",
+    englishRequired: true,
+    japaneseRequired: true,
+    englishNote: "研究科与专攻考试内容文件里有英语相关要求，但仍需按专攻 PDF 最终确认。",
+    japaneseNote: "常规项目默认为日语运行。",
+    examSubjects: "研究科总纲为笔试 + 口头试问；社会信息学、系统科学等另附专攻考试内容。",
+    note: "我已经把专攻考试内容 PDF 也并到京都大学文件夹里了。",
+    url: "https://www.i.kyoto-u.ac.jp/assets/pdf/admission/application/master-r8-04-02.pdf"
+  },
+  {
+    id: "osaka-eng",
+    university: "大阪大学",
+    key: "osaka",
+    category: "工科",
+    title: "工学研究科（机械、电气电子、应用化学、材料、环境、建筑土木）",
+    directions: ["生物工学", "応用化学", "化学工学", "物理学系", "精密工学", "機械工学", "マテリアル生産科学", "電気電子情報通信工学", "環境エネルギー工学", "地球総合工学", "ビジネスエンジニアリング"],
+    apply: "2026-07-06 至 2026-07-17",
+    exam: "2026-08-18 至 2026-08-20（专攻不同略有差异）",
+    englishRequired: true,
+    japaneseRequired: true,
+    englishNote: "多数专攻接受 TOEIC / TOEFL；部分专攻可 IELTS，部分明确 IELTS 不可。",
+    japaneseNote: "一般选拔默认需要足够的日语能力；留学签证者不少专攻不可报一般选拔。",
+    examSubjects: "机械看热流体控，电电看数学、电磁、回路，化学看化学 I/II，建筑土木看结构、环境、设计等。",
+    note: "大阪工学按专攻差异很大，英语条件尤其要看专攻。",
+    url: "https://www.eng.osaka-u.ac.jp/ja/entrance/g_admissions/"
+  },
+  {
+    id: "osaka-info",
+    university: "大阪大学",
+    key: "osaka",
+    category: "计算机",
+    title: "信息科学研究科（信息基础数学、计算机、网络、多媒体、生物信息）",
+    directions: ["情報基礎数学", "コンピュータサイエンス", "情報システム工学", "情報ネットワーク学", "マルチメディア工学", "バイオ情報工学", "知能ソフトウェア工学", "データ工学"],
+    apply: "2026 年度 4 月入学一般选拔，详见正式 PDF",
+    exam: "研究科统一管理；试验与口头试问等综合选拔",
+    englishRequired: true,
+    japaneseRequired: true,
+    englishNote: "PDF 中明确提到 TOEIC / TOEFL 成绩可作为评价材料。",
+    japaneseNote: "外国留学生需具有修学所需日语能力。",
+    examSubjects: "笔试、口头试问等综合判断，按志望专攻实施。",
+    note: "这次保存的是正式一般选拔 PDF。",
+    url: "https://www.ist.osaka-u.ac.jp/files/examinees/admission/2026/11_a_JA2026.pdf"
+  },
+  {
+    id: "nagoya-eng",
+    university: "名古屋大学",
+    key: "nagoya",
+    category: "工科",
+    title: "工学研究科（机械、航空宇宙、材料、化学、电气电子、土木、能源）",
+    directions: ["化学生命工学", "物理工学", "マテリアル工学", "電気電子情報工学", "機械航空宇宙工学", "エネルギー理工学", "土木工学"],
+    apply: "2026-07-03 截止（Web 出愿）",
+    exam: "2026-08-18 至 2026-08-20",
+    englishRequired: true,
+    japaneseRequired: true,
+    englishNote: "工学研究科多数系明确要求 TOEIC / TOEFL；IELTS 一般不可。",
+    japaneseNote: "常规前期课程默认为日语项目。",
+    examSubjects: "机械看数学 + 热流体控材；电电看数学 + 电磁 + 回路；材料和化学按系科目选答。",
+    note: "名古屋工学研究科已经很适合按系继续细拆。",
+    url: "https://www.engg.nagoya-u.ac.jp/prospective/doc/attention2.pdf"
+  },
+  {
+    id: "nagoya-info",
+    university: "名古屋大学",
+    key: "nagoya",
+    category: "计算机",
+    title: "信息学研究科（数理信息、复杂系统、社会信息、智能系统）",
+    directions: ["数理情報学", "複雑系科学", "社会情報学", "知能システム学", "心理・認知科学", "数理システム", "データサイエンス"],
+    apply: "8 月实施出愿期为 2025-06-27 至 2025-07-03 16:00",
+    exam: "数理信息学口述 2025-07-05；笔试 2025-08-06、2025-08-07",
+    englishRequired: false,
+    japaneseRequired: true,
+    englishNote: "当前总募集要项没有像北大、九大那样把统一英语成绩写成硬门槛。",
+    japaneseNote: "一般项目按日语体系运行。",
+    examSubjects: "按专攻实施，包括笔试、口头试问，以及免笔试或口述流程。",
+    note: "后续继续拆到专攻层会更好搜。",
+    url: "https://www.i.nagoya-u.ac.jp/gs/entranceexamination/"
+  },
+  {
+    id: "kyushu-eng",
+    university: "九州大学",
+    key: "kyushu",
+    category: "工科",
+    title: "工学府（机械、航空宇宙、化学、材料、电气电子、资源、土木海洋）",
+    directions: ["機械工学", "航空宇宙工学", "量子物理工学", "応用化学", "化学工学", "材料工学", "地球資源システム工学", "船舶海洋工学", "土木工学", "水素エネルギーシステム", "電気電子工学", "エネルギー科学"],
+    apply: "2026 年度工学府修士募集要项见院系文件",
+    exam: "按专攻和一般选拔实施方法执行",
+    englishRequired: true,
+    japaneseRequired: true,
+    englishNote: "一般工学系修士多数会要求外部英语成绩或英语评价材料。",
+    japaneseNote: "常规项目按日语项目准备。",
+    examSubjects: "不同专攻差异很大，机械、化学、材料、电电、资源、海洋分别实施。",
+    note: "你之前给的工学府修士 PDF 已经在九州大学文件夹里。",
+    url: "https://www.eng.kyushu-u.ac.jp/admissions.html"
+  },
+  {
+    id: "kyushu-info",
+    university: "九州大学",
+    key: "kyushu",
+    category: "计算机",
+    title: "系统信息科学府（信息学、电气电子、智能系统、系统科学）",
+    directions: ["情報知能工学", "情報工学", "電気電子工学", "通信工学", "知能システム", "システム制御", "データサイエンス", "AI・機械学習"],
+    apply: "出愿前需先联系教员；海外学历申请人原则上 2025-05-30 前完成前置支援",
+    exam: "按募集要项 12. 试验实施方法执行",
+    englishRequired: true,
+    japaneseRequired: true,
+    englishNote: "明确要求 TOEIC / TOEFL-iBT / IELTS 其中一种原始成绩证明。",
+    japaneseNote: "一般修士项目默认按日语体系运行。",
+    examSubjects: "英语外部成绩 + 研究计划英文摘要 + 笔试 / 口试，按专攻执行。",
+    note: "这份是系统信息科学府正式修士募集要项。",
+    url: "https://www.isee.kyushu-u.ac.jp/wp/wp-content/uploads/2026mc_general_guidelines.pdf"
+  },
+  {
+    id: "tsukuba-info",
+    university: "筑波大学",
+    key: "tsukuba",
+    category: "计算机",
+    title: "系统信息工学研究群（当前已收录：海外居住者特别选拔）",
+    directions: ["社会工学", "サービス工学", "リスク・レジリエンス工学", "情報理工学位プログラム", "知能機能システム", "構造エネルギー工学", "エンジニアリング科学", "都市計画", "コンピュータサイエンス", "制御工学"],
+    apply: "当前抓到的是 2026 海外居住者特别选拔 PDF；一般入试入口已保存为官方页面",
+    exam: "以特别选拔 PDF 和官方打印版页面为准",
+    englishRequired: true,
+    japaneseRequired: false,
+    englishNote: "特别选拔通常按英语资料和面试准备。",
+    japaneseNote: "当前收录的是海外居住者特别选拔，不能直接等同一般日语笔试项目。",
+    examSubjects: "特别选拔更偏书类、研究计划和面试；一般入试仍需继续沿官网深挖。",
+    note: "筑波这条我先做得保守一点，避免误混其他项目。",
+    url: "https://www.sie.tsukuba.ac.jp/wp2/wp-content/uploads/2026-Application-Guidelines-Masters-Special-Selection-for-Overseas-Residents.pdf"
+  },
+  {
+    id: "scitokyo-eng",
+    university: "东京工业大学（现：Science Tokyo）",
+    key: "scitokyo",
+    category: "工科",
+    title: "工学院（机械、系统控制、电气电子、经营工学）",
+    directions: ["機械系", "システム制御系", "電気電子系", "情報通信系", "経営工学系"],
+    apply: "A / B 日程按学院修士募集要项与各系页面执行",
+    exam: "历年常见为 7 月 A 日程、8 月 B 日程",
+    englishRequired: true,
+    japaneseRequired: true,
+    englishNote: "学院修士入试通常要求英语成绩；系页面反复提示尽早准备外部英语测试。",
+    japaneseNote: "常规项目默认为日语运行。",
+    examSubjects: "机械常见热流体材料力学，系统控制偏数学与口试，电电偏数学、电磁、专业选答。",
+    note: "这次我把 Science Tokyo 总览页和各系页面都并进学校文件夹了。",
+    url: "https://admissions.isct.ac.jp/ja/013/graduate/guideline"
+  },
+  {
+    id: "scitokyo-info",
+    university: "东京工业大学（现：Science Tokyo）",
+    key: "scitokyo",
+    category: "计算机",
+    title: "信息理工学院（信息工学系、数理计算科学系）",
+    directions: ["情報工学系", "数理・計算科学系", "計算機科学", "人工知能", "数理最適化", "アルゴリズム", "理論計算機科学"],
+    apply: "按学院募集总览页与系页面执行",
+    exam: "A / B 日程制；具体考试安排以后续官方公布为准",
+    englishRequired: true,
+    japaneseRequired: true,
+    englishNote: "系网页长期明确提示准备外部英语成绩。",
+    japaneseNote: "常规修士项目默认按日语体系运行。",
+    examSubjects: "系网页说明以笔答、口头试问、研究计划确认等为主。",
+    note: "目前这块以官方页面信息为主，不强写尚未公开的具体日期。",
+    url: "https://educ.titech.ac.jp/cs/admissions/"
+  },
+  {
+    id: "kobe-eng",
+    university: "神户大学",
+    key: "kobe",
+    category: "工科",
+    title: "工学研究科（机械、建筑、市民工学、应用化学、电气电子）",
+    directions: ["建築学", "市民工学", "電気電子工学", "機械工学", "応用化学"],
+    apply: "2026-07-15 至 2026-07-24",
+    exam: "2026 年 8 月按专攻实施",
+    englishRequired: true,
+    japaneseRequired: true,
+    englishNote: "机械、建筑、市民工学多为 TOEIC / TOEFL；电电和应用化学较强调日本国内 TOEIC。",
+    japaneseNote: "常规博士前期一般入试默认为日语运行。",
+    examSubjects: "各专攻分别实施，含专业笔试、设计、口试等。",
+    note: "工学研究科不同专攻英语要求差异很大。",
+    url: "https://www.eng.kobe-u.ac.jp/examinee/master_202604.html"
+  },
+  {
+    id: "kobe-info",
+    university: "神户大学",
+    key: "kobe",
+    category: "计算机",
+    title: "系统信息学研究科（系统、信息、计算机、通信）",
+    directions: ["計算科学", "システム科学", "情報知能学", "情報通信工学", "知能情報学", "データ工学"],
+    apply: "募集要项配布预计 2026-05-19 至 2026-07-25；出愿期 2026-07-22 至 2026-07-25",
+    exam: "一般入试为 2026-08-25、2026-08-26；合格发表 2026-09-05",
+    englishRequired: false,
+    japaneseRequired: true,
+    englishNote: "官方网页层没有直接写统一外部英语成绩要求。",
+    japaneseNote: "页面完全按日语组织，一般入试默认需要日语应对能力。",
+    examSubjects: "官方页面给了日程与纸本募集要项请领方式，具体专业课细目需看纸本。",
+    note: "神户系统信息学研究科不公开完整 PDF，这次已保存官方页面。",
+    url: "https://www.csi.kobe-u.ac.jp/exam/master/2025/20250708master_exam.html"
+  },
+  {
+    id: "hiroshima-eng",
+    university: "广岛大学",
+    key: "hiroshima",
+    category: "工科",
+    title: "先进理工系科学研究科（机械、电气、化工、建筑、社会基盘）",
+    directions: ["機械工学", "輸送・環境システム", "電気システム制御", "応用化学", "化学工学", "建築学", "社会基盤環境工学", "輸送システム", "スマートイノベーション"],
+    apply: "A 日程资格审查 2026-06-29 至 2026-07-03；出愿 2026-07-17 至 2026-07-24 17:00",
+    exam: "A 日程试验 2026-08-27、2026-08-28；合格发表 2026-09-03",
+    englishRequired: true,
+    japaneseRequired: true,
+    englishNote: "官网单独挂出 TOFEL 得点相关出愿要件通知，英语成绩是关键条件之一。",
+    japaneseNote: "一般选拔按日语项目组织。",
+    examSubjects: "项目级日程明确，但专业课细目仍需结合各程序募集要项。",
+    note: "广岛这边我同时保存了页面和日程 PDF。",
+    url: "https://www.hiroshima-u.ac.jp/adse/admission/m_admission"
+  },
+  {
+    id: "hiroshima-info",
+    university: "广岛大学",
+    key: "hiroshima",
+    category: "计算机",
+    title: "先进理工系科学研究科（信息科学、智能创新、电气系统控制）",
+    directions: ["情報科学プログラム", "スマートイノベーションプログラム", "電気システム制御プログラム", "数理データサイエンス", "知能ロボティクス"],
+    apply: "A 日程资格审查 2026-06-29 至 2026-07-03；出愿 2026-07-17 至 2026-07-24 17:00",
+    exam: "A 日程试验 2026-08-27、2026-08-28",
+    englishRequired: true,
+    japaneseRequired: true,
+    englishNote: "官网明确有 TOFEL 得点相关的出愿要件通知。",
+    japaneseNote: "常规一般选拔按日语体系运行。",
+    examSubjects: "项目级日程已公开，具体专业课需结合项目募集要项。",
+    note: "这条是把信息方向单独拎出来，方便和工学方向一起搜。",
+    url: "https://www.hiroshima-u.ac.jp/adse/admission/m_admission"
+  },
+  {
+    id: "chiba-mix",
+    university: "千叶大学",
+    key: "chiba",
+    category: "工科+计算机",
+    title: "融合理工学府（数理信息、智能机械、建筑都市、物质化学）",
+    directions: ["数学情報科学", "地球環境科学", "先進理化学", "画像科学", "都市環境システム", "建築学", "デザイン科学", "機械工学", "医工学", "電気電子工学", "ナノサイエンス", "物質科学", "共生応用化学"],
+    apply: "2025-06-17 至 2025-06-19（必着）",
+    exam: "2025 年 10 月入学与 2026 年 4 月入学共通募集",
+    englishRequired: false,
+    japaneseRequired: true,
+    englishNote: "当前总募集要项未把统一外部英语成绩写成全课程共享硬门槛。",
+    japaneseNote: "出愿前需先联系意向指导教员，整体按日语项目运行。",
+    examSubjects: "按课程实施，通常为专业基础、研究计划确认、口试或笔试组合。",
+    note: "千叶这份很适合以后再细拆成课程级。",
+    url: "https://www.se.chiba-u.jp/admission/index.html"
+  },
+  {
+    id: "kanazawa-mix",
+    university: "金泽大学",
+    key: "kanazawa",
+    category: "工科+计算机",
+    title: "自然科学研究科（机械、前沿工学、电子信息通信、计算科学）",
+    directions: ["機械科学", "フロンティア工学", "電子情報通信学", "地球社会基盤学", "生命理工学", "物質化学", "数物科学", "計算科学", "情報通信"],
+    apply: "2026-06-04 至 2026-06-10",
+    exam: "B 试验 2026-07-04；A 试验 2026-08-18 起",
+    englishRequired: true,
+    japaneseRequired: true,
+    englishNote: "总募集要项单列英语外部试验分数章节。",
+    japaneseNote: "常规前期课程默认按日语项目准备。",
+    examSubjects: "英语、数学、专业课。计算科学和电子信息通信都在总募集要项覆盖范围内。",
+    note: "金泽这份总 PDF 同时兼顾工科和计算机相关方向。",
+    url: "https://www.nst.kanazawa-u.ac.jp/admission/master/"
+  },
+  {
+    id: "okayama-info",
+    university: "冈山大学",
+    key: "okayama",
+    category: "计算机",
+    title: "环境生命自然科学研究科（数理信息科学方向）",
+    directions: ["数理情報科学", "計算機科学", "データサイエンス", "情報システム", "数理解析"],
+    apply: "当前公开的是博士前期募集要项页面入口",
+    exam: "需以官网后续公开 PDF 或纸本为准",
+    englishRequired: false,
+    japaneseRequired: true,
+    englishNote: "官网页面层目前没有直接拉出统一英语门槛。",
+    japaneseNote: "常规博士前期项目按日语官网体系发布。",
+    examSubjects: "当前入口页更偏项目目录和募集入口，专业课内容仍需继续补。",
+    note: "冈山这条先作为官方入口版保留。",
+    url: "https://www.elst.okayama-u.ac.jp/admission/nyugakushiken/mc-guideline/"
+  },
+  {
+    id: "naist-mix",
+    university: "奈良先端科学技术大学院大学",
+    key: "naist",
+    category: "工科+计算机",
+    title: "先端科学技术研究科（信息、物质、生命）",
+    directions: ["情報科学", "物質創成科学", "バイオサイエンス", "人工知能", "データサイエンス", "コンピュータサイエンス", "マテリアルズインフォマティクス", "ロボティクス"],
+    apply: "博士前期课程 2026 募集要项按轮次实施",
+    exam: "以 2026 募集要项中的各轮次口试与书类审查安排为准",
+    englishRequired: false,
+    japaneseRequired: false,
+    englishNote: "NAIST 更偏研究计划、书类与面试审查，外语条件需按当轮募集要项确认。",
+    japaneseNote: "国际化程度高，部分方向可英语应对，但具体仍取决于轮次与导师要求。",
+    examSubjects: "以书类审查、研究计划、口头试问为主，不同于传统大规模统一笔试型院校。",
+    note: "这所学校没有传统学部，是大学院大学，所以适合单独看研究方向和导师。",
+    url: "https://www.naist.jp/admission/examinee/"
+  },
+  {
+    id: "jaist-mix",
+    university: "北陆先端科学技术大学院大学",
+    key: "jaist",
+    category: "工科+计算机",
+    title: "先端科学技术研究科 / 融合科学共同专攻",
+    directions: ["情報科学", "マテリアルサイエンス", "知識科学", "トランスフォーマティブ知識経営", "サービスサイエンス", "人工知能", "データ科学", "サイバーフィジカルシステム", "融合科学"],
+    apply: "2027 年 4 月入学博士前期课程按轮次实施",
+    exam: "以各轮次的书类、面试与口头试问安排为准",
+    englishRequired: false,
+    japaneseRequired: false,
+    englishNote: "JAIST 也偏书类与面试型选拔，外语条件需看各轮次正式募集要项。",
+    japaneseNote: "国际项目相对丰富，是否需要日语要按志望研究室与项目确认。",
+    examSubjects: "先端科学技术专攻与融合科学共同专攻都更重研究计划、志望理由和面试，不完全是传统统一专业笔试模式。",
+    note: "你文件夹里这两份 JAIST PDF 现在都已经并进同一个学校文件夹了。",
+    url: "https://www.jaist.ac.jp/admissions/"
+  }
 ];
 
-const TONES = {
-  hoku:{label:"北海道",border:"#378add",bg:"#e6f1fb",text:"#0c447c"},
-  osaka:{label:"大阪",border:"#d85a30",bg:"#faece7",text:"#993c1d"},
-  nagoya:{label:"名古屋",border:"#1d9e75",bg:"#e1f5ee",text:"#0f6e56"},
-  kyoto:{label:"京都",border:"#7a4dcc",bg:"#f2ebff",text:"#5c2da8"},
-  tohoku:{label:"东北",border:"#1f7a8c",bg:"#e7f7fb",text:"#125463"},
-  kanazawa:{label:"金泽",border:"#8c6b1f",bg:"#faf1da",text:"#6b4e0f"},
-  kobe:{label:"神户",border:"#b34d7a",bg:"#fceaf3",text:"#8d2f59"},
-  hiroshima:{label:"广岛",border:"#2c8a57",bg:"#e8f6ee",text:"#18633c"},
-  scitokyo:{label:"Science Tokyo",border:"#4f46e5",bg:"#eeedfe",text:"#3c3489"},
-  utokyo:{label:"东京大学",border:"#3558b6",bg:"#e8efff",text:"#28408d"},
-  kyushu:{label:"九州",border:"#a95b1f",bg:"#f9eee1",text:"#8b4814"},
-  tsukuba:{label:"筑波",border:"#1776a8",bg:"#e8f6fb",text:"#0d5578"},
-  naist:{label:"奈良先端",border:"#58761d",bg:"#edf6df",text:"#415915"},
-  jaist:{label:"北陆先端",border:"#6c49b8",bg:"#f0eafe",text:"#503392"},
-  chiba:{label:"千叶",border:"#208d92",bg:"#e7f8f9",text:"#146468"}
-};
+const QUICK = ["机械", "材料", "电气电子", "情报工学", "AI", "数据科学", "建筑", "土木", "TOEFL", "口试"];
 
-let currentResults = [];
-let openCards = new Set();
-let filterNoJP = false;
-let thresholdState = "any";
-let pillState = { toefl: true, ielts: true };
-let univState = {};
+let currentSchool = "all";
+let needEnglish = false;
+let needJapanese = false;
 
-function uniqUnivs() {
-  const map = new Map();
-  DB.forEach(item => {
-    if (!map.has(item.univKey)) map.set(item.univKey, item.univ);
-  });
-  return Array.from(map, ([key, univ]) => ({ key, univ }));
+function uniqueSchools() {
+  return [...new Map(DATA.map(item => [item.key, item.university])).entries()]
+    .map(([key, university]) => ({ key, university }));
 }
 
-function escapeHtml(str) {
-  return String(str || "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
-}
-
-function norm(s) {
-  return String(s || "").toLowerCase().trim();
-}
-
-function tokenize(q) {
-  return norm(q).split(/[\s,，、\/・]+/).filter(Boolean);
-}
-
-function calcScore(item, query) {
-  const tokens = tokenize(query);
-  if (!tokens.length) return 0;
-
+function scoreItem(item, keyword) {
+  if (!keyword) return 1;
+  const q = keyword.toLowerCase().trim();
   const pool = [
-    item.major,
-    item.dept,
-    item.univ,
+    item.university,
+    item.category,
+    item.title,
+    item.apply,
+    item.exam,
+    item.englishNote,
+    item.japaneseNote,
     item.examSubjects,
-    item.englishPolicy,
-    item.notes,
-    item.route,
-    ...(item.keywords || []),
-    ...(item.zhKeywords || [])
-  ].map(norm).filter(Boolean);
-
-  let score = 0;
-  tokens.forEach(token => {
-    pool.forEach(text => {
-      if (text === token) score += 24;
-      else if (text.includes(token)) score += 11;
-      else if (token.length >= 2 && token.includes(text) && text.length >= 2) score += 6;
-    });
-  });
-
-  if (norm(item.major).includes(norm(query))) score += 18;
-  if (norm(item.examSubjects).includes(norm(query))) score += 10;
+    item.note,
+    ...(item.directions || [])
+  ].join(" ").toLowerCase();
+  if (!pool.includes(q)) return 0;
+  let score = 10;
+  if ((item.title || "").toLowerCase().includes(q)) score += 8;
+  if ((item.examSubjects || "").toLowerCase().includes(q)) score += 6;
+  if ((item.university || "").toLowerCase().includes(q)) score += 4;
   return score;
 }
 
-function buildUniversityTabs() {
-  const wrap = document.getElementById("univTabs");
-  wrap.innerHTML = "";
-  uniqUnivs().forEach(item => {
-    if (!(item.key in univState)) univState[item.key] = true;
-    const tone = TONES[item.key] || { border:"#ccc", bg:"#f3f2f8", text:"#5c5870" };
-    const btn = document.createElement("button");
-    btn.className = "univ-tab";
-    btn.textContent = item.univ;
-    btn.onclick = () => toggleUniv(item.key);
-    btn.style.borderColor = univState[item.key] ? tone.border : "var(--border)";
-    btn.style.background = univState[item.key] ? tone.bg : "var(--surface2)";
-    btn.style.color = univState[item.key] ? tone.text : "var(--text2)";
-    btn.style.fontWeight = univState[item.key] ? "700" : "500";
-    wrap.appendChild(btn);
+function renderTabs() {
+  const tabs = document.getElementById("schoolTabs");
+  tabs.innerHTML = "";
+
+  const all = document.createElement("span");
+  all.className = "tab" + (currentSchool === "all" ? " active" : "");
+  all.textContent = "全部";
+  all.onclick = () => {
+    currentSchool = "all";
+    renderAll();
+  };
+  tabs.appendChild(all);
+
+  uniqueSchools().forEach(item => {
+    const el = document.createElement("span");
+    el.className = "tab" + (currentSchool === item.key ? " active" : "");
+    el.textContent = item.university;
+    el.onclick = () => {
+      currentSchool = item.key;
+      renderAll();
+    };
+    tabs.appendChild(el);
   });
 }
 
-function updateStats() {
-  document.getElementById("univCount").textContent = uniqUnivs().length;
-  document.getElementById("totalCount").textContent = DB.length;
-}
-
-function renderEmpty() {
-  document.getElementById("countBadge").textContent = "请输入关键词";
-  document.getElementById("resultsList").innerHTML =
-    '<div class="empty">输入专业关键词，点击「✦ 推荐」开始搜索。<br><span style="font-size:13px;color:#b8b4cc;">已经补进旧帝大、地方国立、科学技术大学院大学等多所理工修士信息。</span></div>';
-}
-
-function doSearch() {
-  const q = document.getElementById("queryInput").value.trim();
-  if (!q) {
-    currentResults = [];
-    renderEmpty();
-    return;
-  }
-  document.getElementById("loadingRow").classList.add("show");
-  setTimeout(() => {
-    currentResults = DB.map(item => ({ ...item, _score: calcScore(item, q) }))
-      .filter(item => item._score > 0)
-      .sort((a, b) => b._score - a._score);
-    document.getElementById("loadingRow").classList.remove("show");
-    applyFilters();
-  }, 250);
+function renderQuick() {
+  const row = document.getElementById("quickRow");
+  row.innerHTML = "";
+  QUICK.forEach(word => {
+    const el = document.createElement("span");
+    el.className = "quick-chip";
+    el.textContent = word;
+    el.onclick = () => {
+      document.getElementById("searchInput").value = word;
+      renderAll();
+    };
+    row.appendChild(el);
+  });
 }
 
 function applyFilters() {
-  let list = currentResults.length ? [...currentResults] : [];
-  list = list.filter(item => univState[item.univKey]);
+  const keyword = document.getElementById("searchInput").value.trim();
 
-  if (filterNoJP) {
-    list = list.filter(item => !item.langJP);
+  let list = DATA
+    .map(item => ({ ...item, _score: scoreItem(item, keyword) }))
+    .filter(item => item._score > 0);
+
+  if (currentSchool !== "all") {
+    list = list.filter(item => item.key === currentSchool);
   }
-  if (pillState.toefl && !pillState.ielts) {
-    list = list.filter(item => item.toeflOK);
-  } else if (!pillState.toefl && pillState.ielts) {
-    list = list.filter(item => item.ieltsOK);
-  } else if (!pillState.toefl && !pillState.ielts) {
-    list = [];
+  if (needEnglish) {
+    list = list.filter(item => item.englishRequired);
+  }
+  if (needJapanese) {
+    list = list.filter(item => item.japaneseRequired);
   }
 
-  if (thresholdState === "461") list = list.filter(item => item.englishMin === null || item.englishMin >= 461);
-  if (thresholdState === "550") list = list.filter(item => item.englishMin === null || item.englishMin >= 550);
-
-  render(list);
+  list.sort((a, b) => b._score - a._score || a.university.localeCompare(b.university, "zh-CN"));
+  return list;
 }
 
-function render(list) {
-  if (!currentResults.length && !document.getElementById("queryInput").value.trim()) {
-    renderEmpty();
-    return;
-  }
+function tag(text, cls) {
+  return `<span class="tag ${cls}">${text}</span>`;
+}
 
-  document.getElementById("countBadge").textContent = list.length + " 条结果";
-  const wrap = document.getElementById("resultsList");
+function renderList(list) {
+  const wrap = document.getElementById("resultList");
+  document.getElementById("resultCount").textContent = `${list.length} 条`;
+
   if (!list.length) {
-    wrap.innerHTML = '<div class="empty">暂无匹配结果。<br><span style="font-size:13px;">可以换关键词，或者放宽英语 / 日语筛选。</span></div>';
+    wrap.innerHTML = `<div class="empty">没有找到匹配结果。<br>可以换关键词，或者切回“全部”院校查看。</div>`;
     return;
   }
 
-  const maxScore = Math.max(...list.map(x => x._score || 1), 1);
+  const groups = list.reduce((acc, item) => {
+    if (!acc[item.university]) acc[item.university] = [];
+    acc[item.university].push(item);
+    return acc;
+  }, {});
 
-  wrap.innerHTML = list.map(item => {
-    const tone = TONES[item.univKey] || { border:"#ccc", bg:"#f3f2f8", text:"#5c5870", label:item.univ };
-    const rel = Math.round(((item._score || 1) / maxScore) * 100);
-    const relClass = rel >= 65 ? "rel-high" : rel >= 35 ? "rel-mid" : "rel-low";
-    const relText = rel >= 65 ? "高度相关" : rel >= 35 ? "相关" : "参考";
-    const open = openCards.has(item.id);
+  wrap.innerHTML = Object.entries(groups).map(([university, items]) => {
+    const expandedItems = items.flatMap(item =>
+      item.directions.map(direction => ({ ...item, majorDirection: direction }))
+    );
 
-    const tags = [];
-    tags.push(item.langJP ? '<span class="ctag ctag-jp">需日语</span>' : '<span class="ctag ctag-ok">日语要求较低</span>');
-    tags.push(item.toeflOK ? '<span class="ctag ctag-ok">TOEFL 可</span>' : '<span class="ctag ctag-ng">TOEFL 未明确</span>');
-    tags.push(item.ieltsOK ? '<span class="ctag ctag-ok">IELTS 可</span>' : '<span class="ctag ctag-ng">IELTS 不可/未写</span>');
-    if (item.englishMin) tags.push('<span class="ctag ctag-info">TOEIC ' + item.englishMin + '+</span>');
-    tags.push('<span class="ctag ctag-info">' + escapeHtml(item.route) + '</span>');
+    const cards = expandedItems.map(item => {
+      const scoreText = document.getElementById("searchInput").value.trim() ? `匹配 ${item._score}` : item.category;
+      return `
+        <div class="item-block">
+          <div class="school-head" style="margin-bottom:12px;">
+            <div>
+              <h4 class="item-title">${item.majorDirection}</h4>
+              <p class="item-subtitle">所属条目：${item.title} / 类别：${item.category}</p>
+            </div>
+            <span class="meta-tag">${scoreText}</span>
+          </div>
+
+          <div class="tag-row">
+            ${tag(item.category, "tag-purple")}
+            ${tag(item.englishRequired ? "需要英语成绩" : "英语成绩未统一要求", item.englishRequired ? "tag-blue" : "tag-amber")}
+            ${tag(item.japaneseRequired ? "需要日语能力" : "日语要求相对低/另案", item.japaneseRequired ? "tag-red" : "tag-green")}
+          </div>
+
+          <div class="grid">
+            <div class="box">
+              <strong>出愿时间</strong>
+              ${item.apply}
+            </div>
+            <div class="box">
+              <strong>考试时间</strong>
+              ${item.exam}
+            </div>
+            <div class="box">
+              <strong>英语要求</strong>
+              ${item.englishNote}
+            </div>
+            <div class="box">
+              <strong>日语说明</strong>
+              ${item.japaneseNote}
+            </div>
+          </div>
+
+          <div class="detail">
+            <div class="detail-line"><strong>专业课 / 选考方式：</strong>${item.examSubjects}</div>
+            <div class="detail-line"><strong>备注：</strong>${item.note}</div>
+            <div class="detail-line"><strong>官方入口：</strong><a href="${item.url}" target="_blank" rel="noopener">${item.url}</a></div>
+          </div>
+        </div>
+      `;
+    }).join("");
 
     return `
-      <div class="result-card" onclick="toggleCard('${item.id}')" style="border-left-color:${tone.border}">
-        <div class="card-head">
+      <section class="school-group">
+        <div class="school-head">
           <div>
-            <div class="card-major">${escapeHtml(item.major)}</div>
-            <div class="card-univ">${escapeHtml(item.univ)}<span class="card-univ-badge" style="background:${tone.bg};color:${tone.text}">${escapeHtml(tone.label)}</span> ${escapeHtml(item.dept)}</div>
+            <h3>${university}</h3>
+            <p>当前收录 ${expandedItems.length} 条专业信息。这里会把这所学校收录到的全部专业逐条展开显示。</p>
           </div>
-          <span class="relevance-badge ${relClass}">${relText}</span>
+          <span class="school-badge">${expandedItems.length} 条</span>
         </div>
-
-        <div class="card-tags">${tags.join("")}</div>
-
-        <div class="meta-grid">
-          <div class="meta-box"><strong>出愿时间</strong>${escapeHtml(item.apply)}</div>
-          <div class="meta-box"><strong>考试时间</strong>${escapeHtml(item.exam)}</div>
-          <div class="meta-box"><strong>募集规模</strong>${escapeHtml(item.capacity)}</div>
-          <div class="meta-box"><strong>英语说明</strong>${escapeHtml(item.englishPolicy)}</div>
-        </div>
-
-        <div class="summary-line"><strong>专业课：</strong>${escapeHtml(item.examSubjects)}</div>
-        <div class="summary-line"><strong>备注：</strong>${escapeHtml(item.notes)}</div>
-
-        <div class="detail-drawer ${open ? "open" : ""}" id="dd-${item.id}">
-          <div class="detail-inner">
-            <div class="detail-row"><span class="detail-key">选拔方式</span><span class="detail-val">${escapeHtml(item.route)}</span></div>
-            <div class="detail-row"><span class="detail-key">考试内容</span><span class="detail-val">${escapeHtml(item.examSubjects)}</span></div>
-            <div class="detail-row"><span class="detail-key">英语要求</span><span class="detail-val">${escapeHtml(item.englishPolicy)}</span></div>
-            <div class="detail-row"><span class="detail-key">注意事项</span><span class="detail-val">${escapeHtml(item.notes)}</span></div>
-            <div class="detail-row"><span class="detail-key">官网</span><span class="detail-val"><a href="${escapeHtml(item.url)}" target="_blank" rel="noopener">${escapeHtml(item.url)}</a></span></div>
-          </div>
-        </div>
-      </div>
+        <div class="item-list">${cards}</div>
+      </section>
     `;
   }).join("");
 }
 
-function toggleCard(id) {
-  if (openCards.has(id)) openCards.delete(id);
-  else openCards.add(id);
-  const el = document.getElementById("dd-" + id);
-  if (el) el.classList.toggle("open", openCards.has(id));
+function renderAll() {
+  renderTabs();
+  document.querySelectorAll("[data-filter='english']").forEach(el => el.classList.toggle("active", needEnglish));
+  document.querySelectorAll("[data-filter='japanese']").forEach(el => el.classList.toggle("active", needJapanese));
+  renderList(applyFilters());
 }
 
-function qs(value) {
-  document.getElementById("queryInput").value = value;
-  doSearch();
-}
-
-function resetAll() {
-  document.getElementById("queryInput").value = "";
-  document.getElementById("filterNoJP").checked = false;
-  filterNoJP = false;
-  thresholdState = "any";
-  pillState = { toefl: true, ielts: true };
-  openCards.clear();
-  currentResults = [];
-  uniqUnivs().forEach(item => { univState[item.key] = true; });
-  syncUI();
-  renderEmpty();
-}
-
-function toggleUniv(key) {
-  const active = Object.values(univState).filter(Boolean).length;
-  if (univState[key] && active === 1) return;
-  univState[key] = !univState[key];
-  syncUI();
-  applyFilters();
-}
-
-function tp(key) {
-  pillState[key] = !pillState[key];
-  syncUI();
-  applyFilters();
-}
-
-function th(value) {
-  thresholdState = thresholdState === value ? "any" : value;
-  syncUI();
-  applyFilters();
-}
-
-function syncUI() {
-  buildUniversityTabs();
-  document.getElementById("p-toefl").className = "pill" + (pillState.toefl ? " on" : "");
-  document.getElementById("p-ielts").className = "pill" + (pillState.ielts ? " on" : "");
-  ["any", "461", "550"].forEach(key => {
-    const el = document.getElementById("p-" + key);
-    if (!el) return;
-    const on = thresholdState === key;
-    el.className = "pill" + (on ? (key === "any" ? " on-teal" : " on") : "");
-  });
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  uniqUnivs().forEach(item => { univState[item.key] = true; });
-  updateStats();
-  buildUniversityTabs();
-  syncUI();
-  document.getElementById("filterNoJP").addEventListener("change", function() {
-    filterNoJP = this.checked;
-    applyFilters();
-  });
-  renderEmpty();
+document.getElementById("searchBtn").addEventListener("click", renderAll);
+document.getElementById("resetBtn").addEventListener("click", () => {
+  document.getElementById("searchInput").value = "";
+  currentSchool = "all";
+  needEnglish = false;
+  needJapanese = false;
+  renderAll();
 });
+document.getElementById("searchInput").addEventListener("keydown", event => {
+  if (event.key === "Enter") renderAll();
+});
+document.querySelector("[data-filter='english']").addEventListener("click", () => {
+  needEnglish = !needEnglish;
+  renderAll();
+});
+document.querySelector("[data-filter='japanese']").addEventListener("click", () => {
+  needJapanese = !needJapanese;
+  renderAll();
+});
+
+document.getElementById("schoolCount").textContent = uniqueSchools().length;
+document.getElementById("itemCount").textContent = DATA.length;
+renderQuick();
+renderAll();
 </script>
 </body>
 </html>
