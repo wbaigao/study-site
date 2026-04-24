@@ -1,3 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>日本大学院 修士専攻 检索推荐系统</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #f8f7fc; --surface: #ffffff; --surface2: #f3f2f8;
+    --border: rgba(0,0,0,0.08); --border-hover: rgba(83,74,183,0.35);
+    --text: #1a1825; --text2: #5c5870; --text3: #9590aa;
+    --purple: #534AB7; --purple-light: #EEEDFE; --purple-mid: #AFA9EC; --purple-dark: #3C3489;
+    --teal: #0F6E56; --teal-light: #E1F5EE;
+    --amber: #633806; --amber-light: #FAEEDA;
+    --blue: #0C447C; --blue-light: #E6F1FB;
+    --gray-light: #F1EFE8; --gray-mid: #5F5E5A;
+    --coral: #993C1D; --coral-light: #FAECE7;
+  }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic UI", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.6; min-height: 100vh; }
+  .page { max-width: 960px; margin: 0 auto; padding: 2rem 1rem 4rem; }
+  .hero { margin-bottom: 1.5rem; }
+  .hero-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; flex-wrap: wrap; }
+  .hero h1 { font-size: 24px; font-weight: 600; letter-spacing: -0.3px; }
+  .ai-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; background: var(--purple-light); color: var(--purple-dark); padding: 3px 8px; border-radius: 999px; }
+  .hero p { font-size: 14px; color: var(--text2); line-height: 1.7; }
+  .stats-bar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 1.25rem; }
+  .stat-pill { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; background: var(--surface); border: 1px solid var(--border); padding: 5px 12px; border-radius: 999px; color: var(--text2); }
+  .stat-pill span { font-size: 15px; font-weight: 700; color: var(--purple); }
+  .search-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.25rem 1.5rem; margin-bottom: 1.25rem; box-shadow: 0 2px 12px rgba(0,0,0,0.04); }
+  .search-row { display: flex; gap: 8px; margin-bottom: 1rem; }
+  .search-input { flex: 1; font-size: 15px; font-family: inherit; padding: 11px 16px; border-radius: 12px; border: 1px solid var(--border); background: var(--surface2); color: var(--text); outline: none; transition: border-color 0.15s, box-shadow 0.15s; }
+  .search-input:focus { border-color: var(--purple-mid); box-shadow: 0 0 0 3px rgba(127,119,221,0.15); background: var(--surface); }
+  .btn { padding: 11px 20px; border-radius: 12px; border: 1px solid var(--border); background: var(--surface); color: var(--text); cursor: pointer; font-size: 14px; font-family: inherit; font-weight: 500; white-space: nowrap; transition: background 0.15s; }
+  .btn:hover { background: var(--surface2); }
+  .btn-primary { background: var(--purple)!important; color:#fff!important; border-color:var(--purple)!important; }
+  .btn-primary:hover { background: var(--purple-dark)!important; }
+  .quick-row { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin-bottom: 1rem; }
+  .quick-label { font-size: 12px; color: var(--text3); }
+  .quick-btn { padding: 4px 11px; border-radius: 999px; border: 1px solid var(--purple-mid); background: var(--purple-light); color: var(--purple-dark); font-size: 12px; cursor: pointer; font-family: inherit; transition: background 0.12s; }
+  .quick-btn:hover { background: #d4d0f8; }
+  .divider { height: 1px; background: var(--border); margin: 1rem 0; }
+  .filter-section { display: flex; flex-wrap: wrap; gap: 10px 20px; align-items: flex-start; }
+  .filter-block { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .filter-label { font-size: 12px; color: var(--text3); white-space: nowrap; }
+  .toggle-label { display: flex; align-items: center; gap: 5px; font-size: 13px; color: var(--text2); cursor: pointer; }
+  .toggle-label input { width: 14px; height: 14px; cursor: pointer; accent-color: var(--purple); }
+  .pill { padding: 4px 12px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface2); color: var(--text2); font-size: 12px; cursor: pointer; transition: all 0.12s; white-space: nowrap; font-family: inherit; }
+  .pill.on { background: var(--purple-light); border-color: var(--purple-mid); color: var(--purple-dark); font-weight: 500; }
+  .pill.on-teal { background: var(--teal-light); border-color: #9FE1CB; color: var(--teal); font-weight: 500; }
+  .univ-tab { padding: 4px 12px; border-radius: 999px; border: 1px solid var(--border); font-size: 12px; cursor: pointer; transition: all 0.12s; background: var(--surface2); color: var(--text2); font-family: inherit; }
+  .results-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; }
+  .results-header h2 { font-size: 15px; font-weight: 600; }
+  .count-badge { font-size: 12px; color: var(--text2); background: var(--surface); border: 1px solid var(--border); padding: 3px 10px; border-radius: 999px; }
+  .results-list { display: grid; gap: 10px; }
+  .result-card { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--border); border-radius: 14px; padding: 1rem 1.25rem; cursor: pointer; transition: border-color 0.15s, box-shadow 0.15s; }
+  .result-card:hover { box-shadow: 0 2px 12px rgba(83,74,183,0.08); }
+  .card-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 8px; }
+  .card-major { font-size: 15px; font-weight: 600; color: var(--text); line-height: 1.4; }
+  .card-univ { font-size: 12px; color: var(--text3); margin-top: 3px; }
+  .card-univ-badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 1px 7px; border-radius: 999px; margin-left: 5px; vertical-align: middle; }
+  .relevance-badge { flex-shrink: 0; font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 999px; }
+  .rel-high { background: var(--purple-light); color: var(--purple-dark); }
+  .rel-mid  { background: var(--teal-light); color: var(--teal); }
+  .rel-low  { background: var(--gray-light); color: var(--gray-mid); }
+  .card-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+  .ctag { font-size: 11px; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--border); color: var(--text2); background: var(--surface2); }
+  .ctag-jp   { background: var(--amber-light); border-color: #FAC775; color: var(--amber); }
+  .ctag-warn { background: #FCEBEB; border-color: #F7C1C1; color: #791F1F; }
+  .ctag-ok   { background: var(--teal-light); border-color: #9FE1CB; color: var(--teal); }
+  .ctag-ng   { background: #FCEBEB; border-color: #F7C1C1; color: #791F1F; }
+  .ctag-alert { background: #FAEEDA; border-color: #FAC775; color: var(--amber); }
+  .card-meta { font-size: 13px; color: var(--text2); display: flex; flex-wrap: wrap; gap: 0 16px; }
+  .card-meta strong { color: var(--text); font-weight: 500; }
+  .detail-drawer { overflow: hidden; max-height: 0; transition: max-height 0.25s ease; border-top: 1px solid transparent; }
+  .detail-drawer.open { max-height: 500px; border-top: 1px solid var(--border); margin-top: 10px; padding-top: 10px; }
+  .detail-inner { display: grid; gap: 6px; }
+  .detail-row { display: flex; gap: 10px; font-size: 13px; }
+  .detail-key { font-weight: 500; color: var(--text); min-width: 72px; flex-shrink: 0; }
+  .detail-val { color: var(--text2); line-height: 1.7; }
+  .detail-val a { color: var(--purple); text-decoration: none; word-break: break-all; }
+  .detail-val a:hover { text-decoration: underline; }
+  .empty { text-align: center; padding: 3rem 0; color: var(--text3); font-size: 14px; line-height: 1.8; }
+  .loading-row { font-size: 13px; color: var(--text3); padding: 0.5rem 0 0; display: none; }
+  .loading-row.show { display: block; }
+  @media (max-width: 600px) { .search-row { flex-direction: column; } .filter-section { flex-direction: column; } .hero h1 { font-size: 20px; } }
+</style>
+</head>
 <body>
 <div class="page">
   <div class="hero">
@@ -180,9 +268,7 @@ let univState = {};
 function uniqUnivs(){
   const list = [];
   DB.forEach(item => {
-    if (!list.find(x => x.key === item.univKey)) {
-      list.push({ key:item.univKey, univ:item.univ });
-    }
+    if (!list.find(x => x.key === item.univKey)) list.push({ key:item.univKey, univ:item.univ });
   });
   return list;
 }
@@ -196,23 +282,16 @@ function escapeHtml(str){
     .replace(/'/g,"&#39;");
 }
 
-function norm(s){
-  return String(s || "").toLowerCase().trim();
-}
-
-function tokenize(q){
-  return norm(q).split(/[\s,，、\/・]+/).filter(Boolean);
-}
+function norm(s){ return String(s || "").toLowerCase().trim(); }
+function tokenize(q){ return norm(q).split(/[\s,，、\/・]+/).filter(Boolean); }
 
 function calcScore(item, query){
   const tokens = tokenize(query);
   if (!tokens.length) return 0;
   let score = 0;
-
   const pool = [
     item.major, item.dept, item.univ, item.exam, item.apply, item.notes,
-    ...(item.keywords || []),
-    ...(item.zhKeywords || [])
+    ...(item.keywords || []), ...(item.zhKeywords || [])
   ].map(norm).filter(Boolean);
 
   tokens.forEach(t => {
@@ -237,7 +316,7 @@ function buildUniversityTabs(){
   wrap.innerHTML = "";
   uniqUnivs().forEach(item => {
     if (!(item.key in univState)) univState[item.key] = true;
-    const tone = TONES[item.key] || { bg:"#f3f2f8", text:"#5c5870", border:"#d7d3e8", name:item.univ };
+    const tone = TONES[item.key] || { bg:"#f3f2f8", text:"#5c5870", border:"#d7d3e8" };
     const btn = document.createElement("button");
     btn.className = "univ-tab";
     btn.id = "t-" + item.key;
@@ -266,15 +345,11 @@ function doSearch(){
     renderEmpty();
     return;
   }
-
   document.getElementById("loadingRow").classList.add("show");
-
   setTimeout(() => {
-    currentResults = DB
-      .map(item => ({ ...item, _score: calcScore(item, q) }))
+    currentResults = DB.map(item => ({ ...item, _score: calcScore(item, q) }))
       .filter(item => item._score > 0)
       .sort((a,b) => b._score - a._score);
-
     document.getElementById("loadingRow").classList.remove("show");
     applyFilters();
   }, 350);
@@ -282,27 +357,16 @@ function doSearch(){
 
 function applyFilters(){
   let list = currentResults.length ? [...currentResults] : [];
-
   list = list.filter(item => univState[item.univKey]);
 
-  if (filterNoJP) {
-    list = list.filter(item => !item.langJP);
-  }
+  if (filterNoJP) list = list.filter(item => !item.langJP);
 
-  if (pillState.toefl && !pillState.ielts) {
-    list = list.filter(item => item.toeflOK);
-  } else if (!pillState.toefl && pillState.ielts) {
-    list = list.filter(item => item.ieltsOK);
-  } else if (!pillState.toefl && !pillState.ielts) {
-    list = [];
-  }
+  if (pillState.toefl && !pillState.ielts) list = list.filter(item => item.toeflOK);
+  else if (!pillState.toefl && pillState.ielts) list = list.filter(item => item.ieltsOK);
+  else if (!pillState.toefl && !pillState.ielts) list = [];
 
-  if (thresholdState === "461") {
-    list = list.filter(item => item.englishMin === null || item.englishMin >= 461);
-  }
-  if (thresholdState === "550") {
-    list = list.filter(item => item.englishMin === null || item.englishMin >= 550);
-  }
+  if (thresholdState === "461") list = list.filter(item => item.englishMin === null || item.englishMin >= 461);
+  if (thresholdState === "550") list = list.filter(item => item.englishMin === null || item.englishMin >= 550);
 
   render(list);
 }
@@ -315,7 +379,6 @@ function renderEmpty(){
 
 function render(list){
   const el = document.getElementById("resultsList");
-
   if (!currentResults.length && !document.getElementById("queryInput").value.trim()) {
     renderEmpty();
     return;
@@ -340,16 +403,11 @@ function render(list){
     const tags = [];
     if (r.langJP) tags.push('<span class="ctag ctag-jp">需日语</span>');
     else tags.push('<span class="ctag ctag-ok">日语要求低</span>');
-
     if (r.englishMin) tags.push(`<span class="ctag ctag-warn">TOEIC≥${r.englishMin}</span>`);
     else tags.push('<span class="ctag ctag-ok">无明确门槛</span>');
-
     tags.push(r.toeflOK ? '<span class="ctag ctag-ok">TOEFL可</span>' : '<span class="ctag ctag-ng">TOEFL限制</span>');
     tags.push(r.ieltsOK ? '<span class="ctag ctag-ok">IELTS可</span>' : '<span class="ctag ctag-ng">IELTS不可</span>');
-
-    if (r.notes.includes("留学") || r.notes.includes("特別選抜")) {
-      tags.push('<span class="ctag ctag-alert">注意选拔条件</span>');
-    }
+    if (r.notes.includes("留学") || r.notes.includes("特別選抜")) tags.push('<span class="ctag ctag-alert">注意选拔条件</span>');
 
     return `
       <div class="result-card${i < 3 ? " top-match" : ""}" onclick="toggleCard('${r.id}')" style="border-left-color:${tone.border}">
@@ -397,10 +455,7 @@ function toggleCard(id){
   if (dd) dd.classList.toggle("open", openCards.has(id));
 }
 
-function qs(q){
-  document.getElementById("queryInput").value = q;
-  doSearch();
-}
+function qs(q){ document.getElementById("queryInput").value = q; doSearch(); }
 
 function resetAll(){
   document.getElementById("queryInput").value = "";
@@ -423,27 +478,15 @@ function toggleUniv(key){
   applyFilters();
 }
 
-function tp(key){
-  pillState[key] = !pillState[key];
-  syncUI();
-  applyFilters();
-}
-
-function th(val){
-  thresholdState = thresholdState === val ? "any" : val;
-  syncUI();
-  applyFilters();
-}
+function tp(key){ pillState[key] = !pillState[key]; syncUI(); applyFilters(); }
+function th(val){ thresholdState = thresholdState === val ? "any" : val; syncUI(); applyFilters(); }
 
 function syncUI(){
   buildUniversityTabs();
-
   document.getElementById("p-toefl").classList.toggle("on", pillState.toefl);
   document.getElementById("p-ielts").classList.toggle("on", pillState.ielts);
-
   ["any","461","550"].forEach(v => {
     const el = document.getElementById("p-" + v);
-    if (!el) return;
     const on = thresholdState === v;
     el.className = "pill" + (on ? (v === "any" ? " on-teal" : " on") : "");
   });
@@ -462,3 +505,4 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 </body>
+</html>
