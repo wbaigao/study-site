@@ -398,8 +398,17 @@
     font-size: 22px;
     line-height: 1;
   }
+  .modal-search {
+    display: flex;
+    gap: 10px;
+    margin: 0 0 14px;
+  }
+  .modal-search input {
+    border-radius: 8px;
+  }
   @media (max-width: 760px) {
     .search-row, .school-head { flex-direction: column; }
+    .modal-search { flex-direction: column; }
     .grid { grid-template-columns: 1fr; }
     .school-index { grid-template-columns: 1fr; }
     .hero h1 { font-size: 28px; }
@@ -458,6 +467,10 @@
         <p id="modalSubtitle"></p>
       </div>
       <button class="close-btn" id="modalClose" aria-label="关闭">×</button>
+    </div>
+    <div class="modal-search">
+      <input id="modalSearchInput" type="text" placeholder="在这所学校内搜索专业：法学 / 机械 / 经济 / TOEFL" />
+      <button class="secondary-btn" id="modalSearchReset">清空</button>
     </div>
     <div id="modalBody"></div>
   </div>
@@ -540,15 +553,253 @@ const DATA = [
     category: "计算机",
     title: "信息理工学系研究科（计算机、电子信息、知能机械信息、创造信息）",
     directions: ["コンピュータ科学", "数理情報学", "システム情報学", "電子情報学", "知能機械情報学", "創造情報学"],
-    apply: "夏入试、冬入试两轮；个别资格审查分别到 2025-05-12、2025-10-27",
-    exam: "夏入试笔试起始日为 2025-08-19；专攻口试见各专攻 PDF",
+    apply: "2026年度：夏入试 2025-05-30 至 2025-06-05 14:00；冬入试 2025-11-12 至 2025-11-18 14:00；个别资格审查分别到 2025-05-12、2025-10-27",
+    exam: "夏入试：数学/程序设计等 2025-08-19，专业科目与口述 2025-08-18 至 2025-08-26；冬入试：2026-01 下旬至 02 中旬",
     englishRequired: true,
     japaneseRequired: true,
-    englishNote: "总募集要项明确使用 TOEFL；知能机械信息专攻也明确用 TOEFL 成绩。",
-    japaneseNote: "默认按日语修学能力准备；个别专攻口试可日语或英语。",
-    examSubjects: "笔试、口述试验等综合评价；知能机械信息专攻含数学、英文发表与口试。",
-    note: "这次主要收了信息理工，不单独加工学系研究科其他工科条目。",
+    englishNote: "必须按研究科 TOEFL 成绩提出要项提交 TOEFL；2026 年 4 月后课程大部分英语化，但入试仍按专攻案内执行。",
+    japaneseNote: "出愿和专攻案内以日语为主；口述语言需逐专攻确认。",
+    examSubjects: "先书类选考，再按专攻进行数学、程序设计、专业科目、口述试验等。计算机/数理/系统/电子/知能机械/创造信息 6 专攻均有独立入试案内。",
+    note: "PDF 扫描：总要项第5节列出各专攻笔试科目和募集人数；知能机械信息案内明确 TOEFL 有效者才进入专业/口述试验。",
     url: "https://www.i.u-tokyo.ac.jp/edu/entra/2026_admission-g_m_j.pdf"
+  },
+  {
+    id: "tokyo-eng",
+    university: "东京大学",
+    key: "utokyo",
+    category: "工科",
+    title: "工学系研究科（社会基盘、建筑、机械、电气、材料、化学、系统、航空、精密等）",
+    directions: ["社会基盤学", "建築学", "都市工学", "機械工学", "精密工学", "システム創成学", "航空宇宙工学", "電気系工学", "物理工学", "マテリアル工学", "応用化学", "化学システム工学", "化学生命工学", "先端学際工学", "原子力国際専攻", "バイオエンジニアリング", "技術経営戦略学"],
+    apply: "2027年度：A日程为主，B日程是否募集约 2026-10-01 公告；出愿具体期限按工学系 Web 出愿系统和专攻案内确认",
+    exam: "2027年度入试为 2026 年度实施；各专攻分别安排笔试、书类审查、面接/口述。社会基盘、系统创成等以书类审查+面接替代部分笔试",
+    englishRequired: true,
+    japaneseRequired: true,
+    englishNote: "必须提交外部英语成绩。社会基盘/建筑可 TOEFL 或 TOEIC L&R；都市/机械/系统创成/航空宇宙/电气等多为 TOEFL；精密可 TOEFL / IELTS / TOEIC L&R。",
+    japaneseNote: "一般选拔按日语募集体系运行；2026 年度起工学系研究科课程原则英语化，但出愿与考试语言仍需看专攻案内。",
+    examSubjects: "社会基盘：书类审查+面接；建筑：建筑关系科目；都市：都市工学；机械/航空宇宙：数学+专业；电气：电气电子/信息；材料、化学、物理、系统创成等按专攻实施。",
+    note: "PDF 扫描：募集人数示例，社会基盘52、建筑32、都市25、机械52、精密27、系统创成45、航空宇宙37。",
+    url: "https://www.t.u-tokyo.ac.jp/hubfs/admission/2026/0403/Guidelines_gse_m_2027.pdf"
+  },
+  {
+    id: "tokyo-science",
+    university: "东京大学",
+    key: "utokyo",
+    category: "理学",
+    title: "理学系研究科（物理、天文、地球惑星、化学、生物科学等）",
+    directions: ["物理学", "天文学", "地球惑星科学", "化学", "生物科学"],
+    apply: "2027年度：WEB 出愿，具体受付期间按 R9_master_guidelines.pdf；资格审查、检查表和募集人数表已一并下载",
+    exam: "通常为 8 月笔试，口述在 8 月下旬至 9 月上旬；专攻可能追加小论文、essay 或独自材料",
+    englishRequired: true,
+    japaneseRequired: true,
+    englishNote: "地球惑星科学改为 TOEFL iBT 或 TOEIC L&R 提交；化学可用 TOEFL iBT / TOEIC L&R 公开测试替代 TOEFL ITP，其他专攻按募集要项确认。",
+    japaneseNote: "一般修士入试默认按日语体系准备；证明书非日英文本需附日译或英译。",
+    examSubjects: "物理、天文、地球惑星科学、化学、生物科学各专攻分别规定专业笔试、口述、书类审查和外语处理；必须同时查看专攻 HP。",
+    note: "已下载 2027 年度理学系研究科修士募集要项。",
+    url: "https://www.s.u-tokyo.ac.jp/ja/admission/master/files/R9/R9_master_guidelines.pdf"
+  },
+  {
+    id: "tokyo-math",
+    university: "东京大学",
+    key: "utokyo",
+    category: "理学",
+    title: "数理科学研究科（数理科学）",
+    directions: ["数理科学", "代数学", "几何学", "解析学", "概率统计", "应用数学", "数理物理"],
+    apply: "2026年度：官网公开正式修士募集要项；在线出愿，募集页同时提供愿书输入表单和 Web 出愿流程",
+    exam: "2026年度修士入试按募集要项实施；通常为数学专业笔试与口述试验，日程以正式 PDF 和研究科公告为准",
+    englishRequired: false,
+    japaneseRequired: true,
+    englishNote: "当前下载的募集要项未按全研究科统一列为外部英语成绩硬门槛。",
+    japaneseNote: "数学笔试与口述通常按日语募集体系实施。",
+    examSubjects: "专业数学为核心，覆盖代数、几何、解析、概率统计、应用数学、数理物理等；官网另公开近年英语、专业科目A/B过去问。",
+    note: "2027 年度未在当前页面确认到正式 PDF，因此保存最新可取得的 2026 年度募集要项。",
+    url: "https://www.ms.u-tokyo.ac.jp/kyoumu/9b58f2c20d26354705576efc5121eb41ed261166.pdf"
+  },
+  {
+    id: "tokyo-frontier",
+    university: "东京大学",
+    key: "utokyo",
+    category: "综合",
+    title: "新领域创成科学研究科（基盘科学、生命科学、环境学）",
+    directions: ["物質系", "先端エネルギー工学", "複雑理工学", "先端生命科学", "メディカル情報生命", "自然環境学", "海洋技術環境学", "環境システム学", "人間環境学", "社会文化環境学", "国際協力学", "サステイナビリティ学"],
+    apply: "2027年度：修士募集要项 2026-03-23 公开；一般选拔与外国人等特别选考共通，在线出愿",
+    exam: "各专攻按入试日程 A/B 实施；笔试、口述、书类、志望调查票、研究计划等由专攻入试案内另定",
+    englishRequired: true,
+    japaneseRequired: true,
+    englishNote: "专攻별可能要求 TOEFL / IELTS / TOEIC；日程A英语成绩通常需为 2024-09-01 以后，日程B通常需为 2025-02-01 以后受验。",
+    japaneseNote: "一般选拔按日语官网体系运行；国际协力等方向可能有英语材料或英语课程，但须按专攻案内确认。",
+    examSubjects: "基盘科学、生命科学、环境学各系分别实施；总要项要求进一步下载各专攻入试案内、志望调查票和追加提交物列表。",
+    note: "已下载 2027 年度新领域创成科学研究科修士募集要项。",
+    url: "https://www.k.u-tokyo.ac.jp/assets/files/2027guidelines_for_applicants_to_mc.pdf"
+  },
+  {
+    id: "tokyo-agri",
+    university: "东京大学",
+    key: "utokyo",
+    category: "生命农学",
+    title: "农学生命科学研究科（农业、生物、森林、兽医、食品、资源、国际农学等）",
+    directions: ["生産・環境生物学", "応用生命化学", "応用生命工学", "森林科学", "水圏生物科学", "農業・資源経済学", "生物・環境工学", "生物材料科学", "農学国際", "生圏システム学", "応用動物科学", "獣医学"],
+    apply: "2027年度：修士募集要项已公开；出愿必须同时遵守研究科总要项和各专攻入试案内",
+    exam: "外语为 TOEFL 成绩提交，研究科本身不实施英语笔试；专业笔试、口述、书类和导师联系要求按各专攻实施",
+    englishRequired: true,
+    japaneseRequired: true,
+    englishNote: "总要项明确：外国语（英语）试验为 TOEFL score 提出，本研究科不另行实施英语考试。",
+    japaneseNote: "一般修士项目默认按日语体系运行；生物材料科学木造建筑课程明确日语授课与日语出题。",
+    examSubjects: "生产环境生物、应用生命化学/工学、森林、水圈、农业资源经济、生物环境工学、生物材料、国际农学、动物科学等按专攻实施专业选拔。",
+    note: "已下载 2027 年度农学生命科学研究科修士募集要项。",
+    url: "https://www.a.u-tokyo.ac.jp/grad/1-1_Admission_Guidelines_M_2027"
+  },
+  {
+    id: "tokyo-pharma",
+    university: "东京大学",
+    key: "utokyo",
+    category: "药学",
+    title: "药学系研究科（药科学、药学相关研究分野）",
+    directions: ["薬科学", "創薬科学", "生命薬学", "医療薬学", "天然物化学", "薬品作用学", "分子薬学", "生物薬科学"],
+    apply: "2027年度：2026年10月或2027年4月入学；正式修士募集要项已公开，按药学系 Web 出愿/书类要求办理",
+    exam: "入学者选拔综合笔记试验、口述试验、TOEFL iBT score 和出身学校成绩；外国大学出身者走外国人留学生特别选拔",
+    englishRequired: true,
+    japaneseRequired: true,
+    englishNote: "必须使用 TOEFL iBT score；募集要项把 TOEFL iBT、笔记试验、口述试验和学业成绩列为综合判定材料。",
+    japaneseNote: "常规修士项目按日语募集体系准备。",
+    examSubjects: "药科学募集 100 名左右；专业科目围绕药科学、创药、生命药学、医疗药学、天然物化学、分子药学、生物药科学等研究分野。",
+    note: "已下载 2027 年度药学系研究科修士募集要项。",
+    url: "https://www.f.u-tokyo.ac.jp/wysiwyg/kcfinder/upload/files/2027%E5%B9%B4%E5%BA%A6%20%E8%96%AC%E5%AD%A6%E7%B3%BB%E7%A0%94%E7%A9%B6%E7%A7%91%E4%BF%AE%E5%A3%AB%E8%AA%B2%E7%A8%8B%E5%8B%9F%E9%9B%86%E8%A6%81%E9%A0%85%281%29.pdf"
+  },
+  {
+    id: "tokyo-med",
+    university: "东京大学",
+    key: "utokyo",
+    category: "医学",
+    title: "医学系研究科（医科学、国际保健学等修士课程）",
+    directions: ["医科学", "分子细胞生物学", "病因・病理学", "脑神经医学", "社会医学", "内科学", "外科学", "国際保健学", "公共健康医学"],
+    apply: "2026年度：医学系修士正式募集要项与入试案内已下载；2027年度目前为预告通知，正式要项需以后续官网为准",
+    exam: "健康科学・护理学/国际保健学：一次为 TOEFL或IELTS 成绩、小论文、专业笔试；二次为在线口头试问。入试案内示例：笔试 2025-08-18，口头试问 2025-08-22",
+    englishRequired: true,
+    japaneseRequired: true,
+    englishNote: "使用 TOEFL 或 IELTS 成绩；医学系另有 2027 年度英语成绩注意事项预告。",
+    japaneseNote: "一般修士课程默认需要日语出愿与考试应对能力，公共健康医学等课程需看单独案内。",
+    examSubjects: "健康科学・护理学：保健学+专业分野；国际保健学：志望专业分野与其他分野选答；公共健康医学 SPH 另按专业职学位要项实施。",
+    note: "已下载医学系研究科 2026 修士募集要项、修士入试案内和公共健康医学 SPH 募集要项。",
+    url: "https://www.m.u-tokyo.ac.jp/daigakuin/apply/appguidemain.html"
+  },
+  {
+    id: "tokyo-humanities",
+    university: "东京大学",
+    key: "utokyo",
+    category: "人文社科",
+    title: "人文社会系研究科（基础文化、日本文化、亚洲文化、欧美文化、社会文化、文化资源等）",
+    directions: ["基礎文化研究", "日本文化研究", "アジア文化研究", "欧米系文化研究", "社会文化研究", "文化資源学研究", "韓国朝鮮文化研究", "言語学", "哲学", "倫理学", "宗教学", "美学芸術学", "心理学", "日本史学", "社会学", "社会心理学"],
+    apply: "2027年度：夏季入试资格审查 2026-05-15；冬季入试资格审查 2026-09-18；正式出愿期间按募集要项与愿书取得方式办理",
+    exam: "夏季、冬季两回；专业分野별是否实施夏季不同。第一次试验后，仅第一次合格者进入第二次口述试验",
+    englishRequired: false,
+    japaneseRequired: true,
+    englishNote: "入学者选拔重视外国语能力，但不同专业分野外语科目不同，未统一为 TOEFL 等外部英语成绩提交。",
+    japaneseNote: "人文社科专业分野一般需要高度日语阅读、写作与口述能力。",
+    examSubjects: "外国语、志望专业分野笔试、毕业论文或替代材料、研究计划书等书类审查，之后实施口述试验。",
+    note: "已下载 2027 年度人文社会系研究科修士募集要项。",
+    url: "https://www.l.u-tokyo.ac.jp/content/000014932.pdf"
+  },
+  {
+    id: "tokyo-edu",
+    university: "东京大学",
+    key: "utokyo",
+    category: "教育",
+    title: "教育学研究科（教育学、比较教育社会学、教育心理、临床心理、身体教育、学校教育高度化等）",
+    directions: ["教育学", "比較教育社会学", "生涯学習基盤経営", "大学経営・政策", "教育心理学", "臨床心理学", "身体教育学", "教職開発", "教育内容開発", "学校開発政策"],
+    apply: "2027年度：在线出愿 2026-06-18 10:00 至 2026-06-26 15:00；研究计划书通过マイページ上传",
+    exam: "按课程实施笔试、口述、研究计划与书类综合评价；临床心理、身体教育、教师开发等课程另有课程별注意事项",
+    englishRequired: false,
+    japaneseRequired: true,
+    englishNote: "研究科层面未统一写成外部英语成绩硬门槛；具体课程按募集要项确认。",
+    japaneseNote: "官网提供日本语能力证明书样式，外国人等需按募集要项确认是否提交。",
+    examSubjects: "教育学、比较教育社会学、终身学习基础经营、大学经营政策、教育心理、临床心理、身体教育、教师开发、教育内容开发、学校开发政策等课程。",
+    note: "已下载 2027 年度教育学研究科修士募集要项。",
+    url: "https://www.p.u-tokyo.ac.jp/wp-content/uploads/2026/04/R92027edu_examM_youkou.pdf"
+  },
+  {
+    id: "tokyo-law",
+    university: "东京大学",
+    key: "utokyo",
+    category: "法政",
+    title: "法学政治学研究科 总合法政专攻（实定法、基础法、政治）",
+    directions: ["実定法", "基礎法学", "政治", "宪法", "民法", "刑法", "商法", "行政法", "国际法", "法社会学", "政治学", "行政学"],
+    apply: "2026年度：Web 出愿系统受付 2025-06-09 至 2025-06-13 15:00；2027年度说明会已公告但募集要项尚未替换",
+    exam: "A/C/D 等选拔区分；研究计划、专业笔试/小论文、口述和书类按区分实施",
+    englishRequired: true,
+    japaneseRequired: true,
+    englishNote: "募集要项列明可提交 TOEFL iBT、TOEIC L&R、IELTS Academic 等外国语成绩；TOEFL ITP、TOEIC IP、IELTS Online 等不可。",
+    japaneseNote: "法学政治学日语阅读、写作、论述要求高；外国人需按日本语学力证明书要求确认。",
+    examSubjects: "实定法、基础法学、政治三课程；围绕法学与政治学专业论述、研究计划、外国语材料和口述综合评价。",
+    note: "已下载当前官网可取得的 2026 年度总合法政专攻修士募集要项。",
+    url: "https://www.j.u-tokyo.ac.jp/graduate/wp-content/uploads/sites/17/2025/05/1.Myoukou_2026.pdf"
+  },
+  {
+    id: "tokyo-econ",
+    university: "东京大学",
+    key: "utokyo",
+    category: "经济经营",
+    title: "经济学研究科（经济学、经营、数量金融等）",
+    directions: ["経済学", "経営", "数量ファイナンス", "统计", "计量经济", "宏观经济", "微观经济", "金融", "会计", "管理"],
+    apply: "2027年度：募集要项已公开；Web 出愿系统提交材料，经济学课程另有单独要项",
+    exam: "经济学、统计学、地域研究、经济史、管理、数量金融等按课程实施。经济学课程需 TOEFL iBT 与 GRE General Test 成绩由 ETS 送达",
+    englishRequired: true,
+    japaneseRequired: true,
+    englishNote: "经济/统计等英语选考使用 TOEFL；管理和数量金融可 TOEFL 或 TOEIC。经济学课程单独要项要求 TOEFL iBT，部分英语圏大学毕业者可免。",
+    japaneseNote: "日语项目默认需要日语读写与面试能力；外国人出愿材料需按要项确认。",
+    examSubjects: "经济学/统计学有问题群笔试；地域研究、经济史部分免专业笔试；管理从经营学问题群选答；数量金融提交 GMAT 或 GMAT Focus。",
+    note: "已下载 2027 年度经济学研究科修士募集要项与经济学课程单独募集要项。",
+    url: "https://www.student.e.u-tokyo.ac.jp/grad/2027M_youkou.pdf"
+  },
+  {
+    id: "tokyo-arts-science",
+    university: "东京大学",
+    key: "utokyo",
+    category: "综合文化",
+    title: "综合文化研究科（广域科学、文系四专攻、人间安全保障等）",
+    directions: ["広域科学", "生命環境科学", "広域システム科学", "相関基礎科学", "言語情報科学", "超域文化科学", "地域文化研究", "国際社会科学", "人間の安全保障", "多文化共生・統合人間学"],
+    apply: "2027年度：广域科学专攻募集要项 2026-03-25 公开，之后多次更新；文系四专攻更新以综合文化官网为准",
+    exam: "广域科学按生命环境科学、广域系统科学、相关基础科学各系实施笔试/口述；外语成绩需按补足说明提交",
+    englishRequired: true,
+    japaneseRequired: true,
+    englishNote: "广域科学接受 TOEFL iBT / TOEFL iBT Home Edition 或 TOEIC L&R，至少提交一种，TOEFL 与 TOEIC 可同时提交。",
+    japaneseNote: "综合文化一般选拔多按日语体系运行，文系专攻尤其需要日语论述能力。",
+    examSubjects: "广域科学三系各自规定专业笔试和研究内容材料；综合文化其他文系专攻如语言信息、超域文化、地域文化、国际社会科学需看对应页面。",
+    note: "已下载 2027 年度广域科学专攻修士募集要项；文系专攻当前 2027 页面尚未完整公开。",
+    url: "https://www.c.u-tokyo.ac.jp/graduate/admission/master-doctor/2027/01_2027_koiki_M_yoko.pdf"
+  },
+  {
+    id: "tokyo-public-policy",
+    university: "东京大学",
+    key: "utokyo",
+    category: "公共政策",
+    title: "公共政策大学院 专业职学位课程（公共政策学）",
+    directions: ["法政策", "公共管理", "国際公共政策", "経済政策", "国際プログラム", "政策分析", "公共管理", "国际关系", "行政", "经济政策"],
+    apply: "2027年度：一般选拔/职业人选拔要项 2026-04-13 公开；Web 出愿账号注册 2026-06-18 10:00 开始",
+    exam: "一般选拔：入学愿书审查、外国语审查、专业科目审查、面试等综合；职业人选拔强调工作经历和政策实践能力",
+    englishRequired: true,
+    japaneseRequired: true,
+    englishNote: "必须提交 TOEFL iBT 成绩，Home Edition 可，ITP 不可；英语公用语国家大学毕业者可申请免提交审查。",
+    japaneseNote: "日语课程和一般选拔需要日语材料处理能力；国际项目课程需按要项确认语言要求。",
+    examSubjects: "五课程：法政策、公共管理、国际公共政策、经济政策、国际项目。专业科目可选法律、行政、政治、国际关系、经济学等，经济政策课程须选经济学。",
+    note: "公共政策为专业职学位课程，不是普通研究科修士，但属于硕士层级申请信息，已一并收录。",
+    url: "https://www.pp.u-tokyo.ac.jp/wp-content/uploads/2026/04/3683c8fcfd077af21c0905c5221d8e4f-1.pdf"
+  },
+  {
+    id: "tokyo-iii",
+    university: "东京大学",
+    key: "utokyo",
+    category: "信息学",
+    title: "学际信息学府 学际信息学专攻（社会信息、文化人间信息、先端表现、综合分析信息等）",
+    directions: ["社会情報学", "文化・人間情報学", "先端表現情報学", "総合分析情報学", "アジア情報社会", "学際情報学", "メディア研究", "情報社会", "データ社会", "表現情報"],
+    apply: "2026年度冬季募集：正式 PDF 已下载；社会信息学等课程按冬季募集日程实施，2027年度未确认到正式公开版",
+    exam: "一次选考包括 TOEFL 等外语成绩、专业科目和书类选考；二次选考为口述试验，通常在线实施",
+    englishRequired: true,
+    japaneseRequired: true,
+    englishNote: "社会信息学等课程使用 TOEFL 等成绩；募集要项表中明确外国语为英语，利用 TOEFL 等成绩。",
+    japaneseNote: "社会信息学等课程一般需要日语读写与口述能力；亚洲信息社会课程等需另看当轮要求。",
+    examSubjects: "社会信息、文化人间信息、先端表现、综合分析信息等：一次选考含外语、专业科目、书类；二次口述评价基础/专业学力、研究能力和研究计划。",
+    note: "已下载 2026 年度学际信息学府学际信息学专攻修士课程冬季募集要项。",
+    url: "https://www.iii.u-tokyo.ac.jp/manage/wp-content/uploads/2025/10/2026W_guideM.pdf"
   },
   {
     id: "kyoto-eng",
@@ -1284,13 +1535,24 @@ const SEARCH_ALIASES = {
   "建筑": ["建筑", "建築", "都市", "空间", "空間"],
   "土木": ["土木", "社会基盘", "社会基盤", "都市", "环境", "環境"],
   "化学": ["化学", "化工", "応用化学", "应用化学", "化学生命"],
-  "半导体": ["半导体", "半導体", "电子", "電気電子", "信息数理"]
+  "半导体": ["半导体", "半導体", "电子", "電気電子", "信息数理"],
+  "经济": ["经济", "经济学", "金融", "数量金融", "会计", "统计", "计量经济", "宏观经济", "微观经济", "经济政策"],
+  "经济学": ["经济学", "经济", "统计", "计量经济", "宏观经济", "微观经济"],
+  "経済": ["経済", "経済学", "経済政策", "農業・資源経済学"],
+  "经营": ["经营", "経営", "管理", "マネジメント", "会计", "会計", "金融"],
+  "法学": ["法学", "法律", "法政", "総合法政", "实定法", "実定法", "基础法", "基礎法学", "政治", "宪法", "憲法", "民法", "刑法", "商法", "行政法", "国际法", "国際法"],
+  "法律": ["法律", "法学", "法政", "総合法政", "实定法", "実定法", "基础法", "基礎法学", "政治", "行政法", "国际法", "国際法"],
+  "法政": ["法政", "法学", "法律", "総合法政", "政治", "行政"],
+  "公共政策": ["公共政策", "公共管理", "政策", "行政", "法政策", "国际公共政策", "国際公共政策", "经济政策", "経済政策"],
+  "东京大学": ["东京大学", "東京大学", "东大", "東大", "utokyo"],
+  "东大": ["东京大学", "東京大学", "东大", "東大", "utokyo"]
 };
 
 let currentSchool = "all";
 let needInterviewEnglish = false;
 let needEnglishScore = false;
 let needJapaneseScore = false;
+let currentModalSchool = null;
 
 function uniqueSchools() {
   return [...new Map(DATA.map(item => [item.key, item.university])).entries()]
@@ -1323,17 +1585,42 @@ function normalizeKeyword(keyword) {
   return keyword.toLowerCase().trim().replace(/\s+/g, " ");
 }
 
-function keywordTerms(keyword) {
+function keywordPieces(keyword) {
   const q = normalizeKeyword(keyword);
   if (!q) return [];
-  const base = [q];
+  const compact = q.replace(/\s+/g, "");
+  const spaced = q.split(/[\s,，、/]+/).filter(Boolean);
+  const known = [
+    ...Object.keys(SEARCH_ALIASES),
+    ...Object.values(SEARCH_ALIASES).flat()
+  ].map(value => value.toLowerCase());
+  const embedded = known.filter(value => value && compact.includes(value.replace(/\s+/g, "")));
+  const base = embedded.length ? [...spaced, ...embedded] : [q, compact, ...spaced];
+  return [...new Set(base)].filter(Boolean);
+}
+
+function keywordTerms(keyword) {
+  const pieces = keywordPieces(keyword);
+  if (!pieces.length) return [];
+  const base = [...pieces];
   Object.entries(SEARCH_ALIASES).forEach(([key, values]) => {
     const all = [key, ...values].map(value => value.toLowerCase());
-    if (all.some(value => value.includes(q) || q.includes(value))) {
+    if (pieces.some(piece => all.some(value => value.includes(piece) || piece.includes(value)))) {
       base.push(...all);
     }
   });
   return [...new Set(base)].filter(Boolean);
+}
+
+function schoolTerms() {
+  return uniqueSchools().flatMap(school => keywordTerms(school.university));
+}
+
+function keywordTopicTerms(keyword) {
+  const terms = keywordTerms(keyword);
+  const schools = schoolTerms();
+  const topics = terms.filter(term => !schools.some(school => school.includes(term) || term.includes(school)));
+  return topics.length ? topics : terms;
 }
 
 function scoreText(text, terms, weight) {
@@ -1344,23 +1631,45 @@ function scoreText(text, terms, weight) {
 
 function scoreMajor(item, direction, keyword) {
   if (!keyword) return 1;
-  const terms = keywordTerms(keyword);
+  const terms = keywordTopicTerms(keyword);
+  const allTerms = keywordTerms(keyword);
   const meta = getMeta(item);
-  let score = 0;
-  score += scoreText(direction, terms, 30);
-  score += scoreText(item.title, terms, 14);
-  score += scoreText(item.category, terms, 8);
+  const primaryScore =
+    scoreText(direction, terms, 30) +
+    scoreText(item.title, terms, 14) +
+    scoreText(item.category, terms, 8);
+  if (terms.length < allTerms.length && primaryScore === 0) return 0;
+  let score = primaryScore;
   score += scoreText(item.examSubjects, terms, 8);
   score += scoreText(item.note, terms, 6);
   score += scoreText(item.englishNote, terms, 4);
   score += scoreText(item.japaneseNote, terms, 4);
   score += scoreText(meta.pdfInsight, terms, 4);
-  score += scoreText(item.university, terms, 3);
+  if (terms.length === allTerms.length) score += scoreText(item.university, terms, 3);
+  return score;
+}
+
+function scoreMajorWithinSchool(item, direction, keyword) {
+  if (!keyword) return 1;
+  const terms = keywordTopicTerms(keyword);
+  const meta = getMeta(item);
+  const primaryScore =
+    scoreText(direction, terms, 30) +
+    scoreText(item.title, terms, 16) +
+    scoreText(item.category, terms, 10);
+  if (primaryScore === 0) return 0;
+  let score = primaryScore;
+  score += scoreText(item.examSubjects, terms, 8);
+  score += scoreText(item.note, terms, 6);
+  score += scoreText(item.englishNote, terms, 4);
+  score += scoreText(item.japaneseNote, terms, 4);
+  score += scoreText(meta.pdfInsight, terms, 4);
   return score;
 }
 
 function scoreItem(item, keyword) {
   if (!keyword) return 1;
+  const pieces = keywordPieces(keyword);
   const terms = keywordTerms(keyword);
   const meta = getMeta(item);
   const pool = [
@@ -1376,6 +1685,15 @@ function scoreItem(item, keyword) {
     meta.pdfInsight,
     ...(item.directions || [])
   ].join(" ").toLowerCase();
+  const meaningfulPieces = pieces.filter(piece => piece.length > 1);
+  const matchedPieces = meaningfulPieces.filter(piece => {
+    const aliasGroup = Object.entries(SEARCH_ALIASES).find(([key, values]) =>
+      [key, ...values].map(value => value.toLowerCase()).some(value => value.includes(piece) || piece.includes(value))
+    );
+    const candidates = aliasGroup ? [aliasGroup[0], ...aliasGroup[1]].map(value => value.toLowerCase()) : [piece];
+    return candidates.some(candidate => pool.includes(candidate));
+  });
+  if (meaningfulPieces.length && matchedPieces.length < meaningfulPieces.length) return 0;
   if (!terms.some(term => pool.includes(term))) return 0;
   let score = 1;
   score += scoreText(item.title, terms, 8);
@@ -1540,6 +1858,32 @@ function majorCards(items, keyword = "") {
   };
 }
 
+function schoolMajorCards(items, keyword = "") {
+  let expandedItems = items.flatMap(item =>
+    item.directions
+      .map(direction => ({
+        ...item,
+        majorDirection: direction,
+        _majorScore: scoreMajorWithinSchool(item, direction, keyword)
+      }))
+      .filter(item => !keyword || item._majorScore > 0)
+  ).sort((a, b) => b._majorScore - a._majorScore || a.title.localeCompare(b.title, "zh-CN"));
+
+  return {
+    count: expandedItems.length,
+    html: expandedItems.length
+      ? majorCards(
+          expandedItems.map(item => ({
+            ...item,
+            directions: [item.majorDirection],
+            _score: item._majorScore || 1
+          })),
+          keyword
+        ).html
+      : `<div class="empty">这所学校内没有找到匹配专业。<br>可以换一个关键词，比如“法学”“机械”“经济”。</div>`
+  };
+}
+
 function renderHome() {
   const wrap = document.getElementById("resultList");
   const groups = Object.values(schoolGroups());
@@ -1585,6 +1929,7 @@ function renderList(list) {
   const sections = Object.entries(groups).map(([university, items]) => {
     const keyword = document.getElementById("searchInput").value.trim();
     const cards = majorCards(items, keyword);
+    if (!cards.count) return "";
     majorCount += cards.count;
 
     return `
@@ -1616,21 +1961,46 @@ function renderAll() {
     return;
   }
   renderList(applyFilters());
+  const school = findSchoolByKeyword(keyword);
+  if (school && !needInterviewEnglish && !needEnglishScore && !needJapaneseScore) {
+    openSchoolModal(school.key);
+  }
+}
+
+function findSchoolByKeyword(keyword) {
+  const q = normalizeKeyword(keyword).replace(/\s+/g, "");
+  if (!q) return null;
+  return uniqueSchools().find(school => {
+    const aliases = keywordTerms(school.university).map(term => term.replace(/\s+/g, ""));
+    return aliases.includes(q);
+  }) || null;
+}
+
+function renderSchoolModalBody(keyword = "") {
+  if (!currentModalSchool) return;
+  const group = schoolGroups()[currentModalSchool];
+  if (!group) return;
+  const cards = schoolMajorCards(group.items, keyword.trim());
+  document.getElementById("modalSubtitle").textContent =
+    `${schoolSummary(group).text} 当前${keyword ? "匹配" : "收录"} ${cards.count} 个相关专业方向。`;
+  document.getElementById("modalBody").innerHTML = `<div class="item-list">${cards.html}</div>`;
 }
 
 function openSchoolModal(key) {
   const group = schoolGroups()[key];
   if (!group) return;
   const summary = schoolSummary(group);
-  const cards = majorCards(group.items, "");
+  currentModalSchool = key;
   document.getElementById("modalTitle").textContent = group.university;
-  document.getElementById("modalSubtitle").textContent = `${summary.text} 当前收录 ${cards.count} 个相关专业方向。`;
-  document.getElementById("modalBody").innerHTML = `<div class="item-list">${cards.html}</div>`;
+  document.getElementById("modalSubtitle").textContent = `${summary.text}`;
+  document.getElementById("modalSearchInput").value = "";
+  renderSchoolModalBody("");
   document.getElementById("schoolModal").classList.add("active");
   document.getElementById("schoolModal").setAttribute("aria-hidden", "false");
 }
 
 function closeSchoolModal() {
+  currentModalSchool = null;
   document.getElementById("schoolModal").classList.remove("active");
   document.getElementById("schoolModal").setAttribute("aria-hidden", "true");
 }
@@ -1658,6 +2028,13 @@ document.querySelector("[data-filter='englishScore']").addEventListener("click",
 document.querySelector("[data-filter='japaneseScore']").addEventListener("click", () => {
   needJapaneseScore = !needJapaneseScore;
   renderAll();
+});
+document.getElementById("modalSearchInput").addEventListener("input", event => {
+  renderSchoolModalBody(event.target.value);
+});
+document.getElementById("modalSearchReset").addEventListener("click", () => {
+  document.getElementById("modalSearchInput").value = "";
+  renderSchoolModalBody("");
 });
 document.getElementById("modalClose").addEventListener("click", closeSchoolModal);
 document.getElementById("schoolModal").addEventListener("click", event => {
