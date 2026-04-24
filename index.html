@@ -311,9 +311,97 @@
     background: #f9fafb;
     line-height: 1.8;
   }
+  .school-index {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+  }
+  .school-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background: #fff;
+    padding: 16px;
+    cursor: pointer;
+    transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .school-card:hover {
+    transform: translateY(-2px);
+    border-color: #c7d2fe;
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+  }
+  .school-card h3 {
+    margin: 0 0 8px;
+    font-size: 20px;
+    line-height: 1.3;
+  }
+  .school-card p {
+    margin: 0;
+    color: #4b5563;
+    font-size: 14px;
+    line-height: 1.7;
+  }
+  .school-card-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 12px;
+  }
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: rgba(17, 24, 39, 0.52);
+  }
+  .modal-backdrop.active {
+    display: flex;
+  }
+  .modal {
+    width: min(960px, 100%);
+    max-height: min(86vh, 860px);
+    overflow: auto;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 24px 80px rgba(15, 23, 42, 0.28);
+    padding: 20px;
+  }
+  .modal-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: flex-start;
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 14px;
+    margin-bottom: 14px;
+  }
+  .modal-head h3 {
+    margin: 0;
+    font-size: 26px;
+    line-height: 1.25;
+  }
+  .modal-head p {
+    margin: 6px 0 0;
+    color: #6b7280;
+    line-height: 1.7;
+    font-size: 14px;
+  }
+  .close-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    padding: 0;
+    background: #f3f4f6;
+    color: #374151;
+    font-size: 22px;
+    line-height: 1;
+  }
   @media (max-width: 760px) {
     .search-row, .school-head { flex-direction: column; }
     .grid { grid-template-columns: 1fr; }
+    .school-index { grid-template-columns: 1fr; }
     .hero h1 { font-size: 28px; }
   }
 </style>
@@ -322,7 +410,7 @@
 <div class="page">
   <div class="hero">
     <h1>日本修士募集要项检索系统</h1>
-    <p>这版把工科和计算机相关项目合并在一起了，并且按<strong>学校</strong>来展示。点某个学校时，会直接显示这所学校当前收录的全部专业信息；不再以研究科作为第一层。筛选条件只保留 <strong>需要英语成绩</strong> 和 <strong>需要日语能力</strong>。</p>
+    <p>输入专业方向后，系统会把所有有关联的研究科和专业方向逐条推荐出来；也可以继续按学校查看全量信息。筛选条件已根据本地 PDF 重新复核，拆成 <strong>面试可英语</strong>、<strong>需提交英语成绩</strong>、<strong>需提交日语成绩</strong>。</p>
   </div>
 
   <div class="stats">
@@ -333,7 +421,7 @@
 
   <div class="panel">
     <div class="search-row">
-      <input id="searchInput" type="text" placeholder="例如：机械 / 材料 / 电气电子 / 情报工学 / AI / 数据科学 / 建筑 / 土木 / TOEFL / 口试" />
+      <input id="searchInput" type="text" placeholder="输入专业：机械 / 材料 / 电气电子 / 情报工学 / AI / 数据科学 / 建筑 / 土木 / 半导体" />
       <button class="primary-btn" id="searchBtn">搜索</button>
       <button class="secondary-btn" id="resetBtn">重置</button>
     </div>
@@ -346,11 +434,12 @@
 
     <div class="section-title" style="margin-top:16px;">筛选条件</div>
     <div class="row">
-      <span class="chip" data-filter="english">需要英语成绩</span>
-      <span class="chip" data-filter="japanese">需要日语能力</span>
+      <span class="chip" data-filter="interviewEnglish">面试可英语</span>
+      <span class="chip" data-filter="englishScore">需提交英语成绩</span>
+      <span class="chip" data-filter="japaneseScore">需提交日语成绩</span>
     </div>
 
-    <div class="hint">说明：院校栏是单选查看。点学校后会展示该校当前收录的全部工科和计算机专业信息；点“全部”可回到总表。</div>
+    <div class="hint">说明：专业搜索会展开到具体方向层级；筛选里的“成绩”指需要提交外部考试或能力证明，不等同于日语授课/日语面试能力。</div>
   </div>
 
   <div class="results-head">
@@ -359,6 +448,19 @@
   </div>
 
   <div class="result-list" id="resultList"></div>
+</div>
+
+<div class="modal-backdrop" id="schoolModal" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-head">
+      <div>
+        <h3 id="modalTitle"></h3>
+        <p id="modalSubtitle"></p>
+      </div>
+      <button class="close-btn" id="modalClose" aria-label="关闭">×</button>
+    </div>
+    <div id="modalBody"></div>
+  </div>
 </div>
 
 <script>
@@ -1113,20 +1215,154 @@ const DATA = [
   }
 ];
 
-const QUICK = ["机械", "材料", "电气电子", "情报工学", "AI", "数据科学", "建筑", "土木", "TOEFL", "口试"];
+const QUICK = ["机械", "材料", "电气电子", "情报工学", "AI", "数据科学", "建筑", "土木", "半导体", "机器人"];
+
+const PDF_META = {
+  "hoku-info": {
+    englishScoreRequired: true,
+    pdfInsight: "PDF 复核：TOEIC / TOEFL / IELTS 成绩证明须在指定期间提交，未按期提交则不评价外语分。"
+  },
+  "tokyo-info": {
+    englishScoreRequired: true,
+    pdfInsight: "PDF 复核：信息理工使用 TOEFL 成绩，专业科目/口述试验通常只对数学与 TOEFL 有效者实施。"
+  },
+  "tokyo-eng": {
+    englishScoreRequired: true,
+    pdfInsight: "PDF 复核：工学系多专攻列明 TOEFL 或 TOEIC L&R 等外部英语成绩提交。"
+  },
+  "utokyo": {
+    englishScoreRequired: true
+  },
+  "kyushu-eng": {
+    englishScoreRequired: true,
+    pdfInsight: "PDF 复核：工学府出愿书类包含 TOEIC / TOEFL / IELTS 等英语资格试验成绩证明。"
+  },
+  "kyushu-info": {
+    englishScoreRequired: true,
+    pdfInsight: "PDF 复核：系统信息科学府要求 TOEIC / TOEFL / IELTS 分数证明原本，并将其作为外语评价。"
+  },
+  "shinshu-mix": {
+    englishScoreRequired: true,
+    pdfInsight: "PDF 复核：一般选拔全分野需在试验当天提交 TOEIC L&R / TOEIC IP / TOEFL iBT 等成绩认定证明。"
+  },
+  "gifu-mix": {
+    englishScoreRequired: true,
+    pdfInsight: "PDF 复核：愿书受付时必须提交 TOEIC L&R、TOEIC IP 或 TOEFL iBT 成绩，过期或未提交者不合格。"
+  },
+  "osaka-info": {
+    englishScoreRequired: true,
+    pdfInsight: "PDF 复核：除信息基础数学外，多数专攻把 TOEIC / TOEFL 成绩与笔试、口头试问综合评价。"
+  },
+  "jaist-mix": {
+    interviewEnglishAvailable: true,
+    japaneseScoreRequired: true,
+    pdfInsight: "PDF 复核：融合科学共同专攻要求日本以外大学毕业者提交英语或日语能力证明，可用 JLPT / BJT / EJU 等日语证明。"
+  },
+  "naist-mix": {
+    interviewEnglishAvailable: true,
+    pdfInsight: "PDF/页面复核：NAIST 选拔更偏书类与面试，国际化程度高，英语应对可能性高但仍需按轮次确认。"
+  },
+  "tsukuba-info": {
+    interviewEnglishAvailable: true,
+    englishScoreRequired: false,
+    pdfInsight: "PDF 复核：当前收录为海外居住者特别选拔，偏书类、研究计划与面试，不能直接等同一般入试。"
+  }
+};
+
+const SEARCH_ALIASES = {
+  "ai": ["ai", "人工智能", "智能", "知能", "机器学习", "深度学习"],
+  "人工智能": ["ai", "人工智能", "智能", "知能", "机器学习", "深度学习"],
+  "数据科学": ["数据科学", "数据", "データ", "data"],
+  "计算机": ["计算机", "情报", "信息", "情報", "コンピュータ", "computer", "cs"],
+  "情报": ["情报", "信息", "情報", "计算机", "コンピュータ"],
+  "信息": ["信息", "情报", "情報", "计算机", "通信"],
+  "机械": ["机械", "機械", "机电", "知能机械", "机器人", "ロボット", "航空宇宙"],
+  "机器人": ["机器人", "ロボット", "知能机械", "机械", "機械"],
+  "电气": ["电气", "電気", "电气电子", "电子", "電気電子", "通信"],
+  "电气电子": ["电气电子", "電気電子", "电气", "電子", "通信"],
+  "材料": ["材料", "物质", "物質", "マテリアル", "金属"],
+  "建筑": ["建筑", "建築", "都市", "空间", "空間"],
+  "土木": ["土木", "社会基盘", "社会基盤", "都市", "环境", "環境"],
+  "化学": ["化学", "化工", "応用化学", "应用化学", "化学生命"],
+  "半导体": ["半导体", "半導体", "电子", "電気電子", "信息数理"]
+};
 
 let currentSchool = "all";
-let needEnglish = false;
-let needJapanese = false;
+let needInterviewEnglish = false;
+let needEnglishScore = false;
+let needJapaneseScore = false;
 
 function uniqueSchools() {
   return [...new Map(DATA.map(item => [item.key, item.university])).entries()]
     .map(([key, university]) => ({ key, university }));
 }
 
+function getMeta(item) {
+  const byId = PDF_META[item.id] || {};
+  const byKey = PDF_META[item.key] || {};
+  const text = [
+    item.title,
+    item.englishNote,
+    item.japaneseNote,
+    item.examSubjects,
+    item.note
+  ].join(" ");
+  const interviewEnglishAvailable =
+    byId.interviewEnglishAvailable ??
+    byKey.interviewEnglishAvailable ??
+    /英语应对|英语资料|海外居住者|国际项目|英語で|English/i.test(text);
+  return {
+    interviewEnglishAvailable,
+    englishScoreRequired: byId.englishScoreRequired ?? byKey.englishScoreRequired ?? item.englishRequired,
+    japaneseScoreRequired: byId.japaneseScoreRequired ?? byKey.japaneseScoreRequired ?? false,
+    pdfInsight: byId.pdfInsight || byKey.pdfInsight || "PDF 复核：已按当前保存的募集要项/官网页面重新校准搜索与筛选；未发现统一外部日语成绩提交要求时，不纳入“需提交日语成绩”。"
+  };
+}
+
+function normalizeKeyword(keyword) {
+  return keyword.toLowerCase().trim().replace(/\s+/g, " ");
+}
+
+function keywordTerms(keyword) {
+  const q = normalizeKeyword(keyword);
+  if (!q) return [];
+  const base = [q];
+  Object.entries(SEARCH_ALIASES).forEach(([key, values]) => {
+    const all = [key, ...values].map(value => value.toLowerCase());
+    if (all.some(value => value.includes(q) || q.includes(value))) {
+      base.push(...all);
+    }
+  });
+  return [...new Set(base)].filter(Boolean);
+}
+
+function scoreText(text, terms, weight) {
+  const pool = (text || "").toLowerCase();
+  if (!pool) return 0;
+  return terms.reduce((score, term) => score + (pool.includes(term) ? weight : 0), 0);
+}
+
+function scoreMajor(item, direction, keyword) {
+  if (!keyword) return 1;
+  const terms = keywordTerms(keyword);
+  const meta = getMeta(item);
+  let score = 0;
+  score += scoreText(direction, terms, 30);
+  score += scoreText(item.title, terms, 14);
+  score += scoreText(item.category, terms, 8);
+  score += scoreText(item.examSubjects, terms, 8);
+  score += scoreText(item.note, terms, 6);
+  score += scoreText(item.englishNote, terms, 4);
+  score += scoreText(item.japaneseNote, terms, 4);
+  score += scoreText(meta.pdfInsight, terms, 4);
+  score += scoreText(item.university, terms, 3);
+  return score;
+}
+
 function scoreItem(item, keyword) {
   if (!keyword) return 1;
-  const q = keyword.toLowerCase().trim();
+  const terms = keywordTerms(keyword);
+  const meta = getMeta(item);
   const pool = [
     item.university,
     item.category,
@@ -1137,13 +1373,15 @@ function scoreItem(item, keyword) {
     item.japaneseNote,
     item.examSubjects,
     item.note,
+    meta.pdfInsight,
     ...(item.directions || [])
   ].join(" ").toLowerCase();
-  if (!pool.includes(q)) return 0;
-  let score = 10;
-  if ((item.title || "").toLowerCase().includes(q)) score += 8;
-  if ((item.examSubjects || "").toLowerCase().includes(q)) score += 6;
-  if ((item.university || "").toLowerCase().includes(q)) score += 4;
+  if (!terms.some(term => pool.includes(term))) return 0;
+  let score = 1;
+  score += scoreText(item.title, terms, 8);
+  score += scoreText(item.examSubjects, terms, 6);
+  score += scoreText(item.university, terms, 4);
+  score += scoreText(meta.pdfInsight, terms, 3);
   return score;
 }
 
@@ -1165,8 +1403,7 @@ function renderTabs() {
     el.className = "tab" + (currentSchool === item.key ? " active" : "");
     el.textContent = item.university;
     el.onclick = () => {
-      currentSchool = item.key;
-      renderAll();
+      openSchoolModal(item.key);
     };
     tabs.appendChild(el);
   });
@@ -1191,17 +1428,20 @@ function applyFilters() {
   const keyword = document.getElementById("searchInput").value.trim();
 
   let list = DATA
-    .map(item => ({ ...item, _score: scoreItem(item, keyword) }))
+    .map(item => ({ ...item, _meta: getMeta(item), _score: scoreItem(item, keyword) }))
     .filter(item => item._score > 0);
 
   if (currentSchool !== "all") {
     list = list.filter(item => item.key === currentSchool);
   }
-  if (needEnglish) {
-    list = list.filter(item => item.englishRequired);
+  if (needInterviewEnglish) {
+    list = list.filter(item => item._meta.interviewEnglishAvailable);
   }
-  if (needJapanese) {
-    list = list.filter(item => item.japaneseRequired);
+  if (needEnglishScore) {
+    list = list.filter(item => item._meta.englishScoreRequired);
+  }
+  if (needJapaneseScore) {
+    list = list.filter(item => item._meta.japaneseScoreRequired);
   }
 
   list.sort((a, b) => b._score - a._score || a.university.localeCompare(b.university, "zh-CN"));
@@ -1212,28 +1452,46 @@ function tag(text, cls) {
   return `<span class="tag ${cls}">${text}</span>`;
 }
 
-function renderList(list) {
-  const wrap = document.getElementById("resultList");
-  document.getElementById("resultCount").textContent = `${list.length} 条`;
-
-  if (!list.length) {
-    wrap.innerHTML = `<div class="empty">没有找到匹配结果。<br>可以换关键词，或者切回“全部”院校查看。</div>`;
-    return;
-  }
-
-  const groups = list.reduce((acc, item) => {
-    if (!acc[item.university]) acc[item.university] = [];
-    acc[item.university].push(item);
+function schoolGroups(list = DATA) {
+  return list.reduce((acc, item) => {
+    if (!acc[item.key]) {
+      acc[item.key] = {
+        key: item.key,
+        university: item.university,
+        items: []
+      };
+    }
+    acc[item.key].items.push({ ...item, _meta: getMeta(item) });
     return acc;
   }, {});
+}
 
-  wrap.innerHTML = Object.entries(groups).map(([university, items]) => {
-    const expandedItems = items.flatMap(item =>
-      item.directions.map(direction => ({ ...item, majorDirection: direction }))
+function schoolSummary(group) {
+  const categories = [...new Set(group.items.map(item => item.category))].join(" / ");
+  const titles = group.items.map(item => item.title.replace(/（.*?）/g, "")).join("、");
+  const majors = [...new Set(group.items.flatMap(item => item.directions || []))].slice(0, 6).join("、");
+  return {
+    categories,
+    text: `${titles}。主要覆盖 ${majors} 等方向。`
+  };
+}
+
+function majorCards(items, keyword = "") {
+  let expandedItems = items.flatMap(item =>
+    item.directions
+      .map(direction => ({ ...item, majorDirection: direction, _majorScore: scoreMajor(item, direction, keyword) }))
+      .filter(item => !keyword || item._majorScore > 0 || item._score > 18)
+  ).sort((a, b) => b._majorScore - a._majorScore || b._score - a._score);
+  if (!expandedItems.length && keyword) {
+    expandedItems = items.flatMap(item =>
+      item.directions.slice(0, 3).map(direction => ({ ...item, majorDirection: direction, _majorScore: item._score }))
     );
+  }
 
-    const cards = expandedItems.map(item => {
-      const scoreText = document.getElementById("searchInput").value.trim() ? `匹配 ${item._score}` : item.category;
+  return {
+    count: expandedItems.length,
+    html: expandedItems.map(item => {
+      const scoreText = keyword ? `匹配 ${Math.max(item._majorScore, item._score)}` : item.category;
       return `
         <div class="item-block">
           <div class="school-head" style="margin-bottom:12px;">
@@ -1246,8 +1504,9 @@ function renderList(list) {
 
           <div class="tag-row">
             ${tag(item.category, "tag-purple")}
-            ${tag(item.englishRequired ? "需要英语成绩" : "英语成绩未统一要求", item.englishRequired ? "tag-blue" : "tag-amber")}
-            ${tag(item.japaneseRequired ? "需要日语能力" : "日语要求相对低/另案", item.japaneseRequired ? "tag-red" : "tag-green")}
+            ${tag(item._meta.interviewEnglishAvailable ? "面试可英语/英语应对" : "面试语言需确认", item._meta.interviewEnglishAvailable ? "tag-green" : "tag-amber")}
+            ${tag(item._meta.englishScoreRequired ? "需提交英语成绩" : "英语成绩未统一要求", item._meta.englishScoreRequired ? "tag-blue" : "tag-amber")}
+            ${tag(item._meta.japaneseScoreRequired ? "需提交日语成绩" : "未见统一日语成绩提交", item._meta.japaneseScoreRequired ? "tag-red" : "tag-green")}
           </div>
 
           <div class="grid">
@@ -1260,64 +1519,152 @@ function renderList(list) {
               ${item.exam}
             </div>
             <div class="box">
-              <strong>英语要求</strong>
+              <strong>英语成绩 / 面试</strong>
               ${item.englishNote}
             </div>
             <div class="box">
-              <strong>日语说明</strong>
+              <strong>日语成绩 / 能力</strong>
               ${item.japaneseNote}
             </div>
           </div>
 
           <div class="detail">
             <div class="detail-line"><strong>专业课 / 选考方式：</strong>${item.examSubjects}</div>
+            <div class="detail-line"><strong>PDF复核：</strong>${item._meta.pdfInsight}</div>
             <div class="detail-line"><strong>备注：</strong>${item.note}</div>
             <div class="detail-line"><strong>官方入口：</strong><a href="${item.url}" target="_blank" rel="noopener">${item.url}</a></div>
           </div>
         </div>
       `;
-    }).join("");
+    }).join("")
+  };
+}
+
+function renderHome() {
+  const wrap = document.getElementById("resultList");
+  const groups = Object.values(schoolGroups());
+  document.querySelector(".results-head h2").textContent = "院校简介";
+  document.getElementById("resultCount").textContent = `${groups.length} 所`;
+  wrap.innerHTML = `
+    <div class="school-index">
+      ${groups.map(group => {
+        const summary = schoolSummary(group);
+        const majorCount = group.items.reduce((sum, item) => sum + item.directions.length, 0);
+        return `
+          <article class="school-card" onclick="openSchoolModal('${group.key}')">
+            <h3>${group.university}</h3>
+            <p>${summary.text}</p>
+            <div class="school-card-meta">
+              ${tag(summary.categories, "tag-purple")}
+              ${tag(`${majorCount} 个方向`, "tag-blue")}
+            </div>
+          </article>
+        `;
+      }).join("")}
+    </div>
+  `;
+}
+
+function renderList(list) {
+  const wrap = document.getElementById("resultList");
+  document.querySelector(".results-head h2").textContent = "检索结果";
+
+  if (!list.length) {
+    document.getElementById("resultCount").textContent = "0 条";
+    wrap.innerHTML = `<div class="empty">没有找到匹配结果。<br>可以换关键词，或者切回“全部”院校查看。</div>`;
+    return;
+  }
+
+  const groups = list.reduce((acc, item) => {
+    if (!acc[item.university]) acc[item.university] = [];
+    acc[item.university].push(item);
+    return acc;
+  }, {});
+
+  let majorCount = 0;
+  const sections = Object.entries(groups).map(([university, items]) => {
+    const keyword = document.getElementById("searchInput").value.trim();
+    const cards = majorCards(items, keyword);
+    majorCount += cards.count;
 
     return `
       <section class="school-group">
         <div class="school-head">
           <div>
             <h3>${university}</h3>
-            <p>当前收录 ${expandedItems.length} 条专业信息。这里会把这所学校收录到的全部专业逐条展开显示。</p>
+            <p>当前匹配 ${cards.count} 条专业信息。点院校简介卡可以查看该校完整专业介绍。</p>
           </div>
-          <span class="school-badge">${expandedItems.length} 条</span>
+          <span class="school-badge">${cards.count} 条</span>
         </div>
-        <div class="item-list">${cards}</div>
+        <div class="item-list">${cards.html}</div>
       </section>
     `;
-  }).join("");
+  }).filter(Boolean);
+  document.getElementById("resultCount").textContent = `${majorCount} 条`;
+  wrap.innerHTML = sections.join("");
 }
 
 function renderAll() {
   renderTabs();
-  document.querySelectorAll("[data-filter='english']").forEach(el => el.classList.toggle("active", needEnglish));
-  document.querySelectorAll("[data-filter='japanese']").forEach(el => el.classList.toggle("active", needJapanese));
+  document.querySelectorAll("[data-filter='interviewEnglish']").forEach(el => el.classList.toggle("active", needInterviewEnglish));
+  document.querySelectorAll("[data-filter='englishScore']").forEach(el => el.classList.toggle("active", needEnglishScore));
+  document.querySelectorAll("[data-filter='japaneseScore']").forEach(el => el.classList.toggle("active", needJapaneseScore));
+  const keyword = document.getElementById("searchInput").value.trim();
+  const hasActiveFilter = needInterviewEnglish || needEnglishScore || needJapaneseScore || currentSchool !== "all";
+  if (!keyword && !hasActiveFilter) {
+    renderHome();
+    return;
+  }
   renderList(applyFilters());
+}
+
+function openSchoolModal(key) {
+  const group = schoolGroups()[key];
+  if (!group) return;
+  const summary = schoolSummary(group);
+  const cards = majorCards(group.items, "");
+  document.getElementById("modalTitle").textContent = group.university;
+  document.getElementById("modalSubtitle").textContent = `${summary.text} 当前收录 ${cards.count} 个相关专业方向。`;
+  document.getElementById("modalBody").innerHTML = `<div class="item-list">${cards.html}</div>`;
+  document.getElementById("schoolModal").classList.add("active");
+  document.getElementById("schoolModal").setAttribute("aria-hidden", "false");
+}
+
+function closeSchoolModal() {
+  document.getElementById("schoolModal").classList.remove("active");
+  document.getElementById("schoolModal").setAttribute("aria-hidden", "true");
 }
 
 document.getElementById("searchBtn").addEventListener("click", renderAll);
 document.getElementById("resetBtn").addEventListener("click", () => {
   document.getElementById("searchInput").value = "";
   currentSchool = "all";
-  needEnglish = false;
-  needJapanese = false;
+  needInterviewEnglish = false;
+  needEnglishScore = false;
+  needJapaneseScore = false;
   renderAll();
 });
 document.getElementById("searchInput").addEventListener("keydown", event => {
   if (event.key === "Enter") renderAll();
 });
-document.querySelector("[data-filter='english']").addEventListener("click", () => {
-  needEnglish = !needEnglish;
+document.querySelector("[data-filter='interviewEnglish']").addEventListener("click", () => {
+  needInterviewEnglish = !needInterviewEnglish;
   renderAll();
 });
-document.querySelector("[data-filter='japanese']").addEventListener("click", () => {
-  needJapanese = !needJapanese;
+document.querySelector("[data-filter='englishScore']").addEventListener("click", () => {
+  needEnglishScore = !needEnglishScore;
   renderAll();
+});
+document.querySelector("[data-filter='japaneseScore']").addEventListener("click", () => {
+  needJapaneseScore = !needJapaneseScore;
+  renderAll();
+});
+document.getElementById("modalClose").addEventListener("click", closeSchoolModal);
+document.getElementById("schoolModal").addEventListener("click", event => {
+  if (event.target.id === "schoolModal") closeSchoolModal();
+});
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape") closeSchoolModal();
 });
 
 document.getElementById("schoolCount").textContent = uniqueSchools().length;
