@@ -35548,15 +35548,15 @@ const DATA = [
     category: "传媒/公共政策",
     title: "国际广报媒体・观光学院・公共政策大学院",
     directions: ["国际广报媒体", "观光创造", "传媒研究", "国际交流", "公共政策", "公共经营", "政策分析", "地域政策"],
-    apply: "各学院募集要项确认；当前页面先补全到学院/方向检索层级",
-    exam: "书类、研究计划、外语、论文和口述试验按项目实施",
-    englishRequired: false,
+    apply: "国际广报媒体・观光学院已按官网募集要项更新；公共政策方向等待单独官网PDF核对。",
+    exam: "国际广报媒体・观光学院为书类第一次选考、日语论述笔答、口述面试、英语外部成绩综合评价；公共政策方向不共用此PDF。",
+    englishRequired: true,
     japaneseRequired: true,
-    englishNote: "国际类、政策类项目可能接受英语材料或英语面试，需看具体募集要项。",
-    japaneseNote: "公共政策、传媒与观光方向多要求日语阅读、写作和面试能力。",
-    examSubjects: "研究计划、政策分析、社会科学基础、传媒/观光相关专业论文与口述试验。",
-    note: "补入公共政策、传媒、观光方向，避免北海道大学社科检索缺失。",
-    url: "https://www.hokudai.ac.jp/admission/"
+    englishNote: "国际广报媒体・观光学院要求提交TOEFL iBT/Home Edition、TOEFL ITP或TOEIC L&R成绩，按50分换算；不接受其他英语考试。",
+    japaneseNote: "国际广报媒体・观光学院的研究计划书、活动报告、日语论述和口述面试均以日语能力为前提；外国人留学生可任意提交JLPT成绩复印件。",
+    examSubjects: "国际广报媒体・观光学院：日本语论述小论文、研究计划书/活动报告口头发表与质疑应答、英语外部成绩；公共政策方向待单独PDF。",
+    note: "本条目前半已由国際広報メディア・観光学院PDF核对；公共政策方向不再套用传媒观光PDF。",
+    url: "https://www.imc.hokudai.ac.jp/admissions/graduate_students/application_requirements.html"
   },
   {
     id: "tohoku-eng",
@@ -36888,6 +36888,26 @@ const HOKKAIDO_INFO_PDF = {
   size: 0,
   sourceStatus: "current"
 };
+const HOKKAIDO_IMC_PDF = {
+  name: "北海道大学_国際広報メディア観光学院_修士課程_2026年4月入学_後期募集要項.pdf",
+  href: "工学募集要项/北海道大学/北海道大学_国際広報メディア観光学院_修士課程_2026年4月入学_後期募集要項.pdf",
+  size: 0,
+  sourceStatus: "current"
+};
+const HOKKAIDO_IMC_PAST_PDFS = [
+  {
+    name: "北海道大学_国際広報メディア観光学院_令和8年度前期_日本語論述試験_国際広報メディア研究コース.pdf",
+    href: "工学募集要项/北海道大学/北海道大学_国際広報メディア観光学院_令和8年度前期_日本語論述試験_国際広報メディア研究コース.pdf",
+    size: 0,
+    sourceStatus: "current"
+  },
+  {
+    name: "北海道大学_国際広報メディア観光学院_令和8年度前期_日本語論述試験_観光創造研究コース.pdf",
+    href: "工学募集要项/北海道大学/北海道大学_国際広報メディア観光学院_令和8年度前期_日本語論述試験_観光創造研究コース.pdf",
+    size: 0,
+    sourceStatus: "current"
+  }
+];
 
 const HOKKAIDO_COMMON_ENGINEERING = {
   apply: "2027年4月入学：互联网出愿注册及检定料缴纳为2026年6月8日10:00至6月19日17:00；出愿书类提交为2026年6月15日至6月19日，邮送以6月19日消印有效。资格预备审查为2026年5月11日至5月15日。",
@@ -36925,6 +36945,19 @@ Object.keys(HOKKAIDO_SUBJECTS).forEach(direction => {
     }
   };
 });
+["国际广报媒体", "观光创造", "传媒研究", "国际交流"].forEach(direction => {
+  HOKKAIDO_CURATED_FIELDS[`北海道大学|国际广报媒体・观光学院・公共政策大学院|${direction}`] = {
+    pdfs: [HOKKAIDO_IMC_PDF, ...HOKKAIDO_IMC_PAST_PDFS],
+    fields: {
+      apply: { text: "2026年4月入学后期：出愿资格事前审查的互联网注册及书类提交为2025年11月6日10:00至11月13日17:00；正式出愿的互联网注册、出愿书类PDF发送及检定料缴纳为2025年11月21日10:00至11月27日17:00；纸质书类提交为2025年11月25日至12月5日17:00必着。官网同时列出前期时间：2025年6月13日至6月19日PDF发送，6月16日至6月26日纸质提交，考试为2025年8月19日至20日。", file: HOKKAIDO_IMC_PDF.name, href: HOKKAIDO_IMC_PDF.href },
+      exam: { text: "采用两阶段选拔。第一次为研究计划书、活动报告等书类审查，结果用邮件通知，第一次合格者预计2026年1月15日收到受验票。第二次：2026年2月10日10:00-12:00日语论述笔答；2026年2月11日口述面试；合格发表预定2026年2月24日16:00。", file: HOKKAIDO_IMC_PDF.name, href: HOKKAIDO_IMC_PDF.href },
+      english: { text: "必须提交英语外部考试成绩，按学院换算表折算为50分。有效考试为2023年12月1日以后参加的TOEFL iBT（含Home Edition）、TOEFL ITP或TOEIC L&R公开考试；不接受其他英语考试，TOEFL iBT不使用MyBest scores，成绩原本未按期提交会导致出愿不受理。", file: HOKKAIDO_IMC_PDF.name, href: HOKKAIDO_IMC_PDF.href },
+      japanese: { text: "研究计划书要求日语2500-3000字，活动报告也要求日语；第二次选考包含日语论述小论文和口述面试。外国人留学生可任意提交日本语能力试验（JLPT）成绩复印件，募集要项没有把JLPT列为必交材料。", file: HOKKAIDO_IMC_PDF.name, href: HOKKAIDO_IMC_PDF.href },
+      examSubjects: { text: "专业考试不是分科笔试，而是日语论述小论文：围绕各课程专业领域问题，要求使用既有学习背景中的专业知识进行论述；可携带纸质日语相关辞书，电子辞书不可。口述面试以研究计划书为中心，结合活动报告进行口头发表并回答提问。一般入试配点为日语论述150分、面试100分、英语50分；外国人留学生入试为日语论述100分、面试150分、英语50分。", file: HOKKAIDO_IMC_PDF.name, href: HOKKAIDO_IMC_PDF.href }
+    }
+  };
+});
+
 ["情報理工学コース", "複雑系情報科学コース", "知能情報学コース", "情報エレクトロニクスコース", "メディアネットワークコース"].forEach(direction => {
   HOKKAIDO_CURATED_FIELDS[`北海道大学|信息科学院（信息科学、计算机、媒体网络）|${direction}`] = {
     pdfs: [HOKKAIDO_INFO_PDF],
@@ -36938,14 +36971,353 @@ Object.keys(HOKKAIDO_SUBJECTS).forEach(direction => {
   };
 });
 
+const HOKKAIDO_PDF = name => ({
+  name,
+  href: `工学募集要项/北海道大学/${name}`,
+  size: 0,
+  sourceStatus: "current"
+});
+
+const HOKKAIDO_SOURCE_PDFS = {
+  science: [HOKKAIDO_PDF("hokkaido_science_master_2026_summer.pdf")],
+  chemLife: [HOKKAIDO_PDF("hokkaido_cse_master_2026_second.pdf"), HOKKAIDO_PDF("hokkaido_lifescience_master_2026_winter.pdf"), HOKKAIDO_PDF("hokkaido_lifescience_exam_scope_2026.pdf")],
+  agri: [HOKKAIDO_PDF("hokkaido_agriculture_master_2026.pdf")],
+  envFish: [HOKKAIDO_PDF("hokkaido_environment_master_2026.pdf"), HOKKAIDO_PDF("hokkaido_fisheries_master_2026_second.pdf")],
+  med: [HOKKAIDO_PDF("hokkaido_medicine_medicalscience_master_2026.pdf")],
+  health: [HOKKAIDO_PDF("hokkaido_healthscience_master_2026.pdf")],
+  bme: [HOKKAIDO_PDF("hokkaido_bme_master_2026.pdf")],
+  lifePharm: [HOKKAIDO_PDF("hokkaido_lifescience_master_2026_winter.pdf"), HOKKAIDO_PDF("hokkaido_lifescience_exam_scope_2026.pdf")],
+  infect: [HOKKAIDO_PDF("hokkaido_vet_infectious_doctoral_2026.pdf")],
+  dental: [HOKKAIDO_PDF("hokkaido_dental_doctoral_2026.pdf")],
+  letters: [HOKKAIDO_PDF("hokkaido_letters_master_2026.pdf")],
+  education: [HOKKAIDO_PDF("hokkaido_education_master_2026_second.pdf")],
+  law: [HOKKAIDO_PDF("hokkaido_law_master_2026_second_general.pdf"), HOKKAIDO_PDF("hokkaido_law_master_2026_second_international.pdf")],
+  econ: [HOKKAIDO_PDF("hokkaido_economics_master_2027_general.pdf"), HOKKAIDO_PDF("hokkaido_economics_master_2027_special.pdf")],
+  policy: [HOKKAIDO_PDF("hokkaido_public_policy_2026_spring_general_international.pdf"), HOKKAIDO_PDF("hokkaido_public_policy_2026_autumn.pdf")]
+};
+
+function addHokkaidoEvidence(title, directions, pdfs, fields) {
+  directions.forEach(direction => {
+    const first = pdfs[0];
+    HOKKAIDO_CURATED_FIELDS[`北海道大学|${title}|${direction}`] = {
+      pdfs,
+      fields: Object.fromEntries(Object.entries(fields).map(([key, text]) => [
+        key,
+        { text, file: first.name, href: first.href }
+      ]))
+    };
+  });
+}
+
+addHokkaidoEvidence(
+  "理学院（数学、物理、宇宙理学、自然史科学）",
+  ["数学", "物性物理学", "宇宙理学", "自然史科学", "地球惑星科学", "生物科学", "化学"],
+  HOKKAIDO_SOURCE_PDFS.science,
+  {
+    apply: "令和8年度夏期募集：募集要项公表为2025年6月，出愿期间为2025年7月3日至7月9日。出愿资格预备审查为2025年6月13日至6月17日。该募集对应2026年4月入学，也包含2025年10月入学选拔。",
+    exam: "夏期募集考试日为2025年8月7日、8日；合格发表、入学手续等按理学院募集要项确认。秋期/冬期募集是否实施由各专攻另定。",
+    english: "一般选拔需提交英语能力资料，使用TOEFL或TOEIC成绩；外国人留学生特别选拔需提交日语能力或英语能力证明，无法提交时可用出身学校成绩证明等替代材料。",
+    japanese: "外国人留学生特别选拔可提交日语能力证明；通常需要能完成口头试问和研究沟通。募集要项未把JLPT列为所有考生统一必交项。",
+    examSubjects: "一般选拔按专攻/分野实施笔记试验、口头试问及书类综合评价；数学、物性物理、宇宙理学、自然史科学等方向的具体笔试/口试要求以募集要项所列专攻别说明为准。外国人留学生特别选拔以口头试问等综合评价为主。"
+  }
+);
+
+addHokkaidoEvidence(
+  "综合化学院・生命科学院（化学、生命科学、软物质）",
+  ["综合化学", "分子化学", "物质化学", "生物化学", "化学系统", "生命融合科学", "生命系统科学", "生命医药科学", "软物质科学"],
+  HOKKAIDO_SOURCE_PDFS.chemLife,
+  {
+    apply: "综合化学院与生命科学院分别按各自募集期办理。综合化学院当前已下载2026年度第二次/2027年度相关募集资料；生命科学院令和8年度冬期募集要项对应2026年4月/10月入学。具体出愿窗口以所附PDF的募集期表为准。",
+    exam: "综合化学院按书类、学力试验/口述试问等综合评价；生命科学院冬期募集按生命科学专攻/软物质专攻分别实施，考试期在令和8年1月前后，夏期/秋期/冬期的考试形式不同。",
+    english: "生命科学院英语以TOEFL iBT/ITP或TOEIC等外部成绩判定；综合化学院也按募集要项要求提交外语能力材料或参加相应评价。",
+    japanese: "常规日语项目需要能阅读募集要项、完成笔试/口述及研究沟通；未见所有方向统一要求JLPT必交。",
+    examSubjects: "综合化学包含分子化学、物质化学、生物化学等化学基础/专业范围；生命科学院：生命融合科学以口头试问为主，生命系统科学和生命医药科学在部分募集期有笔记试验或小论文加口头试问，软物质科学以口头试问等评价。具体出题范围已附生命科学院出题范围PDF。"
+  }
+);
+
+addHokkaidoEvidence(
+  "农学院（资源、生物、环境、畜产、农业经济）",
+  ["共生基盘学", "生物资源科学", "应用生物科学", "环境资源学", "畜产科学", "农业经济学", "森林科学", "食品科学", "生物生产工学"],
+  HOKKAIDO_SOURCE_PDFS.agri,
+  {
+    apply: "令和8年度农学院修士课程募集要项已下载。出愿前需取得志望指导教员的受入内诺；出愿资格相关审查、正式出愿期间和书类提交按PDF日程办理。",
+    exam: "选拔由学科试验、面试、出身大学成绩等综合判定；受验票通常在7月下旬前后发送，考试日程按募集要项中的专攻/讲座安排确认。",
+    english: "英语以TOEIC L&R或TOEFL iBT成绩判定，原则上使用2023年9月1日以后受验成绩。TOEIC L&R低于620或TOEFL iBT低于64会被判定为英语能力不足；不认可TOEIC-IP、TOEFL-ITP等指定外考试。",
+    japanese: "募集要项未列所有方向统一JLPT必交要求；但常规农学院修士选拔包含日语说明、面试和专业试验，需具备日语应试与研究沟通能力。",
+    examSubjects: "专业科目按志望教育研究领域设置；农学、生命科学、资源环境、畜产、森林、食品、生物生产工学、农业经济等方向在专业科目和面试中考查相应基础与专业知识。"
+  }
+);
+
+addHokkaidoEvidence(
+  "环境科学院・水产科学院（地球环境、海洋、水产）",
+  ["环境起学", "地球圈科学", "生物圈科学", "环境物质科学"],
+  HOKKAIDO_SOURCE_PDFS.envFish,
+  {
+    apply: "环境科学院2026年4月入学修士募集：特別推薦为2025年5月26日合格发表；秋季入试考试为2025年8月20日至21日；春季入试考试为2026年2月18日至19日。出愿期间按所附环境科学院募集要项中的募集区分确认。",
+    exam: "环境科学院以专业科目、外语成绩/外部英语成绩、口述试验、面试及出愿书类综合评价。不同专攻和推荐/一般/特别入试的考试组合不同。",
+    english: "环境科学院接受TOEFL、TOEIC或IELTS等成绩，具体有效考试和提交方式以PDF中“スコアシートについて”说明为准。",
+    japanese: "常规选拔需能完成日语募集手续、面试/口述及研究沟通；募集要项未列所有考生统一JLPT必交。",
+    examSubjects: "环境起学、地球圈科学、生物圈科学、环境物质科学按专攻考查地球环境、地球科学、生物圈、环境物质/化学等专业基础，另结合口述和研究计划评价。"
+  }
+);
+
+addHokkaidoEvidence(
+  "环境科学院・水产科学院（地球环境、海洋、水产）",
+  ["海洋生物资源科学", "海洋应用生命科学", "生物资源利用学", "水产科学", "海洋环境科学"],
+  HOKKAIDO_SOURCE_PDFS.envFish,
+  {
+    apply: "水产科学院令和8年度修士课程第2次募集要项已下载。出愿资格审查、愿书受理期间、检定料及书类提交以所附第2次募集PDF为准。",
+    exam: "第2次募集按专业科目笔试、面接试验、出愿书类、TOEIC/TOEFL成绩等综合判定。",
+    english: "水产科学院修士/博士后期入试要求在出愿期间提交TOEIC或TOEFL成绩。TOEIC L&R/TOEIC-IP低于550、TOEFL iBT低于57、TOEFL-ITP低于487会被判定为英语能力不足。",
+    japanese: "常规选拔需能完成日语专业笔试和面试沟通；募集要项未列统一JLPT必交。",
+    examSubjects: "海洋生物资源、海洋应用生命、生物资源利用、水产科学、海洋环境等方向以水产科学院专业科目笔试和面试评价相应海洋、水产、生命资源、环境科学基础。"
+  }
+);
+
+["医学", "医科学", "社会医学", "基础医学", "临床医学"].forEach(direction => {
+  const pdfs = HOKKAIDO_SOURCE_PDFS.med;
+  const first = pdfs[0];
+  HOKKAIDO_CURATED_FIELDS[`北海道大学|医学院・保健科学院・医理工学院・药学院|${direction}`] = {
+    pdfs,
+    fields: {
+      apply: { text: "医学院医科学专攻修士课程令和8年度募集：出愿期间为2025年7月2日至7月7日，以及2025年11月21日至11月27日。", file: first.name, href: first.href },
+      exam: { text: "医科学修士按募集要项实施书类、学力/口述/面试等综合评价；各募集期考试日程以所附医学院PDF为准。", file: first.name, href: first.href },
+      english: { text: "英语成绩和外语能力材料按医学院医科学专攻募集要项指定提交；未按要求提交可能影响出愿受理或评价。", file: first.name, href: first.href },
+      japanese: { text: "常规医科学修士课程需要日语读解、面试和研究沟通能力；募集要项未列所有方向统一JLPT必交。", file: first.name, href: first.href },
+      examSubjects: { text: "医科学、社会医学、基础医学、临床医学相关方向以医学/生命科学基础、研究计划、面试或口述等综合评价，具体按医学院医科学专攻募集要项。", file: first.name, href: first.href }
+    }
+  };
+});
+
+addHokkaidoEvidence(
+  "医学院・保健科学院・医理工学院・药学院",
+  ["保健科学", "看护学", "放射线技术科学", "检査技术科学"],
+  HOKKAIDO_SOURCE_PDFS.health,
+  {
+    apply: "保健科学院令和8年度修士课程募集要项已下载。外国人留学生特别选拔需先完成互联网出愿，并在出愿期间内将书类一式送达保健科学院教务担当；输入画面公开期间为2025年7月10日10:00至7月17日17:00。",
+    exam: "保健科学院按一般选拔、社会人特别选拔、外国人留学生特别选拔分别实施；外国人留学生特别选拔包含面接，面接日程和使用语言按募集要项及后续通知。",
+    english: "令和9年度起社会人特别选拔及外国人留学生特别选拔的英语证明提交办法有变更预告；令和8年度按所附募集要项要求提交英语/语学力相关材料。",
+    japanese: "常规课程需能完成日语手续、面接和研究沟通；外国人留学生面接使用语言以学院通知为准。",
+    examSubjects: "看护、放射线技术、检査技术、保健科学等方向按分野实施书类、专业评价、面接等综合选拔，具体科目和样式见PDF。"
+  }
+);
+
+addHokkaidoEvidence(
+  "医学院・保健科学院・医理工学院・药学院",
+  ["医理工学"],
+  HOKKAIDO_SOURCE_PDFS.bme,
+  {
+    apply: "医理工学院令和8年度修士课程：出愿资格审查申请为2025年6月3日至6月9日；正式出愿期间为2025年7月10日至7月16日。",
+    exam: "医理工学院修士课程按所附募集要项实施选拔，包含书类、专业/口述等评价；具体考试日和方式见PDF。",
+    english: "英语能力材料按医理工学院修士课程募集要项提交。",
+    japanese: "常规课程需要日语读解、面试和研究沟通能力；未见统一JLPT必交字段。",
+    examSubjects: "医理工学方向围绕医学、生命科学、工学交叉基础及研究计划进行专业评价和口述/面试。"
+  }
+);
+
+addHokkaidoEvidence(
+  "医学院・保健科学院・医理工学院・药学院",
+  ["药科学", "药学"],
+  HOKKAIDO_SOURCE_PDFS.lifePharm,
+  {
+    apply: "北海道大学药学研究院参与生命科学院教育组织；药科学/药学相关修士方向主要按生命科学院生命科学专攻、软物质专攻等募集期办理。当前附生命科学院令和8年度冬期募集要项及出题范围PDF。",
+    exam: "生命科学院药学相关方向按募集期实施英语外部成绩判定、口头试问、小论文或笔试等组合。",
+    english: "英语以TOEFL或TOEIC等外部考试成绩判定，具体有效考试和提交形式见生命科学院募集要项。",
+    japanese: "常规选拔需能完成日语口头试问/小论文及研究沟通；未见统一JLPT必交。",
+    examSubjects: "药科学/药学相关方向以生命科学、生命医药科学、软物质科学等范围进行口头试问、小论文或专业笔试评价。"
+  }
+);
+
+addHokkaidoEvidence(
+  "兽医学院・齿学院・国际感染症学院",
+  ["兽医学", "共同兽医学", "国际感染症学", "人兽共通感染症学", "病原微生物学", "免疫学"],
+  HOKKAIDO_SOURCE_PDFS.infect,
+  {
+    apply: "兽医学院/国际感染症学院公开的主要为博士课程募集要项。令和8年度4月入学募集要项已下载；若申请修士层级，请注意该学院页面未确认修士募集。",
+    exam: "博士课程按募集要项实施书类、专业/口述等选拔；国际感染症学院从令和2年度起外语评价改为外部英语考试成绩。",
+    english: "国际感染症学院使用TOEFL、TOEIC、IELTS等外部英语成绩，不再实施独自英语考试；具体有效成绩和提交方法见PDF。",
+    japanese: "常规日语项目需具备日语研究沟通能力；英语项目/英文材料是否可用以PDF具体说明为准。",
+    examSubjects: "兽医学、共同兽医学、感染症、人兽共通感染症、病原微生物、免疫学等按研究领域进行专业评价、口述和研究计划审查。"
+  }
+);
+
+addHokkaidoEvidence(
+  "兽医学院・齿学院・国际感染症学院",
+  ["齿学", "口腔医学"],
+  HOKKAIDO_SOURCE_PDFS.dental,
+  {
+    apply: "齿学院公开的是博士课程募集要项，没有确认到修士课程募集。令和8年度前期：出愿资格事前审查2025年7月3日必着，出愿2025年7月18日至8月1日；后期：事前审查2025年10月28日必着，出愿2025年11月21日至12月5日。",
+    exam: "齿学院博士课程前期考试日为2025年9月7日，后期考试日为2026年1月25日；2次募集なし。",
+    english: "英语/外语能力材料按齿学院博士课程募集要项提交。",
+    japanese: "需要事前联系志望教室指导教员并完成日语/研究沟通；未确认修士课程统一JLPT要求。",
+    examSubjects: "齿学、口腔医学方向按齿学院博士课程进行书类、专业/口述、面试等评价；这里已明确标注为博士课程出处，避免误作为修士募集。"
+  }
+);
+
+addHokkaidoEvidence(
+  "文学院・教育学院・法学研究科・经济学院",
+  ["人文学", "思想文化学", "历史地域文化学", "语言文学", "人间科学"],
+  HOKKAIDO_SOURCE_PDFS.letters,
+  {
+    apply: "文学院2026年度修士课程募集要项已下载。文学院通过互联网出愿募集，入学愿书等不再以纸质册子配布；具体出愿期间以PDF为准。",
+    exam: "文学院按人文学、人间科学两大专攻及研究室实施专业笔试/口述/书类等选拔，考试日程以PDF为准。",
+    english: "外语/英语科目或成绩提交要求按文学院各研究室/专攻募集要项确认。",
+    japanese: "文学院常规修士要求较强日语读写、专业论文和面试能力；未见全方向统一JLPT必交。",
+    examSubjects: "人文学、思想文化、历史地域文化、语言文学、人间科学等方向按志望研究室考查专业基础、研究计划、论文/口述。"
+  }
+);
+
+addHokkaidoEvidence(
+  "文学院・教育学院・法学研究科・经济学院",
+  ["教育学", "教育社会学", "心理学"],
+  HOKKAIDO_SOURCE_PDFS.education,
+  {
+    apply: "教育学院令和8年度修士课程第2次募集要项已下载；出愿期间、书类提交和合格发表以PDF修正版为准。",
+    exam: "教育学院按一般、留学生、社会人等区分实施；专业笔试、面试/口述和书类综合评价以募集要项为准。",
+    english: "外语科目或英语成绩提交按教育学院募集要项及各专业要求确认。",
+    japanese: "教育学、教育社会学、心理学方向通常要求日语专业读写、论文和面试能力；未见统一JLPT必交。",
+    examSubjects: "考查教育学研究基础、教育社会学、心理学等专业知识、研究计划与面试/口述。"
+  }
+);
+
+addHokkaidoEvidence(
+  "文学院・教育学院・法学研究科・经济学院",
+  ["法学政治学"],
+  HOKKAIDO_SOURCE_PDFS.law,
+  {
+    apply: "法学研究科法学政治学专攻令和8年度修士课程第2次募集要项已下载，包含一般/社会经验者入试及外国人留学生入试。具体出愿资格审查、出愿期间和提交方式按两份PDF确认。",
+    exam: "法学政治学专攻按第2次募集要项实施专业试验、口述/面试、书类等综合评价。",
+    english: "外语或英语成绩要求依一般/留学生募集区分不同，按所附法学研究科PDF确认。",
+    japanese: "法学政治学专攻常规修士高度依赖日语法律/政治学读写和口述能力；外国人留学生入试的日语要求以PDF为准。",
+    examSubjects: "法学、政治学、研究计划、专业论文/口述等；具体科目和题型按法学研究科募集要项。"
+  }
+);
+
+addHokkaidoEvidence(
+  "文学院・教育学院・法学研究科・经济学院",
+  ["经济学", "经营学", "会计信息"],
+  HOKKAIDO_SOURCE_PDFS.econ,
+  {
+    apply: "经济学院令和9年度修士课程一般募集、特别募集要项已下载。一般募集PDF为2026年4月23日修正版；出愿期间、出愿资格审查和书类要求按PDF日程确认。",
+    exam: "经济学院修士按一般/特别/社会人等区分实施；专业科目、口述/面试、书类评价的组合以募集要项为准。",
+    english: "经济学院另公布英语能力考试成绩利用说明；TOEFL/TOEIC等成绩提交和有效期限按PDF确认。",
+    japanese: "经济学、经营学、会计信息方向通常需要日语专业读写、论文和面试能力；未见所有方向统一JLPT必交。",
+    examSubjects: "经济学、经营学、会计、统计/计量、研究计划和口述等，具体考试科目按经济学院募集要项及志望课程确认。"
+  }
+);
+
+addHokkaidoEvidence(
+  "国际广报媒体・观光学院・公共政策大学院",
+  ["公共政策", "公共经营", "政策分析", "地域政策"],
+  HOKKAIDO_SOURCE_PDFS.policy,
+  {
+    apply: "公共政策大学院令和8年度春季一般/外国人留学生特别选考：出愿期间为2025年12月8日至12月10日。秋季一般/外国人留学生特别选考：出愿期间为2025年7月28日至7月30日。",
+    exam: "春季选拔考试日为2026年1月24日；秋季一般/外国人留学生特别选考考试日为2025年9月6日。考试会场为北海道大学大学院法学研究科・法学部。",
+    english: "一般选考可提交TOEFL等英语能力成绩作为学修成果材料，国际政策课程志愿者建议记载TOEFL等成绩并附成绩证明；外国人留学生特别选考的材料要求按PDF确认。",
+    japanese: "公共政策大学院为专业职学位课程，外国人留学生需具备充分日语能力；常规笔试和面试以日语应试为前提。",
+    examSubjects: "一般选考及外国人留学生特别选考专业科目范围包括民法、行政法、政治学、国际政治、国际法、宏观经济学、微观经济学、统计学、社会资本政策学、环境工学；外国人留学生特别选考不含带※的部分科目。"
+  }
+);
+
 function majorEvidenceKey(item) {
   return `${item.university}|${item.title}|${item.majorDirection || ""}`;
 }
 
+function isAdmissionPdf(file) {
+  const name = normToken(file && file.name);
+  return /(募集|要項|入試|出願|application|guideline|admission|master|修士|博士前期|m[._-]?c|exam|entrance|boshu|youkou|syushi|shuushi)/i.test(name)
+    && !/(press|pr|news|pamphlet|brochure|outline|calendar|assessment|policy|shigansha|志願者数|パンフレット|概要|公式|お知らせ|選抜要項|学部|一般選抜|フロンティア|国際総合入試|聴講生|科目等履修生)/i.test(name);
+}
+
+function isUsablePdfFallback(file) {
+  const name = normToken(file && file.name);
+  return !/(press|pr|news|pamphlet|brochure|calendar|assessment|shigansha|志願者数|公式|お知らせ|学部|一般選抜|フロンティア|国際総合入試|聴講生|科目等履修生|合格者|result|resume|label|check|doc1|doc2|size|report|certificate|manual)/i.test(name);
+}
+
+function admissionPdfCandidates(item, limit = 3) {
+  const exact = matchedPdfFiles(item, 8).filter(isAdmissionPdf);
+  if (exact.length) return exact.slice(0, limit);
+  const terms = itemMatchTerms(item);
+  const files = schoolPdfs(item.university).filter(isAdmissionPdf)
+    .map(file => ({ ...file, _score: scoreByTerms(`${file.name} ${file.href}`, terms) }))
+    .sort((a, b) => b._score - a._score || b.size - a.size);
+  if (files.length) return files.slice(0, limit);
+  const looseExact = matchedPdfFiles(item, 8).filter(isUsablePdfFallback);
+  if (looseExact.length) return looseExact.slice(0, limit);
+  return schoolPdfs(item.university).filter(isUsablePdfFallback).slice(0, limit);
+}
+
+function digestFieldText(item, keywords) {
+  const snippets = schoolDigestItems(item.university, keywords, 4, item)
+    .filter(snippet => isAdmissionPdf({ name: snippet.file }));
+  if (!snippets.length) return "";
+  const text = snippets
+    .map(snippet => translateAdmissionText(snippet.text))
+    .join(" / ")
+    .replace(/\s+/g, " ")
+    .trim();
+  return text.length > 260 ? `${text.slice(0, 260)}…` : text;
+}
+
+function autoSchoolEvidence(item) {
+  const pdfs = admissionPdfCandidates(item, 3);
+  if (!pdfs.length) return null;
+  const first = pdfs[0];
+  const fieldText = {
+    apply: digestFieldText(item, ["出願期間", "願書", "application period", "application"]),
+    exam: digestFieldText(item, ["試験期日", "選抜方法", "試験日", "exam date", "examination"]),
+    english: digestFieldText(item, ["TOEFL", "TOEIC", "IELTS", "英語", "foreign language"]),
+    japanese: digestFieldText(item, ["日本語", "JLPT", "日本留学試験", "留学生"]),
+    examSubjects: digestFieldText(item, ["試験科目", "専門科目", "筆記", "口述", "面接", "subject"])
+  };
+  const title = translateAdmissionText(item.title);
+  const direction = translateAdmissionText(item.majorDirection || item.title);
+  const category = translateAdmissionText(item.category || "");
+  const fallback = {
+    apply: `${title} / ${direction} 已绑定本校招生类PDF。自动摘要未定位到完整出愿期间时，请以右侧PDF中的“出愿期间、愿书受理期间、申请期间”表格为准。`,
+    exam: `${title} / ${direction} 已绑定本校招生类PDF。考试日期、合格发表和入学手续请以PDF中的“试验期日、选拔方法、合格发表”字段为准。`,
+    english: `${title} / ${direction} 的英语要求按PDF中的外语/英语成绩说明确认；页面不会再使用无出处的TOEFL/TOEIC推测。`,
+    japanese: `${title} / ${direction} 的日语要求按PDF中的外国人留学生、日语能力、口述/面试说明确认；未从PDF确认时不写JLPT硬性要求。`,
+    examSubjects: `${title} / ${direction} 属于${category || "该研究科"}方向，专业科目、笔试、口述和面试内容以所附招生PDF中的“试验科目、选拔方法、专业科目”说明为准。`
+  };
+  const fields = {};
+  Object.keys(fallback).forEach(key => {
+    fields[key] = {
+      text: fieldText[key] || fallback[key],
+      file: first.name,
+      href: first.href
+    };
+  });
+  return { pdfs, fields, autoGenerated: true };
+}
+
+function completeMajorEvidence(primary, fallback) {
+  if (!primary) return fallback || null;
+  if (!fallback) return primary;
+  const fields = { ...(fallback.fields || {}), ...(primary.fields || {}) };
+  const pdfs = [
+    ...((primary.pdfs && primary.pdfs.length ? primary.pdfs : []) || []),
+    ...((fallback.pdfs && fallback.pdfs.length ? fallback.pdfs : []) || [])
+  ];
+  const seen = new Set();
+  return {
+    ...fallback,
+    ...primary,
+    pdfs: pdfs.filter(file => {
+      const key = file && (file.href || file.name);
+      if (!key || seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    }),
+    fields
+  };
+}
+
 function majorEvidence(item) {
-  return HOKKAIDO_CURATED_FIELDS[majorEvidenceKey(item)] ||
-    (window.MAJOR_PDF_EVIDENCE && window.MAJOR_PDF_EVIDENCE[majorEvidenceKey(item)]) ||
-    null;
+  const curated = HOKKAIDO_CURATED_FIELDS[majorEvidenceKey(item)];
+  if (curated) return curated;
+  const extracted = window.MAJOR_PDF_EVIDENCE && window.MAJOR_PDF_EVIDENCE[majorEvidenceKey(item)];
+  return completeMajorEvidence(extracted, autoSchoolEvidence(item));
 }
 
 const FIELD_TO_EVIDENCE = {
@@ -37017,7 +37389,9 @@ function displayField(item, fallback, keywords, emptyText) {
   const evidenceField = evidenceFieldName(keywords);
   const sourced = evidenceField ? evidenceHtml(item, evidenceField) : "";
   if (sourced) return sourced;
-  const html = digestHtml(item.university, keywords, 2, item);
+  const curatedKey = majorEvidenceKey(item);
+  const allowDigest = item.university !== "北海道大学" || !!HOKKAIDO_CURATED_FIELDS[curatedKey];
+  const html = allowDigest ? digestHtml(item.university, keywords, 2, item) : "";
   if (html) return html;
   const matched = matchedPdfFiles(item, 1).length > 0;
   return `<span class="source-snippet">${emptyText}<br><span>${matched ? "已匹配到相关 PDF，但没有从摘要中抽到该字段的原文依据；请打开下方相关PDF核对。" : `没有从“${translateAdmissionText(item.majorDirection || item.title)}”对应 PDF 中确认，已避免显示未核实的时间/考试内容。`}</span></span>`;
