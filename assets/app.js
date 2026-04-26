@@ -1941,6 +1941,7 @@ function completeMajorEvidence(primary, fallback) {
 function majorEvidence(item) {
   const curated = HOKKAIDO_CURATED_FIELDS[majorEvidenceKey(item)];
   if (curated) return curated;
+  if (isPriorityOptimizedItem(item)) return null;
   const extracted = window.MAJOR_PDF_EVIDENCE && window.MAJOR_PDF_EVIDENCE[majorEvidenceKey(item)];
   return completeMajorEvidence(extracted, autoSchoolEvidence(item));
 }
@@ -2014,6 +2015,9 @@ function displayField(item, fallback, keywords, emptyText) {
   const evidenceField = evidenceFieldName(keywords);
   const sourced = evidenceField ? evidenceHtml(item, evidenceField) : "";
   if (sourced) return sourced;
+  if (isPriorityOptimizedItem(item) && fallback) {
+    return `<span class="source-snippet">${translateAdmissionText(fallback)}<br><span>人工结构化字段：请通过官网募集要项入口核对原文。</span></span>`;
+  }
   const curatedKey = majorEvidenceKey(item);
   const allowDigest = item.university !== "北海道大学" || !!HOKKAIDO_CURATED_FIELDS[curatedKey];
   const html = allowDigest ? digestHtml(item.university, keywords, 2, item) : "";
@@ -2144,8 +2148,116 @@ const HOKKAIDO_DIFFICULTY = {
   }
 };
 
+const PRIORITY_SCHOOL_DIFFICULTY = {
+  "tohoku-eng": {
+    level: "偏难",
+    text: "东北大学工学研究科是旧帝大核心工科，官网博士前期课程入口按研究科/专攻发布募集要项；当前条目包含数学、专业课、小论文、口试等，机械、电子、材料、化学、建筑土木均属热门工科，按偏难评价。官方统一志愿者/合格者比例未在当前条目中接入，后续可继续按专攻统计校准。"
+  },
+  "tohoku-info": {
+    level: "偏难",
+    text: "东北大学信息科学研究科覆盖数据科学、智能系统、算法、软件和网络，热门程度高；选拔可能在笔试、小论文、口述试验等方式中组合实施，且日程分组复杂。未接入统一合格比例前，按偏难评价。"
+  },
+  "tokyo-info": {
+    level: "高难",
+    text: "东京大学信息理工学系研究科为全国最高热度的信息类研究科之一，需TOEFL，且计算机/数理/系统/电子/知能机械/创造信息分别有专业科目、数学、程序设计或口述；按高难评价。"
+  },
+  "tokyo-eng": {
+    level: "高难",
+    text: "东京大学工学系研究科官网公开一般入试志愿者・合格者数；同时多数专攻要求外部英语成绩，并按专攻实施笔试、书类、面接/口述。学校层级、热门程度和专业科目负担均高，按高难评价。"
+  },
+  "tokyo-science": {
+    level: "高难",
+    text: "东京大学理学系研究科各专攻专业性很强，物理、化学、地球惑星、生命科学等方向需按专攻参加笔试/口述/书类审查并提交外语材料；热门实验室竞争明显，按高难评价。"
+  },
+  "tokyo-math": {
+    level: "高难",
+    text: "东京大学数理科学研究科以数学专业笔试和口述为核心，专业基础要求极高；即使未统一要求外部英语成绩，也不代表难度低，按高难评价。"
+  },
+  "tokyo-frontier": {
+    level: "偏难",
+    text: "东京大学新领域创成科学研究科方向多、跨学科强，选拔方式由各专攻入试案内决定；英语成绩、研究计划、志望调查票和口述负担较重，按偏难至高难评价。"
+  },
+  "tokyo-agri": {
+    level: "偏难",
+    text: "东京大学农学生命科学研究科总要项要求TOEFL成绩提交，且各专攻另定专业选拔；兽医、食品、国际农学、应用生命等热门方向差异较大，按偏难评价。"
+  },
+  "tokyo-pharma": {
+    level: "高难",
+    text: "东京大学药学系研究科需TOEFL iBT，并综合笔记试验、口述试验和学业成绩；药科学、创药、生命药学等研究室热度高，按高难评价。"
+  },
+  "tokyo-med": {
+    level: "高难",
+    text: "东京大学医学系研究科需TOEFL或IELTS等英语成绩，部分方向有小论文、专业笔试、在线口头试问；医学/公共健康/国际保健方向研究计划和背景匹配要求高，按高难评价。"
+  },
+  "tokyo-humanities": {
+    level: "高难",
+    text: "东京大学人文社会系研究科强调外国语、专业分野笔试、毕业论文或替代材料、研究计划和口述；日语读写和研究能力要求高，按高难评价。"
+  },
+  "tokyo-edu": {
+    level: "偏难",
+    text: "东京大学教育学研究科需按课程提交研究计划和参加专业选拔，教育心理、临床心理等方向热门；按偏难评价。"
+  },
+  "tokyo-law": {
+    level: "高难",
+    text: "东京大学总合法政专攻涉及实定法、基础法学、政治学专业论述和口述，外国语材料也影响评价；日语法律文本处理要求极高，按高难评价。"
+  },
+  "tokyo-econ": {
+    level: "高难",
+    text: "东京大学经济学研究科经济学课程要求TOEFL iBT，部分课程还要求GRE/GMAT，经济学、统计、管理、数量金融均为热门方向；按高难评价。"
+  },
+  "tokyo-arts-science": {
+    level: "偏难",
+    text: "东京大学综合文化研究科广域科学需TOEFL/TOEIC等成绩，文系专攻重视日语论述和研究计划；跨学科方向多但热门度高，按偏难评价。"
+  },
+  "tokyo-public-policy": {
+    level: "高难",
+    text: "东京大学公共政策大学院为专业职学位课程，需TOEFL iBT、专业科目审查和面试，法政策/国际公共政策/经济政策方向竞争强，按高难评价。"
+  },
+  "tokyo-iii": {
+    level: "偏难",
+    text: "东京大学学际信息学府社会信息、文化人间信息、先端表现等方向需外语、专业科目、书类和二次口述；传媒/社会信息热度高，按偏难评价。"
+  },
+  "kyoto-eng": {
+    level: "偏难",
+    text: "京都大学工学研究科覆盖机械、化学、材料、电气、建筑、社会基盘等热门方向，考试集中在专业科目和口述；总募集要项未统一一个英语硬门槛，但专攻差异大，按偏难评价。"
+  },
+  "kyoto-info": {
+    level: "高难",
+    text: "京都大学信息学研究科官网公开出愿状况，社会信息学等课程志愿者数较多；知能信息、社会信息、通信信息系统、数据科学相关方向热度高，需按专攻参加笔试/口头试问和英语相关评价，按高难评价。"
+  },
+  "osaka-eng": {
+    level: "偏难",
+    text: "大阪大学工学研究科2027年度推荐入学特别选拔等要项已公开，工学博士前期课程按专攻实施专业科目和英语成绩评价；机械、电气、应用化学、材料、地球综合工学等热门，按偏难评价。"
+  },
+  "osaka-info": {
+    level: "偏难",
+    text: "大阪大学信息科学研究科需要TOEIC/TOEFL等成绩作为评价材料，并按志望专攻实施试验和口头试问；计算机、网络、多媒体、生物信息等方向热门，按偏难评价。"
+  },
+  "kyushu-eng": {
+    level: "中等偏难",
+    text: "九州大学工学府官网明确各专攻英语科目需要TOEIC或TOEFL，地球资源/共同资源方向可用IELTS；机械、航空宇宙、电气电子、材料等方向专业科目负担较重，按中等偏难评价。"
+  },
+  "kyushu-info": {
+    level: "偏难",
+    text: "九州大学系统信息科学府明确要求TOEIC/TOEFL-iBT/IELTS之一，且需研究计划英文摘要、笔试/口试等；信息智能、电气电子、AI/数据方向热度较高，按偏难评价。"
+  },
+  "nagoya-eng": {
+    level: "偏难",
+    text: "名古屋大学工学研究科博士前期课程募集要项公开，需Web出愿并按系提交材料；多数工学系要求TOEIC/TOEFL，机械航空、电气电子、材料、化学生命等方向热门，按偏难评价。"
+  },
+  "nagoya-info": {
+    level: "偏难",
+    text: "名古屋大学信息学研究科官网公开过去志愿者・受验者・合格者数；数理信息、复杂系统、社会信息、智能系统和数据科学方向热度上升，按偏难评价。"
+  }
+};
+
+function isPriorityOptimizedItem(item) {
+  return !!(item && PRIORITY_SCHOOL_DIFFICULTY[item.id]);
+}
+
 function difficultyInfo(item) {
   if (item.university === "北海道大学" && HOKKAIDO_DIFFICULTY[item.id]) return HOKKAIDO_DIFFICULTY[item.id];
+  if (PRIORITY_SCHOOL_DIFFICULTY[item.id]) return PRIORITY_SCHOOL_DIFFICULTY[item.id];
   const difficulty = estimateDifficulty(item);
   return {
     level: difficulty >= 4 ? "偏难" : difficulty <= 2 ? "相对稳妥" : "中等",
