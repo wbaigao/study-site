@@ -2560,10 +2560,9 @@ function renderSchoolResults(list) {
 
   const groups = Object.values(schoolGroups(list))
     .map(group => {
-      const cards = schoolMajorCards(group.items, keyword);
       const isSchoolMatch = schoolKeyword && schoolKeyword.key === group.key;
-      const majorCount = group.items.reduce((sum, item) => sum + item.directions.length, 0);
-      return { ...group, matchCount: isSchoolMatch ? majorCount : cards.count, schoolOnlyMatch: isSchoolMatch };
+      const matchCount = isSchoolMatch ? totalDirections(group.items) : countMatchingDirections(group.items, keyword);
+      return { ...group, matchCount, schoolOnlyMatch: isSchoolMatch };
     })
     .filter(group => group.matchCount > 0)
     .sort((a, b) => b.matchCount - a.matchCount || a.university.localeCompare(b.university, "zh-CN"));
@@ -2594,6 +2593,19 @@ function renderSchoolResults(list) {
       }).join("")}
     </div>
   `;
+}
+
+function totalDirections(items) {
+  return items.reduce((sum, item) => sum + (item.directions || []).length, 0);
+}
+
+function countMatchingDirections(items, keyword) {
+  const q = (keyword || "").trim();
+  if (!q) return totalDirections(items);
+  return items.reduce((sum, item) => {
+    const count = (item.directions || []).filter(direction => scoreMajorWithinSchool(item, direction, q) > 0).length;
+    return sum + count;
+  }, 0);
 }
 
 function renderSchoolPage() {
