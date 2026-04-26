@@ -93,8 +93,12 @@
           <option value="challenge">冲刺优先</option>
         </select>
       </label>
+      <label class="wide-field">
+        背景补充
+        <textarea id="recBackground" rows="4" placeholder="例：本科经济学，N2，TOEIC 650，想去东京或关西，专业不严格，只想提高合格率。也可以写预算、研究兴趣、是否能接受英文项目等。"></textarea>
+      </label>
     </div>
-    <div class="hint">推荐结果会进入对应大学页面，并自动带上专业关键词做校内筛选。</div>
+    <div class="hint" id="aiStatus">未配置 GPT 后端时，会使用本地数据库规则推荐；配置后会先让 GPT 理解背景再排序。</div>
   </div>
 
   <div class="results-head">
@@ -124,6 +128,7 @@
 </div>
 <script src="assets/index-data.js"></script>
 <script src="assets/new-schools-data.js"></script>
+<script src="assets/config.js"></script>
 <script src="assets/app.js"></script>
 </body>
 </html>

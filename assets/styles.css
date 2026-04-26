@@ -150,7 +150,8 @@
     font-weight: 700;
   }
   .recommend-grid input,
-  .recommend-grid select {
+  .recommend-grid select,
+  .recommend-grid textarea {
     width: 100%;
     border: 1px solid #d1d5db;
     border-radius: 12px;
@@ -161,9 +162,18 @@
     background: #fff;
   }
   .recommend-grid input:focus,
-  .recommend-grid select:focus {
+  .recommend-grid select:focus,
+  .recommend-grid textarea:focus {
     border-color: #6366f1;
     box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+  }
+  .recommend-grid textarea {
+    min-height: 104px;
+    resize: vertical;
+    line-height: 1.6;
+  }
+  .wide-field {
+    grid-column: 1 / -1;
   }
   .recommend-card {
     display: grid;
@@ -181,6 +191,25 @@
     color: #4b5563;
     line-height: 1.7;
     font-size: 14px;
+  }
+  .ai-summary {
+    border: 1px solid #bfdbfe;
+    border-left: 4px solid #2563eb;
+    border-radius: 12px;
+    background: #eff6ff;
+    padding: 14px 16px;
+    color: #1e3a8a;
+    line-height: 1.7;
+  }
+  .ai-summary strong {
+    display: block;
+    margin-bottom: 4px;
+  }
+  .ai-summary p {
+    margin: 0;
+  }
+  .ai-summary p + p {
+    margin-top: 6px;
   }
   .results-head {
     display: flex;

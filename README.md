@@ -26,3 +26,22 @@ git add .gitattributes
 ```
 
 之后再正常 `git add`、`git commit`、`git push`。
+
+## GPT 推荐接口
+
+首页的智能推荐默认使用本地数据库规则，不需要密钥。要启用 GPT 深度理解用户背景，需要部署 `api/recommend.js` 到支持 Node Serverless 的平台，例如 Vercel，并在平台环境变量中设置：
+
+- `OPENAI_API_KEY`: OpenAI API key
+- `OPENAI_MODEL`: 可选，默认 `gpt-5-mini`
+
+如果网站和接口部署在同一个 Vercel 项目，把 `assets/config.js` 改成：
+
+```js
+window.AI_RECOMMEND_API = "/api/recommend";
+```
+
+如果前端仍放在 GitHub Pages、接口单独部署，则填完整接口地址，例如：
+
+```js
+window.AI_RECOMMEND_API = "https://your-project.vercel.app/api/recommend";
+```

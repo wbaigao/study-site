@@ -1318,6 +1318,7 @@ const SCHOOL_NAME_ALIASES = {
 const SCHOOL_PAGE_KEY = window.SCHOOL_PAGE_KEY || "";
 const IS_SCHOOL_PAGE = !!SCHOOL_PAGE_KEY;
 const SCHOOL_PAGE_PREFIX = window.SCHOOL_PAGE_PREFIX || "schools/";
+const AI_RECOMMEND_API = window.AI_RECOMMEND_API || "";
 function schoolPageHref(key, query = "") {
   const suffix = query ? `?q=${encodeURIComponent(query)}` : "";
   return `${SCHOOL_PAGE_PREFIX}${key}.html${suffix}`;
@@ -2620,14 +2621,17 @@ const REGION_GROUPS = {
 const TOP_SCHOOL_KEYS = new Set(["utokyo", "kyoto", "osaka", "tohoku", "nagoya", "kyushu", "hokudai", "scitokyo", "kobe", "hitotsubashi", "tsukuba"]);
 
 function readRecommendationProfile() {
+  const major = (document.getElementById("recMajor")?.value || "").trim();
   return {
-    major: (document.getElementById("recMajor")?.value || "").trim(),
+    major,
+    majorTerms: keywordTopicTerms(major),
     flex: document.getElementById("recFlex")?.value || "strict",
     japanese: document.getElementById("recJapanese")?.value || "high",
     english: document.getElementById("recEnglish")?.value || "high",
     interview: document.getElementById("recInterview")?.value || "high",
     region: document.getElementById("recRegion")?.value || "any",
-    difficulty: document.getElementById("recDifficulty")?.value || "balanced"
+    difficulty: document.getElementById("recDifficulty")?.value || "balanced",
+    background: (document.getElementById("recBackground")?.value || "").trim()
   };
 }
 
@@ -2688,18 +2692,61 @@ function difficultyScore(item, preference, reasons) {
   return 22 - Math.abs(difficulty - 3) * 6;
 }
 
+function scoreMajorForRecommendation(item, direction, terms) {
+  if (!terms || !terms.length) return 1;
+  const meta = getMeta(item);
+  const primaryScore =
+    scoreText(direction, terms, 30) +
+    scoreText(item.title, terms, 16) +
+    scoreText(item.category, terms, 10);
+  if (primaryScore === 0) return 0;
+  let score = primaryScore;
+  score += scoreText(item.examSubjects, terms, 8);
+  score += scoreText(item.note, terms, 6);
+  score += scoreText(item.englishNote, terms, 4);
+  score += scoreText(item.japaneseNote, terms, 4);
+  score += scoreText(meta.pdfInsight, terms, 4);
+  return score;
+}
+
+function scoreItemForRecommendation(item, terms) {
+  if (!terms || !terms.length) return 1;
+  const meta = getMeta(item);
+  const pool = [
+    item.university,
+    item.category,
+    item.title,
+    item.apply,
+    item.exam,
+    item.englishNote,
+    item.japaneseNote,
+    item.examSubjects,
+    item.note,
+    meta.pdfInsight,
+    ...(item.directions || [])
+  ].join(" ").toLowerCase();
+  const compactPool = pool.replace(/\s+/g, "");
+  if (!terms.some(term => pool.includes(term) || compactPool.includes(term.replace(/\s+/g, "")))) return 0;
+  let score = 1;
+  score += scoreText(item.title, terms, 8);
+  score += scoreText(item.examSubjects, terms, 6);
+  score += scoreText(item.university, terms, 4);
+  score += scoreText(meta.pdfInsight, terms, 3);
+  return score;
+}
+
 function recommendMajorScore(item, direction, profile, reasons) {
   if (!profile.major) {
     reasons.push(profile.flex === "flexible" ? "未限定专业，按可申请方向和通过可能性推荐" : "未填写专业，先按学校方向和难度做基础推荐");
     return profile.flex === "flexible" ? 18 : 8;
   }
-  const score = scoreMajorWithinSchool(item, direction, profile.major);
+  const score = scoreMajorForRecommendation(item, direction, profile.majorTerms);
   if (score > 0) {
     reasons.push(`专业方向与“${profile.major}”匹配`);
     return Math.min(55, score);
   }
   if (profile.flex === "flexible") {
-    const broad = scoreItem(item, profile.major);
+    const broad = scoreItemForRecommendation(item, profile.majorTerms);
     if (broad > 0) {
       reasons.push(`研究科层面与“${profile.major}”相关，可作为相近方向考虑`);
       return Math.min(24, broad);
@@ -2710,8 +2757,7 @@ function recommendMajorScore(item, direction, profile, reasons) {
   return -999;
 }
 
-function runSmartRecommend() {
-  const profile = readRecommendationProfile();
+function buildSmartRecommendations(profile, limit = 18) {
   const recs = [];
   DATA.forEach(item => {
     (item.directions || []).forEach(direction => {
@@ -2725,13 +2771,101 @@ function runSmartRecommend() {
       recs.push({ item, direction, score, reasons: [...new Set(reasons)].slice(0, 4), difficulty: estimateDifficulty(item) });
     });
   });
-  const selected = recs
+  return recs
     .sort((a, b) => b.score - a.score || a.item.university.localeCompare(b.item.university, "zh-CN"))
-    .slice(0, 18);
-  renderSmartRecommendations(selected, profile);
+    .slice(0, limit);
 }
 
-function renderSmartRecommendations(recs, profile) {
+function recommendationPayload(recs) {
+  return recs.map(rec => ({
+    id: rec.item.id,
+    university: rec.item.university,
+    key: rec.item.key,
+    category: translateAdmissionText(rec.item.category),
+    title: translateAdmissionText(rec.item.title),
+    direction: translateAdmissionText(rec.direction),
+    apply: translateAdmissionText(rec.item.apply),
+    exam: translateAdmissionText(rec.item.exam),
+    examSubjects: translateAdmissionText(rec.item.examSubjects),
+    englishRequired: !!rec.item.englishRequired,
+    japaneseRequired: !!rec.item.japaneseRequired,
+    englishNote: translateAdmissionText(rec.item.englishNote),
+    japaneseNote: translateAdmissionText(rec.item.japaneseNote),
+    difficulty: rec.difficulty,
+    heuristicScore: Math.round(rec.score),
+    pdfCount: schoolPdfs(rec.item.university).length
+  }));
+}
+
+function setAiStatus(message) {
+  const status = document.getElementById("aiStatus");
+  if (status) status.textContent = message;
+}
+
+function mergeAiRecommendations(baseRecs, aiItems) {
+  if (!Array.isArray(aiItems) || !aiItems.length) return baseRecs;
+  const pool = new Map(baseRecs.map(rec => [`${rec.item.id}::${rec.direction}`, rec]));
+  const merged = [];
+  aiItems.forEach((ai, index) => {
+    const direction = ai.direction || ai.major || "";
+    let rec = pool.get(`${ai.id}::${direction}`);
+    if (!rec && ai.id) rec = baseRecs.find(item => item.item.id === ai.id);
+    if (!rec) return;
+    merged.push({
+      ...rec,
+      score: Number(ai.score) || rec.score,
+      reasons: [
+        ai.reason,
+        ...(Array.isArray(ai.reasons) ? ai.reasons : [])
+      ].filter(Boolean).slice(0, 4),
+      aiRank: index + 1
+    });
+  });
+  return merged.length ? merged : baseRecs;
+}
+
+async function requestAiRecommendations(profile, candidates) {
+  if (!AI_RECOMMEND_API) return null;
+  const response = await fetch(AI_RECOMMEND_API, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      profile,
+      candidates: recommendationPayload(candidates.slice(0, 60))
+    })
+  });
+  if (!response.ok) throw new Error(`AI API ${response.status}`);
+  return response.json();
+}
+
+async function runSmartRecommend() {
+  const profile = readRecommendationProfile();
+  const baseRecs = buildSmartRecommendations(profile, 60);
+  renderSmartRecommendations(baseRecs.slice(0, 18), profile, {
+    mode: AI_RECOMMEND_API ? "preparing" : "local"
+  });
+  if (!AI_RECOMMEND_API) {
+    setAiStatus("当前未配置 GPT 后端，已使用本地数据库规则推荐。配置 assets/config.js 后可启用 GPT 深度理解。");
+    return;
+  }
+  try {
+    setAiStatus("正在让 GPT 阅读用户背景并重新排序候选专业...");
+    const aiResult = await requestAiRecommendations(profile, baseRecs);
+    const aiRecs = mergeAiRecommendations(baseRecs, aiResult?.recommendations).slice(0, 18);
+    renderSmartRecommendations(aiRecs, profile, {
+      mode: "ai",
+      summary: aiResult?.summary,
+      followUp: aiResult?.followUp
+    });
+    setAiStatus(aiResult?.summary || "GPT 已完成背景理解和推荐排序。");
+  } catch (error) {
+    console.error(error);
+    renderSmartRecommendations(baseRecs.slice(0, 18), profile, { mode: "fallback" });
+    setAiStatus("GPT 后端暂时不可用，已自动切回本地数据库规则推荐。");
+  }
+}
+
+function renderSmartRecommendations(recs, profile, options = {}) {
   const wrap = document.getElementById("resultList");
   document.querySelector(".results-head h2").textContent = "AI 智能推荐结果";
   document.getElementById("resultCount").textContent = `${recs.length} 个方向`;
@@ -2739,7 +2873,13 @@ function renderSmartRecommendations(recs, profile) {
     wrap.innerHTML = `<div class="empty">没有生成推荐。可以放宽专业要求，或把地区改成“不限地区”。</div>`;
     return;
   }
-  wrap.innerHTML = recs.map(rec => {
+  const intro = options.summary || options.followUp ? `
+    <div class="ai-summary">
+      ${options.summary ? `<strong>${options.mode === "ai" ? "GPT 分析" : "推荐说明"}</strong><p>${options.summary}</p>` : ""}
+      ${options.followUp ? `<p>${options.followUp}</p>` : ""}
+    </div>
+  ` : "";
+  wrap.innerHTML = intro + recs.map(rec => {
     const query = profile.major || rec.direction;
     return `
       <article class="school-card recommend-card" onclick="location.href=schoolPageHref('${rec.item.key}', '${query.replace(/'/g, "\\'")}')">
@@ -2748,7 +2888,7 @@ function renderSmartRecommendations(recs, profile) {
             <h3>${rec.item.university}</h3>
             <p>${translateAdmissionText(rec.item.title)} / ${translateAdmissionText(rec.direction)}</p>
           </div>
-          <span class="school-badge">推荐分 ${Math.round(rec.score)}</span>
+          <span class="school-badge">${rec.aiRank ? `AI 第 ${rec.aiRank}` : `推荐分 ${Math.round(rec.score)}`}</span>
         </div>
         <div class="recommend-score">
           ${tag(`难度 ${rec.difficulty}/5`, rec.difficulty >= 4 ? "tag-purple" : "tag-blue")}
