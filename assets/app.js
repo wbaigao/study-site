@@ -2322,6 +2322,173 @@ const IMPERIAL_ADMISSION_STATS = {
   }
 };
 
+const SCHOOL_STATS_SOURCE_FALLBACK = {
+  "muroran": {
+    "label": "??2?? ???????",
+    "url": "https://www.muroran-it.ac.jp/uploads/sites/6/2021/02/nyujokyo_mcdc_2020.pdf"
+  },
+  "otaru": {
+    "label": "?????????",
+    "url": "https://www.otaru-uc.ac.jp/wp-content/themes/main/pdf/graduate/certificate/ininnjou1.pdf"
+  },
+  "obihiro": {
+    "label": "R9???????????????",
+    "url": "https://www.obihiro.ac.jp/wp/wp-content/uploads/2026/04/1_Graduate-date.pdf"
+  },
+  "kitami": {
+    "label": "????????????",
+    "url": "https://www.kitami-it.ac.jp/wp-content/uploads/2021/04/H240823_hyokakijun.pdf"
+  },
+  "akita": {
+    "label": "??8?????????",
+    "url": "https://www.akita-u.ac.jp/honbu/exam/pdf/2026/2026_selection_2.pdf"
+  },
+  "iwate": {
+    "label": "??7?? ?????????????",
+    "url": "https://www.iwate-u.ac.jp/upload/R7daigakuinn.pdf"
+  },
+  "fukushima": {
+    "label": "???????/?????",
+    "url": "https://www.fukushima-u.ac.jp/graduate-schools/Design/Design3/files/2024%20daigakuin%20setumei.pdf"
+  },
+  "tmd": {
+    "label": "??????????",
+    "url": "https://www.tmd.ac.jp/files/user/202604%20ippan.pdf"
+  },
+  "tufs": {
+    "label": "???????????????",
+    "url": "https://www.tufs.ac.jp/documents/admission/pg/jisshi_master_2026_4.pdf"
+  },
+  "gakugei": {
+    "label": "?????????",
+    "url": "https://www.u-gakugei.ac.jp/graduate/professional/upload/a_report_2015_cal.pdf"
+  },
+  "tuat": {
+    "label": "??8?????????",
+    "url": "https://www.tuat.ac.jp/documents/tuat/admission/nyushi_gakubu/youkou/r8_senbatuyoukou.pdf"
+  },
+  "geidai": {
+    "label": "??????????",
+    "url": "https://www.geidai.ac.jp/wp-content/uploads/2026/02/R8nyuugakuKari_daigakuin.pdf"
+  },
+  "uec": {
+    "label": "????????????",
+    "url": "https://www.uec.ac.jp/education/graduate/admission/pdf/ie-p-commend_2026.pdf"
+  },
+  "hitotsubashi": {
+    "label": "??/?????????",
+    "url": "https://www.hit-u.ac.jp/kyomu/graduates/2026gakusi_yoko.pdf"
+  },
+  "ynu": {
+    "label": "2026?????????",
+    "url": "https://www.ynu.ac.jp/exam/faculty/essential/pdf/2026_senbatsu_youkou.pdf"
+  },
+  "sokendai": {
+    "label": "?????????",
+    "url": "https://www.soken.ac.jp/admission/file/use_ai_entranceexam_jp20251117.pdf"
+  },
+  "hamamed": {
+    "label": "???????",
+    "url": "https://www.hama-med.ac.jp/admission/24640813717ddc004cc63aa32a01f5cb.pdf"
+  },
+  "toyohashi": {
+    "label": "???????????",
+    "url": "https://www.tut.ac.jp/exam/entrance/docs/R8_taikou.pdf"
+  },
+  "nitech": {
+    "label": "2026?? ???????",
+    "url": "https://www.nitech.ac.jp/examination/mt_files/f6478e27dbf0c5ad367366b06f9e88a0a7ebe7bb.pdf"
+  },
+  "aichi-edu": {
+    "label": "??8?? ???????",
+    "url": "https://www.aichi-edu.ac.jp/exam/files/R08_sennbatu_0716.pdf"
+  },
+  "fukui": {
+    "label": "??????????",
+    "url": "https://www.u-fukui.ac.jp/wp/wp-content/uploads/bsy26_DPDTseminar.pdf"
+  },
+  "joetsu": {
+    "label": "??8?????????",
+    "url": "https://www.juen.ac.jp/060admissions/020faculty/files/R08g-oldsenbatuyoko.pdf"
+  },
+  "nagaokaut": {
+    "label": "??????",
+    "url": "https://www.nagaokaut.ac.jp/admissions/exam/assets/m_0010_202609_202704_ippan_youkou.pdf"
+  },
+  "kit": {
+    "label": "Current Application Status for IGP",
+    "url": "https://www.kit.ac.jp/wp/wp-content/uploads/2025/11/CurrentApplicationStatusforIGP.pdf"
+  },
+  "kyokyo": {
+    "label": "??????????",
+    "url": "https://www.kyokyo-u.ac.jp/admission/r9in-yokoku2.pdf"
+  },
+  "osaka-kyoiku": {
+    "label": "??8?????????",
+    "url": "https://osaka-kyoiku.ac.jp/Portals/0/files/admission/department/ippan/r8/r8_senbatsuyoukou.pdf"
+  },
+  "hyogo-edu": {
+    "label": "??7?? ???????",
+    "url": "https://www.hyogo-u.ac.jp/admission/R7_senbatsujokyo.pdf"
+  },
+  "nara-edu": {
+    "label": "??????????",
+    "url": "https://www.nara-edu.ac.jp/admissions/undergraduate_admissionsl/H28_ippan.pdf"
+  },
+  "nara-wu": {
+    "label": "??7???????????",
+    "url": "https://www.nara-wu.ac.jp/nyusi/R7toukei.pdf"
+  },
+  "shiga": {
+    "label": "???????????????",
+    "url": "https://www.shiga-u.ac.jp/wp/wp-content/uploads/R9daigakuin_syutsudaihenkou.pdf"
+  },
+  "shiga-med": {
+    "label": "??8?? ???????",
+    "url": "https://www.shiga-med.ac.jp/sites/default/files/2025-07/R08_guidelines.pdf"
+  },
+  "wakayama": {
+    "label": "????????????",
+    "url": "https://www.wakayama-u.ac.jp/_files/00739290/2026kjeyoukou.pdf"
+  },
+  "tottori": {
+    "label": "?????????",
+    "url": "https://www.tottori-u.ac.jp/campuslife/docs/3f7f429f637bfe52ef13576784692b121a67b463.pdf"
+  },
+  "shimane": {
+    "label": "????????",
+    "url": "https://www.shimane-u.ac.jp/_files/00397544/2026_Entryexample_sougougata1.pdf"
+  },
+  "socu": {
+    "label": "??????",
+    "url": "https://www.socu.ac.jp/uploads/images/1_r7rg_suisen_yo_sample.pdf"
+  },
+  "kagawa": {
+    "label": "??????",
+    "url": "https://www.kagawa-u.ac.jp/files/4117/4968/6563/62026NP.pdf"
+  },
+  "kochi": {
+    "label": "????????",
+    "url": "https://www.kochi-u.ac.jp/wp-content/uploads/2026/04/R8kango_daigakuin.pdf"
+  },
+  "oita": {
+    "label": "??????????????????",
+    "url": "https://www.oita-u.ac.jp/000067041.pdf"
+  },
+  "miyazaki": {
+    "label": "??????????",
+    "url": "https://www.miyazaki-u.ac.jp/exam/henkouten20250729.pdf"
+  },
+  "saga": {
+    "label": "????????????????",
+    "url": "https://www.sao.saga-u.ac.jp/PDF/R8/shihi.pdf"
+  },
+  "ryukyu": {
+    "label": "?????/??????",
+    "url": "https://www.u-ryukyu.ac.jp/wp-content/uploads/2025/06/02reason_for_application_gakkokyoikuR8.pdf"
+  }
+};
+
 const IMPERIAL_SCHOOL_STATS_FALLBACK = {
   hokudai: "hoku-eng",
   tohoku: "tohoku-eng",
@@ -2350,16 +2517,29 @@ function admissionStatsInfo(item) {
   if (!item) return null;
   if (IMPERIAL_ADMISSION_STATS[item.id]) return IMPERIAL_ADMISSION_STATS[item.id];
   const fallbackId = IMPERIAL_SCHOOL_STATS_FALLBACK[item.key];
-  if (!fallbackId || !IMPERIAL_ADMISSION_STATS[fallbackId]) return null;
-  return { ...IMPERIAL_ADMISSION_STATS[fallbackId], fallback: true };
+  if (fallbackId && IMPERIAL_ADMISSION_STATS[fallbackId]) return { ...IMPERIAL_ADMISSION_STATS[fallbackId], fallback: true };
+  const sourceFallback = SCHOOL_STATS_SOURCE_FALLBACK[item.key];
+  const sourceUrl = item.url && item.url !== "#" ? item.url : (sourceFallback ? sourceFallback.url : "");
+  return {
+    label: `${item.university} ${item.title}`,
+    text: "当前官网募集要项入口已登记，但尚未接入可直接计算的往年志愿者/受验者/合格者统一统计表；因此暂不计算合格率。后续补录时将优先使用官网入试结果、志愿状况、学校概要或研究科公开评价资料。",
+    url: sourceUrl,
+    sourceLabel: sourceFallback ? sourceFallback.label : "",
+    pending: true
+  };
 }
 
 function admissionStatsHtml(item) {
   const stats = admissionStatsInfo(item);
   if (!stats) return "";
-  const sources = stats.sources || [{ label: "官网公开统计/入试结果", url: stats.url }];
+  const sources = stats.sources || [{ label: stats.pending ? "官网募集要项/入试入口" : "官网公开统计/入试结果", url: stats.url }];
   const scopeNote = stats.fallback ? "（同校公开样本，非本专业直接合格率）" : "";
-  return `<div class="detail-line"><strong>往年录取比例/公开统计：</strong><span class="source-snippet">${scopeNote}${stats.label}：${stats.text}</span><br>${sources.map(source => `<a href="${source.url}" target="_blank" rel="noopener">出处：${source.label}</a>`).join("　")}</div>`;
+  const sourceHtml = sources
+    .filter(source => source && source.url)
+    .map(source => `<a href="${source.url}" target="_blank" rel="noopener">出处：${source.label}</a>`)
+    .join("　");
+  const pendingNote = stats.pending ? "（待补精确人数比例）" : "";
+  return `<div class="detail-line"><strong>往年录取比例/公开统计：</strong><span class="source-snippet">${scopeNote}${pendingNote}${stats.label}：${stats.text}</span>${sourceHtml ? `<br>${sourceHtml}` : ""}</div>`;
 }
 
 function normalizeKeyword(keyword) {
