@@ -1195,6 +1195,10 @@ DATA.push(...SUPPLEMENTAL_GROUPS.flatMap(school =>
     url: "#"
   }))
 ));
+if (window.ADDITIONAL_DATA && Array.isArray(window.ADDITIONAL_DATA)) {
+  const existingIds = new Set(DATA.map(item => item.id));
+  DATA.push(...window.ADDITIONAL_DATA.filter(item => item && !existingIds.has(item.id)));
+}
 const QUICK = ["机械", "材料", "电气电子", "情报工学", "AI", "数据科学", "建筑", "土木", "半导体", "机器人", "法学", "经济", "医学", "心理学", "生物科学"];
 
 const PDF_META = {
@@ -2336,6 +2340,9 @@ function pdfSize(size) {
 function pdfHref(href) {
   if (!href) return "#";
   if (/^(https?:|file:|mailto:|#)/i.test(href)) return href;
+  if (typeof window !== "undefined" && window.location && /^https?:/i.test(window.location.protocol)) {
+    return `https://github.com/wbaigao/study-site/raw/main/${href}`;
+  }
   return IS_SCHOOL_PAGE && !href.startsWith("../") ? `../${href}` : href;
 }
 
