@@ -2235,6 +2235,7 @@ function scoreItem(item, keyword) {
 
 function renderTabs() {
   const tabs = document.getElementById("schoolTabs");
+  if (!tabs) return;
   tabs.innerHTML = "";
 
   const all = document.createElement("span");
@@ -2259,6 +2260,7 @@ function renderTabs() {
 
 function renderQuick() {
   const row = document.getElementById("quickRow");
+  if (!row) return;
   row.innerHTML = "";
   QUICK.forEach(word => {
     const el = document.createElement("span");
@@ -2547,6 +2549,7 @@ function renderHome() {
 function renderSchoolResults(list) {
   const wrap = document.getElementById("resultList");
   const keyword = document.getElementById("searchInput").value.trim();
+  const schoolKeyword = findSchoolByKeyword(keyword);
   document.querySelector(".results-head h2").textContent = "匹配院校";
 
   if (!list.length) {
@@ -2558,7 +2561,9 @@ function renderSchoolResults(list) {
   const groups = Object.values(schoolGroups(list))
     .map(group => {
       const cards = schoolMajorCards(group.items, keyword);
-      return { ...group, matchCount: cards.count };
+      const isSchoolMatch = schoolKeyword && schoolKeyword.key === group.key;
+      const majorCount = group.items.reduce((sum, item) => sum + item.directions.length, 0);
+      return { ...group, matchCount: isSchoolMatch ? majorCount : cards.count, schoolOnlyMatch: isSchoolMatch };
     })
     .filter(group => group.matchCount > 0)
     .sort((a, b) => b.matchCount - a.matchCount || a.university.localeCompare(b.university, "zh-CN"));
@@ -2578,9 +2583,9 @@ function renderSchoolResults(list) {
         return `
           <article class="school-card" onclick="location.href=schoolPageHref('${group.key}', '${modalKeyword}')">
             <h3>${group.university}</h3>
-            <p>${summary.text}</p>
+            <p>${group.schoolOnlyMatch ? "院校名称匹配。点击进入学校页面查看全部专业方向和募集要项。" : summary.text}</p>
             <div class="school-card-meta">
-              ${tag(`${group.matchCount} 个匹配方向`, "tag-blue")}
+              ${tag(group.schoolOnlyMatch ? `${group.matchCount} 个方向` : `${group.matchCount} 个匹配方向`, "tag-blue")}
               ${tag(summary.categories, "tag-purple")}
               ${tag(`${schoolPdfs(group.university).length} 份PDF`, "tag-green")}
             </div>
@@ -2663,11 +2668,6 @@ function renderAll() {
     return;
   }
   renderSchoolResults(applyFilters());
-  const school = findSchoolByKeyword(keyword);
-  const hasOnlySchoolKeyword = school && !keywordTopicTerms(keyword).some(term => !keywordTerms(school.university).includes(term));
-  if (hasOnlySchoolKeyword && !needInterviewEnglish && !needEnglishScore && !needJapaneseScore) {
-    openSchoolModal(school.key, "");
-  }
 }
 
 function findSchoolByKeyword(keyword) {
@@ -2721,15 +2721,18 @@ document.getElementById("resetBtn").addEventListener("click", () => {
 document.getElementById("searchInput").addEventListener("keydown", event => {
   if (event.key === "Enter") renderAll();
 });
-document.querySelector("[data-filter='interviewEnglish']").addEventListener("click", () => {
+const interviewFilter = document.querySelector("[data-filter='interviewEnglish']");
+if (interviewFilter) interviewFilter.addEventListener("click", () => {
   needInterviewEnglish = !needInterviewEnglish;
   renderAll();
 });
-document.querySelector("[data-filter='englishScore']").addEventListener("click", () => {
+const englishFilter = document.querySelector("[data-filter='englishScore']");
+if (englishFilter) englishFilter.addEventListener("click", () => {
   needEnglishScore = !needEnglishScore;
   renderAll();
 });
-document.querySelector("[data-filter='japaneseScore']").addEventListener("click", () => {
+const japaneseFilter = document.querySelector("[data-filter='japaneseScore']");
+if (japaneseFilter) japaneseFilter.addEventListener("click", () => {
   needJapaneseScore = !needJapaneseScore;
   renderAll();
 });

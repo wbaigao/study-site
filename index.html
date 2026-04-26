@@ -10,7 +10,7 @@
 <div class="page">
   <div class="hero">
     <h1>日本修士募集要项检索系统</h1>
-    <p>输入专业方向后，系统会把所有有关联的研究科和专业方向逐条推荐出来；也可以继续按学校查看全量信息。筛选条件已根据本地 PDF 重新复核，拆成 <strong>面试可英语</strong>、<strong>需提交英语成绩</strong>、<strong>需提交日语成绩</strong>。</p>
+    <p>输入学校或专业方向后，系统会先推荐相关院校；点击院校卡片进入学校页面，再按匹配度查看具体研究科、专业方向、考试内容和 PDF 资料。</p>
   </div>
 
   <div class="stats">
@@ -26,21 +26,7 @@
       <button class="primary-btn" id="searchBtn">搜索</button>
       <button class="secondary-btn" id="resetBtn">重置</button>
     </div>
-
-    <div class="section-title">快速搜索</div>
-    <div class="row" id="quickRow"></div>
-
-    <div class="section-title" style="margin-top:16px;">院校</div>
-    <div class="row" id="schoolTabs"></div>
-
-    <div class="section-title" style="margin-top:16px;">筛选条件</div>
-    <div class="row">
-      <span class="chip" data-filter="interviewEnglish">面试可英语</span>
-      <span class="chip" data-filter="englishScore">需提交英语成绩</span>
-      <span class="chip" data-filter="japaneseScore">需提交日语成绩</span>
-    </div>
-
-    <div class="hint">说明：专业搜索会展开到具体方向层级；筛选里的“成绩”指需要提交外部考试或能力证明，不等同于日语授课/日语面试能力。</div>
+    <div class="hint">说明：例如输入“东北”会推荐东北大学；输入“经济”“机械”“法学”等专业词，会推荐有关联的院校。</div>
   </div>
 
   <div class="results-head">
