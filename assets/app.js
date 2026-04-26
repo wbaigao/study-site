@@ -2251,6 +2251,87 @@ const PRIORITY_SCHOOL_DIFFICULTY = {
   }
 };
 
+const IMPERIAL_ADMISSION_STATS = {
+  "hoku-eng": {
+    label: "北海道大学工学院修士（令和6年8月实施）",
+    text: "官网公开专攻别志愿者/合格者：应用物理 39/41（95.1%）、材料科学 36/40（90.0%）、建築都市空間デザイン 19/21（90.5%）、共同資源工学 11/16（68.8%）。机械系按研究室群统计，需结合原表核对。",
+    url: "https://www.eng.hokudai.ac.jp/graduate/examinfo/statistics/"
+  },
+  "tohoku-eng": {
+    label: "东北大学工学研究科博士前期（2025年度入学状况）",
+    text: "大学概要公开口径为入学志愿者/入学者：877名志愿，695名入学，入学者/志愿者为79.2%。注意：该页未公开合格者数，因此这不是严格合格率。",
+    url: "https://www.tohoku.ac.jp/japanese/profile/about/06/about0602/"
+  },
+  "tohoku-info": {
+    label: "东北大学信息科学研究科博士前期（2025年度入学状况）",
+    text: "大学概要公开口径为入学志愿者/入学者：209名志愿，165名入学，入学者/志愿者为78.9%。注意：该页未公开合格者数，因此这不是严格合格率。",
+    url: "https://www.tohoku.ac.jp/japanese/profile/about/06/about0602/"
+  },
+  "tokyo-eng": {
+    label: "东京大学工学系研究科修士（2025年度入学试验结果）",
+    text: "官网公开修士总计：志愿者1867名，合格者1117名，合格者/志愿者为59.8%。其中电气系工学为157/317（49.5%），建筑学为87/187（46.5%），技术经营战略学为44/118（37.3%）。",
+    url: "https://www.t.u-tokyo.ac.jp/hubfs/graduate/2025/2025_kekka_J.pdf"
+  },
+  "tokyo-info": {
+    label: "东京大学信息理工学系研究科修士（志愿者・合格者・入学者数）",
+    text: "官网公开近年总计样本：志愿者118名，合格者90名，合格者/志愿者为76.3%；另有年度总计131/90、104/73、115/90、137/99，热门专攻需逐项比较。",
+    url: "https://www.i.u-tokyo.ac.jp/edu/entra/2024_data_j.pdf"
+  },
+  "kyoto-info": {
+    label: "京都大学信息学研究科修士（2026年度4月期出愿状况）",
+    text: "官网公开夏季实施出愿人数：知能情報学198、社会情報学93、先端数理科学23、数理工学72、システム科学100、通信情報システム79、データ科学51，合计616名。当前页面未公开对应合格者总数，暂不计算信息学合格率；同校生命科学研究科公开样本为66/93（71.0%），仅作校内公开口径参考。",
+    sources: [
+      { label: "信息学研究科出愿状况/合格发表", url: "https://www.i.kyoto-u.ac.jp/admission/pass/" },
+      { label: "生命科学研究科入试结果样本", url: "https://www.lif.kyoto-u.ac.jp/j/admission/result/" }
+    ]
+  },
+  "kyoto-eng": {
+    label: "京都大学公开合格率样本（生命科学研究科2024年度）",
+    text: "工学研究科未在当前入口公开统一志愿/合格总表；可参考同校生命科学研究科公开口径：修士计93名出愿、66名合格，合格者/出愿者为71.0%。工学各专攻需以对应募集要项/公告另行核对。",
+    url: "https://www.lif.kyoto-u.ac.jp/j/admission/result/"
+  },
+  "osaka-info": {
+    label: "大阪大学信息科学研究科博士前期（令和5年度一般选拔）",
+    text: "官网公开一般选拔：出愿者265名，受验者239名，合格者174名；合格者/出愿者为65.7%，合格者/受验者为72.8%。",
+    url: "https://www.ist.osaka-u.ac.jp/files/examinees/admission/exam/MC2023nyushi_JA.pdf"
+  },
+  "osaka-eng": {
+    label: "大阪大学工学研究科",
+    text: "当前官方入口未找到统一的工学研究科博士前期志愿者/合格者总表；页面暂用信息科学研究科已公开入试结果作为校内难度参照，工学专攻需继续按专攻公告补充。",
+    url: "https://www.osaka-u.ac.jp/ja/admissions/graduate/ovpj1o"
+  },
+  "kyushu-info": {
+    label: "九州大学系统信息科学府修士（公开评价资料样本）",
+    text: "公开评价资料列出系统信息科学府修士一般选拔：募集人数140名，合格人数163名，入学人数143名；合格人数/募集人数为116.4%。该资料未给志愿者总数，因此不能计算严格合格率；可作为定员充足和录取规模参考。",
+    url: "https://www3.ir.kyushu-u.ac.jp/accreditation/assets/files/pdf/2kyo28-fu-sisujohou.pdf"
+  },
+  "kyushu-eng": {
+    label: "九州大学工学府",
+    text: "当前工学府官网入口主要公开募集要项和入试说明，未在页面内公开统一的修士志愿者/合格者总表；暂不计算合格率。可先参考系统信息科学府公开样本：合格人数/募集人数116.4%，工学专攻需继续按各群补充入试结果。",
+    url: "https://www.eng.kyushu-u.ac.jp/admissions.html"
+  },
+  "nagoya-info": {
+    label: "名古屋大学信息学研究科",
+    text: "官网公开过去志愿者数・受验者数・合格者数入口，但数据以图片/PDF形式分年度发布；当前条目先登记出处，后续需要逐年 OCR 后写入精确比例。",
+    url: "https://www.i.nagoya-u.ac.jp/gs/entranceexamination/past_exam/"
+  },
+  "nagoya-eng": {
+    label: "名古屋大学理学研究科博士前期（2025年度公开样本）",
+    text: "同校理学研究科2025年度博士前期公开总计：志愿者286名，合格者202名，合格者/志愿者为70.6%。工学研究科需按专攻结果继续补充。",
+    url: "https://www.sci.nagoya-u.ac.jp/admission/past-entry/"
+  }
+};
+
+const IMPERIAL_SCHOOL_STATS_FALLBACK = {
+  hokudai: "hoku-eng",
+  tohoku: "tohoku-eng",
+  utokyo: "tokyo-eng",
+  kyoto: "kyoto-info",
+  osaka: "osaka-info",
+  kyushu: "kyushu-info",
+  nagoya: "nagoya-eng"
+};
+
 function isPriorityOptimizedItem(item) {
   return !!(item && PRIORITY_SCHOOL_DIFFICULTY[item.id]);
 }
@@ -2263,6 +2344,22 @@ function difficultyInfo(item) {
     level: difficulty >= 4 ? "偏难" : difficulty <= 2 ? "相对稳妥" : "中等",
     text: "当前院校尚未接入按志愿者/合格者比例校准的难易度，暂按学校层级、热门程度、考试科目和语言要求估算。"
   };
+}
+
+function admissionStatsInfo(item) {
+  if (!item) return null;
+  if (IMPERIAL_ADMISSION_STATS[item.id]) return IMPERIAL_ADMISSION_STATS[item.id];
+  const fallbackId = IMPERIAL_SCHOOL_STATS_FALLBACK[item.key];
+  if (!fallbackId || !IMPERIAL_ADMISSION_STATS[fallbackId]) return null;
+  return { ...IMPERIAL_ADMISSION_STATS[fallbackId], fallback: true };
+}
+
+function admissionStatsHtml(item) {
+  const stats = admissionStatsInfo(item);
+  if (!stats) return "";
+  const sources = stats.sources || [{ label: "官网公开统计/入试结果", url: stats.url }];
+  const scopeNote = stats.fallback ? "（同校公开样本，非本专业直接合格率）" : "";
+  return `<div class="detail-line"><strong>往年录取比例/公开统计：</strong><span class="source-snippet">${scopeNote}${stats.label}：${stats.text}</span><br>${sources.map(source => `<a href="${source.url}" target="_blank" rel="noopener">出处：${source.label}</a>`).join("　")}</div>`;
 }
 
 function normalizeKeyword(keyword) {
@@ -2615,6 +2712,7 @@ function majorCards(items, keyword = "") {
           <div class="detail">
             <div class="detail-line"><strong>专业课 / 选考方式：</strong>${displayField(item, item.examSubjects, ["試験科目", "選抜方法", "筆記試験", "口述", "専門科目", "学力試験"], "未从募集要项摘要中抽到该方向专业课细则")}</div>
             <div class="detail-line"><strong>难易度评估：</strong>${difficulty.text}</div>
+            ${admissionStatsHtml(item)}
             <div class="detail-line"><strong>资料状态：</strong>${sourceStatus}</div>
             ${hasPdfEvidence ? `<div class="detail-line"><strong>备注：</strong>${translateAdmissionText(item.note)}</div>` : ""}
             ${itemPdfLinks(item)}
