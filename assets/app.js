@@ -2579,11 +2579,11 @@ function renderSchoolResults(list) {
     <div class="school-index">
       ${groups.map(group => {
         const summary = schoolSummary(group);
-        const modalKeyword = keywordTopicTerms(keyword).join(" ").replace(/'/g, "\\'");
+        const pageKeyword = schoolPageQuery(keyword, group.key).replace(/'/g, "\\'");
         return `
-          <article class="school-card" onclick="location.href=schoolPageHref('${group.key}', '${modalKeyword}')">
+          <article class="school-card" onclick="location.href=schoolPageHref('${group.key}', '${pageKeyword}')">
             <h3>${group.university}</h3>
-            <p>${group.schoolOnlyMatch ? "院校名称匹配。点击进入学校页面查看全部专业方向和募集要项。" : summary.text}</p>
+            <p>${group.schoolOnlyMatch && !pageKeyword ? "院校名称匹配。点击进入学校页面查看全部专业方向和募集要项。" : "点击进入学校页面后，将自动筛选出与当前搜索相关的专业方向。"}</p>
             <div class="school-card-meta">
               ${tag(group.schoolOnlyMatch ? `${group.matchCount} 个方向` : `${group.matchCount} 个匹配方向`, "tag-blue")}
               ${tag(summary.categories, "tag-purple")}
@@ -2674,9 +2674,31 @@ function findSchoolByKeyword(keyword) {
   const q = normalizeKeyword(keyword).replace(/\s+/g, "");
   if (!q) return null;
   return uniqueSchools().find(school => {
-    const aliases = keywordTerms(school.university).map(term => term.replace(/\s+/g, ""));
-    return aliases.includes(q);
+    const aliases = schoolAliasTerms(school).sort((a, b) => b.length - a.length);
+    return aliases.some(alias => q === alias || q.includes(alias));
   }) || null;
+}
+
+function schoolAliasTerms(school) {
+  return [
+    school.university,
+    school.key,
+    ...(SCHOOL_NAME_ALIASES[school.key] || [])
+  ]
+    .map(term => normalizeKeyword(term).replace(/\s+/g, ""))
+    .filter(Boolean);
+}
+
+function schoolPageQuery(keyword, key) {
+  const raw = (keyword || "").trim();
+  if (!raw) return "";
+  const school = uniqueSchools().find(item => item.key === key);
+  if (!school) return raw;
+  let compact = normalizeKeyword(raw).replace(/\s+/g, "");
+  const alias = schoolAliasTerms(school).sort((a, b) => b.length - a.length).find(term => compact.includes(term));
+  if (!alias) return raw;
+  compact = compact.replace(alias, "");
+  return compact.length > 1 ? compact : "";
 }
 
 function renderSchoolModalBody(keyword = "") {
