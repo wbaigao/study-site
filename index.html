@@ -29,6 +29,74 @@
     <div class="hint">说明：例如输入“东北”会推荐东北大学；输入“经济”“机械”“法学”等专业词，会推荐有关联的院校。</div>
   </div>
 
+  <div class="panel ai-panel">
+    <div class="panel-head">
+      <div>
+        <h2>AI 智能推荐</h2>
+        <p>填写语言、专业、地区和难度偏好，系统会按“匹配度 + 通过可能性”推荐院校和专业。</p>
+      </div>
+      <button class="primary-btn" id="recommendBtn">生成推荐</button>
+    </div>
+    <div class="recommend-grid">
+      <label>
+        专业方向
+        <input id="recMajor" type="text" placeholder="例：经济 / 机械 / 计算机；没要求可留空" />
+      </label>
+      <label>
+        专业要求
+        <select id="recFlex">
+          <option value="strict">专业匹配优先</option>
+          <option value="flexible">有学上就行，可接受相关专业</option>
+        </select>
+      </label>
+      <label>
+        日语能力
+        <select id="recJapanese">
+          <option value="high">N1 或日语面试交流较强</option>
+          <option value="mid">N2 左右，能基本交流</option>
+          <option value="low">日语较弱</option>
+        </select>
+      </label>
+      <label>
+        英语成绩
+        <select id="recEnglish">
+          <option value="high">TOEIC 730+ / TOEFL 80+ / IELTS 6.0+</option>
+          <option value="mid">TOEIC 550-729 / TOEFL 60-79</option>
+          <option value="low">暂无或较低</option>
+        </select>
+      </label>
+      <label>
+        面试交流
+        <select id="recInterview">
+          <option value="high">日语/英语都能说明研究计划</option>
+          <option value="mid">能完成基础问答</option>
+          <option value="low">面试表达较弱</option>
+        </select>
+      </label>
+      <label>
+        地理位置
+        <select id="recRegion">
+          <option value="any">不限地区</option>
+          <option value="tokyo">东京圈</option>
+          <option value="kansai">关西</option>
+          <option value="hokkaido-tohoku">北海道 / 东北</option>
+          <option value="chubu">中部</option>
+          <option value="chugoku-shikoku">中国 / 四国</option>
+          <option value="kyushu">九州 / 冲绳</option>
+        </select>
+      </label>
+      <label>
+        难度偏好
+        <select id="recDifficulty">
+          <option value="balanced">均衡推荐</option>
+          <option value="safe">稳妥优先</option>
+          <option value="challenge">冲刺优先</option>
+        </select>
+      </label>
+    </div>
+    <div class="hint">推荐结果会进入对应大学页面，并自动带上专业关键词做校内筛选。</div>
+  </div>
+
   <div class="results-head">
     <h2>检索结果</h2>
     <span class="badge" id="resultCount">0 条</span>

@@ -2608,6 +2608,161 @@ function countMatchingDirections(items, keyword) {
   }, 0);
 }
 
+const REGION_GROUPS = {
+  tokyo: ["utokyo", "scitokyo", "tmd", "tufs", "gakugei", "tuat", "geidai", "uec", "hitotsubashi", "ynu", "chiba", "tsukuba", "gunma", "utsunomiya", "sokendai"],
+  kansai: ["kyoto", "osaka", "kobe", "kit", "kyokyo", "osaka-kyoiku", "hyogo-edu", "nara-edu", "nara-wu", "shiga", "shiga-med", "wakayama", "naist"],
+  "hokkaido-tohoku": ["hokudai", "tohoku", "hirosaki", "iwate", "akita", "yamagata", "fukushima", "muroran", "otaru", "obihiro", "kitami"],
+  chubu: ["nagoya", "kanazawa", "niigata", "shinshu", "shizuoka", "toyama", "gifu", "mie", "hamamed", "toyohashi", "nitech", "aichi-edu", "fukui", "joetsu", "nagaokaut", "jaist"],
+  "chugoku-shikoku": ["hiroshima", "okayama", "yamaguchi", "tokushima", "ehime", "tottori", "shimane", "socu", "kagawa", "kochi"],
+  kyushu: ["kyushu", "kumamoto", "kagoshima", "nagasaki", "oita", "miyazaki", "saga", "ryukyu"]
+};
+
+const TOP_SCHOOL_KEYS = new Set(["utokyo", "kyoto", "osaka", "tohoku", "nagoya", "kyushu", "hokudai", "scitokyo", "kobe", "hitotsubashi", "tsukuba"]);
+
+function readRecommendationProfile() {
+  return {
+    major: (document.getElementById("recMajor")?.value || "").trim(),
+    flex: document.getElementById("recFlex")?.value || "strict",
+    japanese: document.getElementById("recJapanese")?.value || "high",
+    english: document.getElementById("recEnglish")?.value || "high",
+    interview: document.getElementById("recInterview")?.value || "high",
+    region: document.getElementById("recRegion")?.value || "any",
+    difficulty: document.getElementById("recDifficulty")?.value || "balanced"
+  };
+}
+
+function levelValue(level) {
+  return level === "high" ? 3 : level === "mid" ? 2 : 1;
+}
+
+function estimateDifficulty(item) {
+  let level = TOP_SCHOOL_KEYS.has(item.key) ? 4 : 2;
+  const text = `${item.category} ${item.title} ${item.examSubjects} ${item.note}`;
+  if (/医学|医科|齿|歯|法学|一桥|東京大学|京都大学|Science Tokyo|艺术|芸術/.test(text + item.university)) level += 1;
+  if (/推荐|書類|书类|面接|面试|社会人|特别|特別|教育/.test(text)) level -= 1;
+  if (/筆記|笔试|専門科目|专业科目|数学|物理|TOEFL|TOEIC/.test(text)) level += 1;
+  return Math.max(1, Math.min(5, level));
+}
+
+function languageFitScore(item, profile, reasons) {
+  const meta = getMeta(item);
+  const english = levelValue(profile.english);
+  const japanese = levelValue(profile.japanese);
+  const interview = levelValue(profile.interview);
+  let score = 0;
+  if (meta.englishScoreRequired || item.englishRequired) {
+    score += english === 3 ? 10 : english === 2 ? 0 : -22;
+    reasons.push(english === 1 ? "英语成绩偏弱，已降低需要英语成绩项目的排序" : "英语成绩能覆盖多数外部英语要求");
+  } else if (english === 3) {
+    score += 4;
+  }
+  if (item.japaneseRequired || meta.japaneseScoreRequired) {
+    score += japanese === 3 ? 8 : japanese === 2 ? 0 : -24;
+    reasons.push(japanese === 1 ? "日语较弱，日语笔试/面试项目风险更高" : "日语能力适合常规日语出愿和面试");
+  }
+  if (/口述|口頭|面接|面试|研究計画|研究计划/.test(`${item.exam} ${item.examSubjects} ${item.note}`)) {
+    score += interview === 3 ? 8 : interview === 2 ? 0 : -16;
+    reasons.push(interview === 1 ? "面试表达较弱，口述型选拔需谨慎" : "面试交流能力能支持口述/研究计划说明");
+  }
+  return score;
+}
+
+function regionScore(item, region, reasons) {
+  if (region === "any") return 0;
+  const matched = (REGION_GROUPS[region] || []).includes(item.key);
+  if (matched) reasons.push("符合地理位置偏好");
+  return matched ? 14 : -12;
+}
+
+function difficultyScore(item, preference, reasons) {
+  const difficulty = estimateDifficulty(item);
+  if (preference === "safe") {
+    reasons.push(`难度估计 ${difficulty}/5，稳妥排序优先低难度`);
+    return (6 - difficulty) * 7;
+  }
+  if (preference === "challenge") {
+    reasons.push(`难度估计 ${difficulty}/5，冲刺排序优先高难度`);
+    return difficulty * 6;
+  }
+  reasons.push(`难度估计 ${difficulty}/5，按均衡策略排序`);
+  return 22 - Math.abs(difficulty - 3) * 6;
+}
+
+function recommendMajorScore(item, direction, profile, reasons) {
+  if (!profile.major) {
+    reasons.push(profile.flex === "flexible" ? "未限定专业，按可申请方向和通过可能性推荐" : "未填写专业，先按学校方向和难度做基础推荐");
+    return profile.flex === "flexible" ? 18 : 8;
+  }
+  const score = scoreMajorWithinSchool(item, direction, profile.major);
+  if (score > 0) {
+    reasons.push(`专业方向与“${profile.major}”匹配`);
+    return Math.min(55, score);
+  }
+  if (profile.flex === "flexible") {
+    const broad = scoreItem(item, profile.major);
+    if (broad > 0) {
+      reasons.push(`研究科层面与“${profile.major}”相关，可作为相近方向考虑`);
+      return Math.min(24, broad);
+    }
+    reasons.push("专业不完全对应，但因接受调剂保留为备选");
+    return 4;
+  }
+  return -999;
+}
+
+function runSmartRecommend() {
+  const profile = readRecommendationProfile();
+  const recs = [];
+  DATA.forEach(item => {
+    (item.directions || []).forEach(direction => {
+      const reasons = [];
+      let score = recommendMajorScore(item, direction, profile, reasons);
+      if (score < -100) return;
+      score += languageFitScore(item, profile, reasons);
+      score += regionScore(item, profile.region, reasons);
+      score += difficultyScore(item, profile.difficulty, reasons);
+      score += Math.min(8, schoolPdfs(item.university).length / 20);
+      recs.push({ item, direction, score, reasons: [...new Set(reasons)].slice(0, 4), difficulty: estimateDifficulty(item) });
+    });
+  });
+  const selected = recs
+    .sort((a, b) => b.score - a.score || a.item.university.localeCompare(b.item.university, "zh-CN"))
+    .slice(0, 18);
+  renderSmartRecommendations(selected, profile);
+}
+
+function renderSmartRecommendations(recs, profile) {
+  const wrap = document.getElementById("resultList");
+  document.querySelector(".results-head h2").textContent = "AI 智能推荐结果";
+  document.getElementById("resultCount").textContent = `${recs.length} 个方向`;
+  if (!recs.length) {
+    wrap.innerHTML = `<div class="empty">没有生成推荐。可以放宽专业要求，或把地区改成“不限地区”。</div>`;
+    return;
+  }
+  wrap.innerHTML = recs.map(rec => {
+    const query = profile.major || rec.direction;
+    return `
+      <article class="school-card recommend-card" onclick="location.href=schoolPageHref('${rec.item.key}', '${query.replace(/'/g, "\\'")}')">
+        <div class="school-head" style="margin-bottom:0;">
+          <div>
+            <h3>${rec.item.university}</h3>
+            <p>${translateAdmissionText(rec.item.title)} / ${translateAdmissionText(rec.direction)}</p>
+          </div>
+          <span class="school-badge">推荐分 ${Math.round(rec.score)}</span>
+        </div>
+        <div class="recommend-score">
+          ${tag(`难度 ${rec.difficulty}/5`, rec.difficulty >= 4 ? "tag-purple" : "tag-blue")}
+          ${tag(translateAdmissionText(rec.item.category), "tag-green")}
+          ${tag(`${schoolPdfs(rec.item.university).length} 份PDF`, "tag-blue")}
+        </div>
+        <ul class="reason-list">
+          ${rec.reasons.map(reason => `<li>${reason}</li>`).join("")}
+        </ul>
+      </article>
+    `;
+  }).join("");
+}
+
 function renderSchoolPage() {
   const groups = schoolGroups();
   const group = groups[SCHOOL_PAGE_KEY] || Object.values(groups)[0];
@@ -2744,6 +2899,8 @@ function closeSchoolModal() {
 }
 
 document.getElementById("searchBtn").addEventListener("click", renderAll);
+const recommendBtn = document.getElementById("recommendBtn");
+if (recommendBtn) recommendBtn.addEventListener("click", runSmartRecommend);
 document.getElementById("resetBtn").addEventListener("click", () => {
   document.getElementById("searchInput").value = "";
   currentSchool = SCHOOL_PAGE_KEY || "all";
