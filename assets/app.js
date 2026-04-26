@@ -1810,7 +1810,7 @@ addHokkaidoEvidence(
   ["法学政治学"],
   HOKKAIDO_SOURCE_PDFS.law,
   {
-    apply: "法学研究科法学政治学专攻令和8年度修士课程第2次募集要项已下载，包含一般/社会经验者入试及外国人留学生入试。具体出愿资格审查、出愿期间和提交方式按两份PDF确认。",
+    apply: "法学研究科法学政治学专攻令和8年度修士课程第2次募集要项已核对，包含一般/社会经验者入试及外国人留学生入试。具体出愿资格审查、出愿期间和提交方式按两份募集要项确认。",
     exam: "法学政治学专攻按第2次募集要项实施专业试验、口述/面试、书类等综合评价。",
     english: "外语或英语成绩要求依一般/留学生募集区分不同，按所附法学研究科PDF确认。",
     japanese: "法学政治学专攻常规修士高度依赖日语法律/政治学读写和口述能力；外国人留学生入试的日语要求以PDF为准。",
@@ -1826,7 +1826,7 @@ addHokkaidoEvidence(
     apply: "经济学院令和9年度修士课程一般募集、特别募集要项已下载。一般募集PDF为2026年4月23日修正版；出愿期间、出愿资格审查和书类要求按PDF日程确认。",
     exam: "经济学院修士按一般/特别/社会人等区分实施；专业科目、口述/面试、书类评价的组合以募集要项为准。",
     english: "经济学院另公布英语能力考试成绩利用说明；TOEFL/TOEIC等成绩提交和有效期限按PDF确认。",
-    japanese: "经济学、经营学、会计信息方向通常需要日语专业读写、论文和面试能力；未见所有方向统一JLPT必交。",
+    japanese: "经济学院一般入试要求外国人留学生在英语成绩之外提交日本语能力试验（JLPT）N1以上证明；因此外国人申请经济学、经营学、会计信息方向时标记为“需提交日语成绩”。",
     examSubjects: "经济学、经营学、会计、统计/计量、研究计划和口述等，具体考试科目按经济学院募集要项及志望课程确认。"
   }
 );
@@ -1965,7 +1965,7 @@ function evidenceHtml(item, field) {
   const hit = evidence && evidence.fields && evidence.fields[field];
   if (!hit) return "";
   if (hit.href) {
-    return `<div class="evidence-card"><p>${translateAdmissionText(hit.text)}</p><a href="${encodeURI(pdfHref(hit.href))}" target="_blank" rel="noopener">出处PDF：${hit.file}</a></div>`;
+    return `<div class="evidence-card"><p>${translateAdmissionText(hit.text)}</p><span>募集要项出处：${hit.file}</span>${officialSourceLink(item, "官网获取PDF/募集要项")}</div>`;
   }
   const status = hit.sourceStatus === "previous"
     ? "参考上一年度"
@@ -2019,7 +2019,7 @@ function displayField(item, fallback, keywords, emptyText) {
   const html = allowDigest ? digestHtml(item.university, keywords, 2, item) : "";
   if (html) return html;
   const matched = matchedPdfFiles(item, 1).length > 0;
-  return `<span class="source-snippet">${emptyText}<br><span>${matched ? "已匹配到相关 PDF，但没有从摘要中抽到该字段的原文依据；请打开下方相关PDF核对。" : `没有从“${translateAdmissionText(item.majorDirection || item.title)}”对应 PDF 中确认，已避免显示未核实的时间/考试内容。`}</span></span>`;
+  return `<span class="source-snippet">${emptyText}<br><span>${matched ? "已匹配到相关募集要项，但没有从摘要中抽到该字段的原文依据；请通过官网入口核对。" : `没有从“${translateAdmissionText(item.majorDirection || item.title)}”对应募集要项中确认，已避免显示未核实的时间/考试内容。`}</span></span>`;
 }
 
 function matchedPdfFiles(item, limit = 4) {
@@ -2042,35 +2042,24 @@ function matchedPdfFiles(item, limit = 4) {
 }
 
 function itemPdfLinks(item, limit = 4) {
-  const files = schoolPdfs(item.university);
   const evidence = majorEvidence(item);
-  if (!files.length && !(evidence && evidence.pdfs && evidence.pdfs.length)) return "";
+  const sourceLink = officialSourceLink(item, "官网获取PDF/募集要项");
+  if (!sourceLink && !(evidence && evidence.pdfs && evidence.pdfs.length)) return "";
   if (evidence && evidence.pdfs && evidence.pdfs.length) {
     return `
-      <div class="detail-line"><strong>相关PDF：</strong>
-        <div class="pdf-inline">
+      <div class="detail-line"><strong>募集要项出处：</strong>
+        <span class="source-snippet">已依据以下募集要项文件名抽取；网站不再提供本地PDF。请从官网入口获取原文件。</span>
+        <div class="pdf-inline source-files">
           ${evidence.pdfs.slice(0, limit).map(file => {
             const status = file.sourceStatus === "previous" ? "（参考上一年度）" : file.sourceStatus === "current" ? "（本年度/最新年度）" : "";
-            return `<a href="${encodeURI(pdfHref(file.href))}" target="_blank" rel="noopener">${file.name} ${status} ${pdfSize(file.size)}</a>`;
+            return `<span>${file.name} ${status}</span>`;
           }).join("")}
         </div>
+        ${sourceLink}
       </div>
     `;
   }
-  const exact = matchedPdfFiles(item, limit);
-  if (!exact.length) {
-    const label = [translateAdmissionText(item.title), translateAdmissionText(item.majorDirection)]
-      .filter(Boolean)
-      .join(" / ");
-    return `<div class="detail-line"><strong>相关PDF：</strong><span class="source-snippet">没有找到与“${label}”精确匹配的 PDF，已避免显示无关文件。请在上方“本校资料库”中按研究科名称打开核对。</span></div>`;
-  }
-  return `
-    <div class="detail-line"><strong>相关PDF：</strong>
-      <div class="pdf-inline">
-        ${exact.map(file => `<a href="${encodeURI(pdfHref(file.href))}" target="_blank" rel="noopener">${file.name} ${pdfSize(file.size)}</a>`).join("")}
-      </div>
-    </div>
-  `;
+  return `<div class="detail-line"><strong>募集要项入口：</strong>${sourceLink || '<span class="source-snippet">暂未登记官网入口。</span>'}</div>`;
 }
 
 function getMeta(item) {
@@ -2093,9 +2082,74 @@ function getMeta(item) {
     japaneseScoreRequired: byId.japaneseScoreRequired ?? byKey.japaneseScoreRequired ?? false,
     pdfInsight: byId.pdfInsight || byKey.pdfInsight || (
       isSupplemental(item)
-        ? `资料状态：该条目是专业方向索引用的补充分类；只有匹配到对应 PDF 摘要时才显示出愿、考试、英语、专业课信息，否则不再展示推测内容。`
-        : "PDF 复核：已按当前保存的募集要项/官网页面重新校准搜索与筛选；未发现统一外部日语成绩提交要求时，不纳入“需提交日语成绩”。"
+        ? `资料状态：该条目是专业方向索引用的补充分类；只有匹配到对应募集要项摘要时才显示出愿、考试、英语、专业课信息，否则不再展示推测内容。`
+        : "募集要项复核：已按当前保存的募集要项/官网页面重新校准搜索与筛选；未发现统一外部日语成绩提交要求时，不纳入“需提交日语成绩”。"
     )
+  };
+}
+
+function effectiveMeta(item) {
+  const meta = item._meta || getMeta(item);
+  if (item.university === "北海道大学" && ["经济学", "经营学", "会计信息"].includes(item.majorDirection)) {
+    return {
+      ...meta,
+      englishScoreRequired: true,
+      japaneseScoreRequired: true,
+      pdfInsight: "北海道大学经济学院一般入试：外国人留学生除英语成绩外，还需提交JLPT N1以上证明。"
+    };
+  }
+  return meta;
+}
+
+const HOKKAIDO_DIFFICULTY = {
+  "hoku-eng": {
+    level: "中等",
+    text: "工学院公开志愿者/合格者数。令和6年8月实施修士入试中，应用物理41/39、材料40/36、环境场工学41/30、共同资源16/11等方向显示多数方向合格比例较高；但机械、建筑、材料等热门方向仍有专业科目和英语门槛，按中等评价。"
+  },
+  "hoku-info": {
+    level: "偏难",
+    text: "信息科学院属于计算机/AI/媒体网络热门领域，需英语外部成绩、专业科目1/2笔试和口头试问；热门程度高于多数理工方向，按偏难评价。"
+  },
+  "hoku-science": {
+    level: "中等",
+    text: "理学院按专攻实施笔试/口头试问，热门度低于信息类但专业基础要求高；合格比例需按专攻最新公布数据核对，暂按中等评价。"
+  },
+  "hoku-chem-life": {
+    level: "中等偏难",
+    text: "综合化学、生命科学和软物质方向通常要求英语外部成绩或英语评价，并考查化学/生命科学专业基础；热门实验室差异大，按中等偏难评价。"
+  },
+  "hoku-agri": {
+    level: "中等",
+    text: "农学院方向多、受入前需联系指导教员并确认内诺；英语有最低线风险，但整体热门度低于信息/医学，按中等评价。"
+  },
+  "hoku-env-fish": {
+    level: "中等",
+    text: "环境、水产方向通常结合专业科目、英语成绩和面试评价；部分水产方向设TOEIC/TOEFL低分风险线，热门度中等。"
+  },
+  "hoku-med-health": {
+    level: "偏难",
+    text: "医学、保健、医理工、药学相关方向重视研究计划、面试和专业背景，导师匹配影响大；医学/药学热度较高，按偏难评价。"
+  },
+  "hoku-vet-dent-infect": {
+    level: "高风险",
+    text: "当前确认到的兽医、齿学、感染症相关募集多为博士层级，修士申请需先确认是否有对应课程；若按修士推荐应标记为高风险。"
+  },
+  "hoku-humanities-social": {
+    level: "中等偏难",
+    text: "文学院官方出愿状况显示2024年度修士205名志愿、106名合格，合格比例约52%；法学、经济等还受专业论述和日语读写影响，按中等偏难评价。"
+  },
+  "hoku-international-policy": {
+    level: "偏难",
+    text: "国际广报媒体/观光方向需要日语论述、面试和英语成绩；公共政策大学院过去入试结果显示外国人留学生选考竞争波动较大，按偏难评价。"
+  }
+};
+
+function difficultyInfo(item) {
+  if (item.university === "北海道大学" && HOKKAIDO_DIFFICULTY[item.id]) return HOKKAIDO_DIFFICULTY[item.id];
+  const difficulty = estimateDifficulty(item);
+  return {
+    level: difficulty >= 4 ? "偏难" : difficulty <= 2 ? "相对稳妥" : "中等",
+    text: "当前院校尚未接入按志愿者/合格者比例校准的难易度，暂按学校层级、热门程度、考试科目和语言要求估算。"
   };
 }
 
@@ -2353,26 +2407,35 @@ function totalPdfCount() {
   return Object.values(window.SCHOOL_PDFS || {}).reduce((sum, files) => sum + files.length, 0);
 }
 
+function officialSourceLinksForItems(items) {
+  const seen = new Set();
+  return (items || [])
+    .map(item => item.url)
+    .filter(url => url && url !== "#")
+    .filter(url => {
+      if (seen.has(url)) return false;
+      seen.add(url);
+      return true;
+    });
+}
+
+function officialSourceLink(item, label = "获取募集要项") {
+  if (!item || !item.url || item.url === "#") return "";
+  return `<a href="${item.url}" target="_blank" rel="noopener">${label}</a>`;
+}
+
 function renderResources(university) {
-  const files = schoolPdfs(university);
-  const digest = (window.SCHOOL_PDF_DIGEST && window.SCHOOL_PDF_DIGEST[university]) || [];
-  if (!files.length) {
-    return `<div class="resource-panel">本校资料库：暂未索引到 PDF。专业列表为已结构化索引，后续可继续逐份募集要项细拆。</div>`;
-  }
+  const school = uniqueSchools().find(item => item.university === university);
+  const group = school ? schoolGroups()[school.key] : null;
+  const links = officialSourceLinksForItems(group ? group.items : DATA.filter(item => item.university === university));
+  if (!links.length) return `<div class="resource-panel">官方募集要项入口：暂未登记官网链接。专业列表只展示已经结构化的信息。</div>`;
   return `
     <details class="resource-panel" open>
-      <summary>本校已下载募集要项 / 入试资料 PDF：${files.length} 份</summary>
-      <p class="muted">PDF 资料数不等于专业数量；下方专业列表是已经结构化进搜索系统的方向，具体出愿时间和考试内容请以对应 PDF 为准。</p>
+      <summary>官方募集要项获取入口：${links.length} 个</summary>
+      <p class="muted">网站不再展示本地 PDF 文件。具体募集要项、最新年度 PDF、出愿样式和更正公告请从以下官网入口获取。</p>
       <div class="resource-list">
-        ${files.map(file => `<a href="${encodeURI(pdfHref(file.href))}" target="_blank" rel="noopener">${file.name} ${pdfSize(file.size)}</a>`).join("")}
+        ${links.map((url, index) => `<a href="${url}" target="_blank" rel="noopener">官方入口 ${index + 1}</a>`).join("")}
       </div>
-      ${digest.length ? `
-        <div class="digest-list">
-          ${digest.slice(0, 6).map(item => `
-            <div class="digest-item"><strong>${translateAdmissionText(item.keyword)}</strong>｜${translateAdmissionText(item.text)}<br><span>${item.file}</span></div>
-          `).join("")}
-        </div>
-      ` : ""}
     </details>
   `;
 }
@@ -2394,10 +2457,12 @@ function majorCards(items, keyword = "") {
     html: expandedItems.map(item => {
       const scoreText = keyword ? `匹配 ${Math.max(item._majorScore, item._score)}` : translateAdmissionText(item.category);
       const evidence = majorEvidence(item);
+      const meta = effectiveMeta(item);
+      const difficulty = difficultyInfo(item);
       const hasPdfEvidence = (evidence && evidence.pdfs && evidence.pdfs.length) || matchedPdfFiles(item, 1).length > 0;
       const sourceStatus = hasPdfEvidence
-        ? (evidence ? "资料来源：已从该方向相关 PDF 抽取字段；每条信息后附 PDF 文件名。" : "资料来源：已匹配到该方向相关 PDF，但字段仍需打开 PDF 核对。")
-        : "资料来源：当前只确认到学校资料库或方向索引，未匹配到该方向 PDF；时间和考试内容不作推测。";
+        ? (evidence ? "资料来源：已从该方向募集要项抽取字段；下方只显示文件名和官网获取入口。" : "资料来源：已匹配到该方向募集要项，但字段仍需从官网原文核对。")
+        : "资料来源：当前只确认到学校资料库或方向索引，未匹配到该方向募集要项；时间和考试内容不作推测。";
       return `
         <div class="item-block">
           <div class="school-head" style="margin-bottom:12px;">
@@ -2410,32 +2475,34 @@ function majorCards(items, keyword = "") {
 
           <div class="tag-row">
             ${tag(translateAdmissionText(item.category), "tag-purple")}
-            ${tag(item._meta.interviewEnglishAvailable ? "面试可英语/英语应对" : "面试语言需确认", item._meta.interviewEnglishAvailable ? "tag-green" : "tag-amber")}
-            ${tag(item._meta.englishScoreRequired ? "需提交英语成绩" : "英语成绩未统一要求", item._meta.englishScoreRequired ? "tag-blue" : "tag-amber")}
-            ${tag(item._meta.japaneseScoreRequired ? "需提交日语成绩" : "未见统一日语成绩提交", item._meta.japaneseScoreRequired ? "tag-red" : "tag-green")}
+            ${tag(meta.interviewEnglishAvailable ? "面试可英语/英语应对" : "面试语言需确认", meta.interviewEnglishAvailable ? "tag-green" : "tag-amber")}
+            ${tag(meta.englishScoreRequired ? "需提交英语成绩" : "英语成绩未统一要求", meta.englishScoreRequired ? "tag-blue" : "tag-amber")}
+            ${tag(meta.japaneseScoreRequired ? "外国人需提交日语成绩" : "未见统一日语成绩提交", meta.japaneseScoreRequired ? "tag-red" : "tag-green")}
+            ${tag(`难易度：${difficulty.level}`, difficulty.level.includes("难") || difficulty.level.includes("风险") ? "tag-red" : "tag-blue")}
           </div>
 
           <div class="grid">
             <div class="box">
               <strong>出愿时间</strong>
-              ${displayField(item, item.apply, ["出願期間", "出願", "受付期間", "願書"], "未从 PDF 摘要中抽到明确出愿期间")}
+              ${displayField(item, item.apply, ["出願期間", "出願", "受付期間", "願書"], "未从募集要项摘要中抽到明确出愿期间")}
             </div>
             <div class="box">
               <strong>考试时间</strong>
-              ${displayField(item, item.exam, ["試験期日", "試験日", "試験日時", "選抜期日", "合格発表"], "未从 PDF 摘要中抽到明确考试日期")}
+              ${displayField(item, item.exam, ["試験期日", "試験日", "試験日時", "選抜期日", "合格発表"], "未从募集要项摘要中抽到明确考试日期")}
             </div>
             <div class="box">
               <strong>英语成绩 / 面试</strong>
-              ${displayField(item, item.englishNote, ["TOEIC", "TOEFL", "IELTS", "英語", "English"], "未从 PDF 摘要中抽到明确英语成绩要求")}
+              ${displayField(item, item.englishNote, ["TOEIC", "TOEFL", "IELTS", "英語", "English"], "未从募集要项摘要中抽到明确英语成绩要求")}
             </div>
             <div class="box">
               <strong>日语成绩 / 能力</strong>
-              ${displayField(item, item.japaneseNote, ["日本語", "JLPT", "EJU", "日语"], "未从 PDF 摘要中抽到统一日语成绩提交要求")}
+              ${displayField(item, item.japaneseNote, ["日本語", "JLPT", "EJU", "日语"], "未从募集要项摘要中抽到统一日语成绩提交要求")}
             </div>
           </div>
 
           <div class="detail">
-            <div class="detail-line"><strong>专业课 / 选考方式：</strong>${displayField(item, item.examSubjects, ["試験科目", "選抜方法", "筆記試験", "口述", "専門科目", "学力試験"], "未从 PDF 摘要中抽到该方向专业课细则")}</div>
+            <div class="detail-line"><strong>专业课 / 选考方式：</strong>${displayField(item, item.examSubjects, ["試験科目", "選抜方法", "筆記試験", "口述", "専門科目", "学力試験"], "未从募集要项摘要中抽到该方向专业课细则")}</div>
+            <div class="detail-line"><strong>难易度评估：</strong>${difficulty.text}</div>
             <div class="detail-line"><strong>资料状态：</strong>${sourceStatus}</div>
             ${hasPdfEvidence ? `<div class="detail-line"><strong>备注：</strong>${translateAdmissionText(item.note)}</div>` : ""}
             ${itemPdfLinks(item)}
@@ -2492,7 +2559,7 @@ function schoolProgramOverview(group) {
                 <div class="program-summary">
                   <div>
                     <h4>${translateAdmissionText(item.title)}</h4>
-                    <p>${translateAdmissionText(item.category)} / ${item.directions.length} 个方向。展开后查看申请时间、考试内容和对应 PDF。</p>
+                    <p>${translateAdmissionText(item.category)} / ${item.directions.length} 个方向。展开后查看申请时间、考试内容、难易度和官方募集要项入口。</p>
                     <div class="program-directions">
                       ${shown.map(direction => `<span class="direction-pill">${translateAdmissionText(direction)}</span>`).join("")}
                       ${hidden ? `<span class="direction-pill">+${hidden}</span>` : ""}
@@ -2538,7 +2605,7 @@ function renderHome() {
             <div class="school-card-meta">
               ${tag(summary.categories, "tag-purple")}
               ${tag(`${majorCount} 个已结构化方向`, "tag-blue")}
-              ${tag(`${schoolPdfs(group.university).length} 份PDF`, "tag-green")}
+              ${tag(`官方入口 ${officialSourceLinksForItems(group.items).length} 个`, "tag-green")}
             </div>
           </article>
         `;
@@ -2587,7 +2654,7 @@ function renderSchoolResults(list) {
             <div class="school-card-meta">
               ${tag(group.schoolOnlyMatch ? `${group.matchCount} 个方向` : `${group.matchCount} 个匹配方向`, "tag-blue")}
               ${tag(summary.categories, "tag-purple")}
-              ${tag(`${schoolPdfs(group.university).length} 份PDF`, "tag-green")}
+              ${tag(`官方入口 ${officialSourceLinksForItems(group.items).length} 个`, "tag-green")}
             </div>
           </article>
         `;
@@ -2819,7 +2886,7 @@ function buildSmartRecommendations(profile, limit = 18) {
       score += languageFitScore(item, profile, reasons);
       score += regionScore(item, profile.region, reasons);
       score += difficultyScore(item, profile.difficulty, reasons);
-      score += Math.min(8, schoolPdfs(item.university).length / 20);
+      score += officialSourceLink(item) ? 4 : 0;
       recs.push({ item, direction, score, reasons: [...new Set(reasons)].slice(0, 4), difficulty: estimateDifficulty(item) });
     });
   });
@@ -2845,7 +2912,7 @@ function recommendationPayload(recs) {
     japaneseNote: translateAdmissionText(rec.item.japaneseNote),
     difficulty: rec.difficulty,
     heuristicScore: Math.round(rec.score),
-    pdfCount: schoolPdfs(rec.item.university).length
+    officialSource: rec.item.url || ""
   }));
 }
 
@@ -2945,7 +3012,7 @@ function renderSmartRecommendations(recs, profile, options = {}) {
         <div class="recommend-score">
           ${tag(`难度 ${rec.difficulty}/5`, rec.difficulty >= 4 ? "tag-purple" : "tag-blue")}
           ${tag(translateAdmissionText(rec.item.category), "tag-green")}
-          ${tag(`${schoolPdfs(rec.item.university).length} 份PDF`, "tag-blue")}
+          ${tag(officialSourceLink(rec.item) ? "有官网入口" : "待补官网入口", "tag-blue")}
         </div>
         <ul class="reason-list">
           ${rec.reasons.map(reason => `<li>${reason}</li>`).join("")}
@@ -3066,7 +3133,7 @@ function renderSchoolModalBody(keyword = "") {
   if (!group) return;
   const cards = schoolMajorCards(group.items, keyword.trim());
   document.getElementById("modalSubtitle").textContent =
-    `${schoolSummary(group).text} 当前${keyword ? "匹配" : "结构化收录"} ${cards.count} 个相关专业方向；PDF资料库可能包含更多细分研究室和年度文件。`;
+    `${schoolSummary(group).text} 当前${keyword ? "匹配" : "结构化收录"} ${cards.count} 个相关专业方向；页面只显示官网募集要项入口，不再展示本地PDF文件。`;
   document.getElementById("modalBody").innerHTML = `<div class="item-list">${cards.html}</div>`;
 }
 
@@ -3141,14 +3208,18 @@ document.addEventListener("keydown", event => {
 
 document.getElementById("schoolCount").textContent = uniqueSchools().length;
 document.getElementById("itemCount").textContent = DATA.length;
-document.getElementById("pdfCount").textContent = totalPdfCount();
+const sourceStat = document.getElementById("pdfCount");
+if (sourceStat) {
+  const sourceCount = new Set(DATA.map(item => item.url).filter(url => url && url !== "#")).size;
+  sourceStat.parentElement.innerHTML = `官方入口 <strong id="pdfCount">${sourceCount}</strong> 个`;
+}
 if (IS_SCHOOL_PAGE) {
   const q = new URLSearchParams(location.search).get("q") || "";
   document.getElementById("searchInput").value = q;
   const group = schoolGroups()[SCHOOL_PAGE_KEY] || Object.values(schoolGroups())[0];
   if (group) {
-    document.querySelector(".hero h1").textContent = `${group.university} ?????????`;
-    document.querySelector(".hero p").innerHTML = "????????????? PDF???????????????????????????/?????";
+    document.querySelector(".hero h1").textContent = `${group.university} 募集要项与专业信息`;
+    document.querySelector(".hero p").innerHTML = "按研究科/学院整理专业方向。展开后查看申请时间、考试内容、英语/日语成绩要求、难易度评估和官网募集要项入口。";
   }
 }
 renderQuick();

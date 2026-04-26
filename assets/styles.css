@@ -630,6 +630,12 @@
   .pdf-inline a:hover {
     text-decoration: underline;
   }
+  .pdf-inline.source-files span {
+    color: #4b5563;
+    word-break: break-all;
+    font-size: 12px;
+    line-height: 1.5;
+  }
   .evidence-card {
     border: 1px solid #e5e7eb;
     border-radius: 8px;
