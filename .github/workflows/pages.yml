@@ -23,6 +23,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            index.html
+            assets
+            schools
+            README.md
+          sparse-checkout-cone-mode: false
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
