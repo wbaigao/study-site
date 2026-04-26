@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>大学院先端科学研究部ホームページ（英語版）の公開を開始しました！ | 国立大学法人熊本大学大学院先端科学研究部</title>
+    <meta name="Keywords" content="">
+    <meta name="Description" content="">
+    <meta http-equiv="Content-Style-Type" content="text/css">
+    <meta http-equiv="Content-Script-Type" content="text/javascript">
+    <meta name="viewport" content="width=device-width">
+    <link href="/css/base.css" rel="stylesheet" type="text/css">
+<!--[if lt IE 9]>
+    <script type="text/javascript" src="/apps/html5shiv.min.js"></script>
+    <script type="text/javascript" src="/apps/respond.min.js"></script>
+<![endif]-->
+    <link href="/css/pages.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="/apps/jquery.min.js"></script>
+    <script type="text/javascript" src="/apps/common.js"></script>
+<!--[if lt IE 9]>
+    <script type="text/javascript" src="/apps/html5shiv.min.js"></script>
+    <script type="text/javascript" src="/apps/respond.min.js"></script>
+<![endif]-->
+<script type="text/javascript" src="/apps/jquery.smartCrossfade.js"></script>
+<script type="text/javascript">
+$(function() {
+    var showFlag = false;
+    var topBtn = $('#page_top');
+    topBtn.css('bottom', '-100px');
+    var showFlag = false;
+    //スクロールが100に達したらボタン表示
+    $(window).scroll(function () {
+        if ($(this).scrollTop() > 100) {
+            if (showFlag == false) {
+                showFlag = true;
+                topBtn.stop().animate({'bottom' : '20px'}, 200); 
+            }
+        } else {
+            if (showFlag) {
+                showFlag = false;
+                topBtn.stop().animate({'bottom' : '-100px'}, 200); 
+            }
+        }
+    });
+    //スクロールしてトップ
+    topBtn.click(function () {
+        $('body,html').animate({
+            scrollTop: 0
+        }, 500);
+        return false;
+    });
+});
+</script>
+<script type="text/javascript" src="/apps/smooth-scroll.polyfills.min.js"></script>
+<script>
+    //smoothscroll
+    var scroll = new SmoothScroll('.anchor_link a[href*="#"]', {
+        speed: 300,
+        ignore: 'a.noscroll'
+    });
+</script>
+<meta name='robots' content='max-image-preview:large' />
+	<style>img:is([sizes="auto" i], [sizes^="auto," i]) { contain-intrinsic-size: 3000px 1500px }</style>
+	<script type="text/javascript">
+/* <![CDATA[ */
+window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/16.0.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/16.0.1\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/www.fast.kumamoto-u.ac.jp\/wp\/wp-includes\/js\/wp-emoji-release.min.js?ver=6.8.5"}};
+/*! This file is auto-generated */
+!function(s,n){var o,i,e;function c(e){try{var t={supportTests:e,timestamp:(new Date).valueOf()};sessionStorage.setItem(o,JSON.stringify(t))}catch(e){}}function p(e,t,n){e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(t,0,0);var t=new Uint32Array(e.getImageData(0,0,e.canvas.width,e.canvas.height).data),a=(e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(n,0,0),new Uint32Array(e.getImageData(0,0,e.canvas.width,e.canvas.height).data));return t.every(function(e,t){return e===a[t]})}function u(e,t){e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(t,0,0);for(var n=e.getImageData(16,16,1,1),a=0;a<n.data.length;a++)if(0!==n.data[a])return!1;return!0}function f(e,t,n,a){switch(t){case"flag":return n(e,"\ud83c\udff3\ufe0f\u200d\u26a7\ufe0f","\ud83c\udff3\ufe0f\u200b\u26a7\ufe0f")?!1:!n(e,"\ud83c\udde8\ud83c\uddf6","\ud83c\udde8\u200b\ud83c\uddf6")&&!n(e,"\ud83c\udff4\udb40\udc67\udb40\udc62\udb40\udc65\udb40\udc6e\udb40\udc67\udb40\udc7f","\ud83c\udff4\u200b\udb40\udc67\u200b\udb40\udc62\u200b\udb40\udc65\u200b\udb40\udc6e\u200b\udb40\udc67\u200b\udb40\udc7f");case"emoji":return!a(e,"\ud83e\udedf")}return!1}function g(e,t,n,a){var r="undefined"!=typeof WorkerGlobalScope&&self instanceof WorkerGlobalScope?new OffscreenCanvas(300,150):s.createElement("canvas"),o=r.getContext("2d",{willReadFrequently:!0}),i=(o.textBaseline="top",o.font="600 32px Arial",{});return e.forEach(function(e){i[e]=t(o,e,n,a)}),i}function t(e){var t=s.createElement("script");t.src=e,t.defer=!0,s.head.appendChild(t)}"undefined"!=typeof Promise&&(o="wpEmojiSettingsSupports",i=["flag","emoji"],n.supports={everything:!0,everythingExceptFlag:!0},e=new Promise(function(e){s.addEventListener("DOMContentLoaded",e,{once:!0})}),new Promise(function(t){var n=function(){try{var e=JSON.parse(sessionStorage.getItem(o));if("object"==typeof e&&"number"==typeof e.timestamp&&(new Date).valueOf()<e.timestamp+604800&&"object"==typeof e.supportTests)return e.supportTests}catch(e){}return null}();if(!n){if("undefined"!=typeof Worker&&"undefined"!=typeof OffscreenCanvas&&"undefined"!=typeof URL&&URL.createObjectURL&&"undefined"!=typeof Blob)try{var e="postMessage("+g.toString()+"("+[JSON.stringify(i),f.toString(),p.toString(),u.toString()].join(",")+"));",a=new Blob([e],{type:"text/javascript"}),r=new Worker(URL.createObjectURL(a),{name:"wpTestEmojiSupports"});return void(r.onmessage=function(e){c(n=e.data),r.terminate(),t(n)})}catch(e){}c(n=g(i,f,p,u))}t(n)}).then(function(e){for(var t in e)n.supports[t]=e[t],n.supports.everything=n.supports.everything&&n.supports[t],"flag"!==t&&(n.supports.everythingExceptFlag=n.supports.everythingExceptFlag&&n.supports[t]);n.supports.everythingExceptFlag=n.supports.everythingExceptFlag&&!n.supports.flag,n.DOMReady=!1,n.readyCallback=function(){n.DOMReady=!0}}).then(function(){return e}).then(function(){var e;n.supports.everything||(n.readyCallback(),(e=n.source||{}).concatemoji?t(e.concatemoji):e.wpemoji&&e.twemoji&&(t(e.twemoji),t(e.wpemoji)))}))}((window,document),window._wpemojiSettings);
+/* ]]> */
+</script>
+<style id='wp-emoji-styles-inline-css' type='text/css'>
+
+	img.wp-smiley, img.emoji {
+		display: inline !important;
+		border: none !important;
+		box-shadow: none !important;
+		height: 1em !important;
+		width: 1em !important;
+		margin: 0 0.07em !important;
+		vertical-align: -0.1em !important;
+		background: none !important;
+		padding: 0 !important;
+	}
+</style>
+<link rel='stylesheet' id='wp-block-library-css' href='https://www.fast.kumamoto-u.ac.jp/wp/wp-includes/css/dist/block-library/style.min.css?ver=6.8.5' media='all' />
+<style id='classic-theme-styles-inline-css' type='text/css'>
+/*! This file is auto-generated */
+.wp-block-button__link{color:#fff;background-color:#32373c;border-radius:9999px;box-shadow:none;text-decoration:none;padding:calc(.667em + 2px) calc(1.333em + 2px);font-size:1.125em}.wp-block-file__button{background:#32373c;color:#fff;text-decoration:none}
+</style>
+<style id='global-styles-inline-css' type='text/css'>
+:root{--wp--preset--aspect-ratio--square: 1;--wp--preset--aspect-ratio--4-3: 4/3;--wp--preset--aspect-ratio--3-4: 3/4;--wp--preset--aspect-ratio--3-2: 3/2;--wp--preset--aspect-ratio--2-3: 2/3;--wp--preset--aspect-ratio--16-9: 16/9;--wp--preset--aspect-ratio--9-16: 9/16;--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgba(6,147,227,1) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgba(252,185,0,1) 0%,rgba(255,105,0,1) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgba(255,105,0,1) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgba(255, 255, 255, 1), 6px 6px rgba(0, 0, 0, 1);--wp--preset--shadow--crisp: 6px 6px 0px rgba(0, 0, 0, 1);}:where(.is-layout-flex){gap: 0.5em;}:where(.is-layout-grid){gap: 0.5em;}body .is-layout-flex{display: flex;}.is-layout-flex{flex-wrap: wrap;align-items: center;}.is-layout-flex > :is(*, div){margin: 0;}body .is-layout-grid{display: grid;}.is-layout-grid > :is(*, div){margin: 0;}:where(.wp-block-columns.is-layout-flex){gap: 2em;}:where(.wp-block-columns.is-layout-grid){gap: 2em;}:where(.wp-block-post-template.is-layout-flex){gap: 1.25em;}:where(.wp-block-post-template.is-layout-grid){gap: 1.25em;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}
+:where(.wp-block-post-template.is-layout-flex){gap: 1.25em;}:where(.wp-block-post-template.is-layout-grid){gap: 1.25em;}
+:where(.wp-block-columns.is-layout-flex){gap: 2em;}:where(.wp-block-columns.is-layout-grid){gap: 2em;}
+:root :where(.wp-block-pullquote){font-size: 1.5em;line-height: 1.6;}
+</style>
+<link rel='stylesheet' id='normalize-css' href='https://www.fast.kumamoto-u.ac.jp/wp/wp-content/themes/fast/normalize.css?ver=1.0' media='all' />
+<link rel='stylesheet' id='html5blank-css' href='https://www.fast.kumamoto-u.ac.jp/wp/wp-content/themes/fast/style.css?ver=1.0' media='all' />
+<script type="text/javascript" src="https://www.fast.kumamoto-u.ac.jp/wp/wp-content/themes/fast/js/lib/conditionizr-4.3.0.min.js?ver=4.3.0" id="conditionizr-js"></script>
+<script type="text/javascript" src="https://www.fast.kumamoto-u.ac.jp/wp/wp-content/themes/fast/js/lib/modernizr-2.7.1.min.js?ver=2.7.1" id="modernizr-js"></script>
+<link rel="https://api.w.org/" href="https://www.fast.kumamoto-u.ac.jp/wp-json/" /><link rel="alternate" title="oEmbed (JSON)" type="application/json+oembed" href="https://www.fast.kumamoto-u.ac.jp/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fwww.fast.kumamoto-u.ac.jp%2Fnews%2F4590%2F" />
+<link rel="alternate" title="oEmbed (XML)" type="text/xml+oembed" href="https://www.fast.kumamoto-u.ac.jp/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fwww.fast.kumamoto-u.ac.jp%2Fnews%2F4590%2F&#038;format=xml" />
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-85679650-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+</head>
+<body>
+    <div id="container">
+        <div id="container_inner">
+            <!--header-->
+            <div id="header">
+                <div id="header_inner">
+                    <div id="ku_logo"><a href="http://www.kumamoto-u.ac.jp/" target="_blank"><img src="/shared/ku_logo.gif" width="" height="" alt="熊本大学"></a></div>
+                    <div id="site_title"><h1 title="熊本大学大学院先端科学研究部"><a href="/home"><img src="/shared/site_ttl.gif" width="" height="" alt="熊本大学大学院先端科学研究部"></a></h1></div>
+                    <div id="h_etc">
+                        <div id="h_search">
+                            <form action="/search/" method="get">
+                                <div class="search_input">
+                                    <input type="text" name="q" value="" placeholder="サイト内検索">
+                                </div>
+                                <div class="search_submit">
+                                    <input type="image" src="/shared/icn_search.png" id="searchSubmit" alt="検索" onClick="void(this.form.submit()); return(false);">
+                                </div>
+                            </form>
+                        </div>
+                        <div id="h_lang"><a href="/en/home/">ENGLISH</a></div>
+                        <!--<div id="h_lang"><a href="/en/home/">ENGLISH</a></div>-->
+                        <div id="h_nav">
+                            <ul>
+                                <li><a href="http://www.kumamoto-u.ac.jp/campusjouhou" target="_blank"><img src="/shared/h_access.gif" alt="アクセスマップ"></a></li>
+                                <li><a href="/sitemap/"><img src="/shared/h_sitemap.gif" alt="サイトマップ"></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--//header-->
+            
+            <!--g_nav-->
+            <div id="g_nav">
+                <div id="g_nav_inner">
+                    <ul>
+                        <li><a href="/home/"><img src="/shared/g_nav_01.png" alt="HOME" width="46" height="15"></a></li>
+                        <li class="here"><a href="/news/"><img src="/shared/g_nav_02.png" alt="News" width="39" height="15"></a></li>
+                        
+                            <li><a href="/outline/"><img src="/shared/g_nav_03.png" alt="概要" width="35" height="15"></a></li>
+
+                        <li><a href="/divisions/"><img src="/shared/g_nav_04.png" alt="研究部各部門の紹介" width="136" height="15"></a></li>
+
+                        <li><a href="/research/"><img src="/shared/g_nav_05.png" alt="教員紹介・研究紹介" width="135" height="15"></a></li>
+                        
+                        <li><a href="/gender/"><img src="/shared/g_nav_06.png" alt="男女共同参画" width="90" height="15"></a></li>
+
+                        <li><a href="/procedure/"><img src="/shared/g_nav_07.png" alt="各種手続" width="60" height="15"></a></li>
+                    </ul>
+                </div>
+            </div>
+            <!--//g_nav-->            <div id="content_ttl"><h2>
+            <img src="/shared/c_ttl_news.png" alt="News">
+            </h2></div>
+
+            <div id="topicpath">
+                <ul>
+                    <li class="home"><a href="https://www.fast.kumamoto-u.ac.jp/home">HOME</a></li>
+                    <li><a href="/news/">News</a></li>
+                    <li class="here">大学院先端科学研究部ホームページ（英語版）の公開を開始しました！</li>
+                </ul>
+            </div>
+            <!--main-->
+            <div id="main">
+                <div id="main_inner">
+                    
+                    <!--main_column-->
+                    <div id="main_column">
+                        <div id="main_column_inner">
+                            <div id="page_title">大学院先端科学研究部ホームページ（英語版）の公開を開始しました！</div>
+                            <div id="page_box">
+                            	                           	                            		<p>本日、大学院先端科学研究部ホームページ（英語版）の公開を開始しましたので、お知らせいたします。<br />
+次のURLかページ右上の「ENGLISH」ボタンからアクセスいただけます。</p>
+<p>◯大学院先端科学研究部ホームページ（英語版）<br />
+<a href="https://www.fast.kumamoto-u.ac.jp/en/home/">https://www.fast.kumamoto-u.ac.jp/en/home/</a></p>
+                            	                            </div>
+                        </div>
+                    </div>
+                    <!--//main_column-->
+                    
+<!--sub_column-->
+<div id="sub_column">
+    <div id="sub_column_inner">
+                <div id="sc_nav">
+            <div class="menu"><ul>
+<li class="page_item page-item-1575"><a href="https://www.fast.kumamoto-u.ac.jp/search/">サイト内検索</a></li>
+<li class="page_item page-item-7"><a href="https://www.fast.kumamoto-u.ac.jp/research/">教員紹介・研究紹介</a></li>
+<li class="page_item page-item-4321 page_item_has_children"><a href="https://www.fast.kumamoto-u.ac.jp/gender/">男女共同参画</a>
+<ul class='children'>
+	<li class="page_item page-item-4322"><a href="https://www.fast.kumamoto-u.ac.jp/gender/kasoku/">バッファリングによる女性研究者養成の加速</a></li>
+</ul>
+</li>
+<li class="page_item page-item-4323 page_item_has_children"><a href="https://www.fast.kumamoto-u.ac.jp/outline/">概要</a>
+<ul class='children'>
+	<li class="page_item page-item-30"><a href="https://www.fast.kumamoto-u.ac.jp/outline/message/">研究部長メッセージ</a></li>
+	<li class="page_item page-item-32"><a href="https://www.fast.kumamoto-u.ac.jp/outline/about/">研究部概要</a></li>
+	<li class="page_item page-item-34"><a href="https://www.fast.kumamoto-u.ac.jp/outline/idea/">研究部理念</a></li>
+</ul>
+</li>
+<li class="page_item page-item-1314"><a href="https://www.fast.kumamoto-u.ac.jp/ethics/">研究部等倫理委員会</a></li>
+<li class="page_item page-item-1374 page_item_has_children"><a href="https://www.fast.kumamoto-u.ac.jp/procedure/">各種手続</a>
+<ul class='children'>
+	<li class="page_item page-item-1376"><a href="https://www.fast.kumamoto-u.ac.jp/procedure/ryohi/">依頼出張旅費精算手続きについて</a></li>
+</ul>
+</li>
+</ul></div>
+        </div>
+        <div id="side_bns1">
+            <ul>
+                <li title="熊本大学拠点形成研究"><a href="http://poie.kumamoto-u.ac.jp/" target="_blank"><img src="/shared/bnr_poie.jpg" alt="熊本大学拠点形成研究" width="210" height="80"></a></li>
+                <li title="研究部等倫理委員会"><a href="/ethics/"><img src="/shared/bnr_ethics.jpg" alt="研究部等倫理委員会" width="210" height="80"></a></li>
+            </ul>
+        </div>
+        <div id="side_bns2">
+            <ul>
+                <li title="熊本大学自然科学系総合トップ"><a href="/"><img src="/shared/s_nav_01.gif" alt="自然科学系総合トップ" width="210" height="50"></a></li>
+                <li title="熊本大学大学院自然科学研究科"><a href="/gsst/" target="_blank"><img src="/shared/s_nav_02.gif" alt="大学院自然科学研究科" width="210" height="50"></a></li>
+                <li title="熊本大学理学部"><a href="http://www.sci.kumamoto-u.ac.jp/index-j.html" target="_blank"><img src="/shared/s_nav_04.gif" alt="熊本大学理学部" width="210" height="50"></a></li>
+                <li title="熊本大学工学部"><a href="http://www.eng.kumamoto-u.ac.jp/index.php" target="_blank"><img src="/shared/s_nav_03.gif" alt="熊本大学工学部" width="210" height="50"></a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!--//sub_column-->
+                </div>
+            </div>
+            <!--//main-->
+            <!--footer-->
+            <div id="footer">
+                <div id="footer_inner">
+                    <div id="footer_bns">
+                        <ul>
+                            <li title="熊本大学"><a href="http://www.kumamoto-u.ac.jp/" target="_blank"><img src="/shared/f_bnr_01.gif" alt="熊本大学" width="200" height="70"></a></li>
+                            <li title="くまもと水循環・減災研究教育センター"><a href="http://cwmd.kumamoto-u.ac.jp/" target="_blank"><img src="/shared/f_bnr_02.gif" alt="くまもと水循環・減災研究教育センター" width="200" height="70"></a></li>
+                            <li title="先進マグネシウム国際研究センター"><a href="http://www.mrc.kumamoto-u.ac.jp/" target="_blank"><img src="/shared/f_bnr_03.gif" alt="先進マグネシウム国際研究センター" width="200" height="70"></a></li>
+                            <li title="産業ナノマテリアル研究所"><a href="http://www.iina.kumamoto-u.ac.jp/" target="_blank"><img src="/shared/f_bnr_iina.png" alt="産業ナノマテリアル研究所" width="200" height="70"></a></li>
+                            <li title="国際先端科学技術研究機構"><a href="http://iroast.kumamoto-u.ac.jp/" target="_blank"><img src="/shared/f_bnr_05.gif" alt="国際先端科学技術研究機構" width="200" height="70"></a></li>
+                            <li title="生物環境農学国際研究センター"><a href="https://www.fast.kumamoto-u.ac.jp/IRCAEB/" target="_blank"><img src="/shared/f_bnr_ircaeb.png" alt="生物環境農学国際研究センター" width="200" height="70"></a></li>
+                            <li title="大学院先導機構"><a href="http://poie.kumamoto-u.ac.jp/" target="_blank"><img src="/shared/f_bnr_06.gif" alt="大学院先導機構" width="200" height="70"></a></li>
+                            <li title="熊本創生推進機構"><a href="https://www.kumamoto-u.ac.jp/kenkyuu_sangakurenkei/sangakurenkei/kico/" target="_blank"><img src="/shared/f_bnr_07.gif" alt="熊本創生推進機構" width="200" height="70"></a></li>
+                        </ul>
+                    </div>
+                    <div id="footer_main">
+                        <div id="footer_main_inner">
+                            <div id="f_information">
+                                <div class="box_header">
+                                    国立大学法人<br>
+                                    熊本大学大学院先端科学研究部
+                                </div>
+                                <div class="box_inner">
+                                    〒860-8555<br>
+                                    熊本市中央区黒髪2丁目39番1号 <a href="http://www.kumamoto-u.ac.jp/campusjouhou" target="_blank"><img src="/shared/icn_map.png" alt=""></a><br>
+                                    自然科学系事務課総務担当<br>
+                                    TEL: 096-342-3513<br>
+                                    <!--<img src="/shared/icon_mail.png" alt=""> メール-->
+                                </div>
+                            </div>
+                            <div id="f_nav">
+                                <div class="box_header">
+                                    <ul>
+                                        <li><a href="http://www.kumamoto-u.ac.jp/campusjouhou" target="_blank">アクセスマップ</a></li>
+                                        <li><a href="/sitemap/">サイトマップ</a></li>
+                                    </ul>
+                                </div>
+                                <div class="box_inner">
+                                    <ul class="f_nav1">
+                                        <li><a href="/home/">HOME</a></li>
+                                        <li><a href="/news/">News</a></li>
+                                        <li><a href="/ethics/">研究部等倫理委員会</a></li>
+                                    </ul>
+                                    <ul class="f_nav2">
+                                        <li><a href="/outline/">概要</a>
+                                            <ul>
+                                                <li><a href="/outline/message/">研究部長メッセージ</a></li>
+                                                <li><a href="/outline/about/">研究部概要</a></li>
+                                                <li><a href="/outline/idea/">研究部理念</a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                    <ul class="f_nav3">
+                                        <li><a href="/divisions/">研究部各部門の紹介</a></li>
+                                        <li><a href="/research/">教員紹介・研究紹介</a>
+                                            <ul>
+                                                <li><a href="/research/#anc_01">基礎科学</a></li>
+                                                <li><a href="/research/#anc_02">物質材料・化学</a></li>
+                                                <li><a href="/research/#anc_03">産業基盤</a></li>
+                                                <li><a href="/research/#anc_04">情報・エネルギー</a></li>
+                                                <li><a href="/research/#anc_05">土木建築学</a></li>
+                                                <li><a href="/research/#anc_06">医工学</a></li>
+                                                <li><a href="/research/#anc_07">その他</a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                    <ul class="f_nav4">
+                                        <li><a href="/gender/">男女共同参画</a></li>
+                                        <li><a href="/procedure/">各種手続</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="footer_bottom">
+                            <div id="footer_bottom_nav">
+                                <ul>
+                                    <li><a href="http://www.fast.kumamoto-u.ac.jp/">自然科学系総合トップ</a></li>
+                                    <li><a href="http://www.fast.kumamoto-u.ac.jp/gsst/" target="_blank">大学院自然科学教育部</a></li>
+                                    <li><a href="http://www.sci.kumamoto-u.ac.jp/index-j.html" target="_blank">理学部</a></li>
+                                    <li><a href="http://www.eng.kumamoto-u.ac.jp/index.php" target="_blank">工学部</a></li>
+                                </ul>
+                            </div>
+                            <div id="copyright">Copyright &copy; Kumamoto University All Rights Reserved.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--//footer-->
+        </div>
+    </div>
+<div id="page_top"><a href="#header"><img src="/shared/page_top.png" width="18" height="10" alt="Page Top"></a></div>
+</body>
+</html>

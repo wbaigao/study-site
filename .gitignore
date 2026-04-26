@@ -1,0 +1,23 @@
+# Local scratch / extraction reports
+__*.js
+__*.json
+__*.csv
+__*.txt
+__*.py
+__*.md
+db-additions-*.js
+tmp_*.pdf
+html_list.txt
+pdf_list.txt
+*.txt
+情报募集要项/
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Dependency folders
+node_modules/
+.venv/
+venv/

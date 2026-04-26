@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="ja">
+<!-- 共通HTMLヘッダー（NAIST JP Main） -->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <title>
+    
+      教育｜奈良先端科学技術大学院大学
+    
+  </title>
+  
+  <!-- CSS -->
+  <link rel="stylesheet" href="/mt-static/support/theme_static/naist_jp_main/css/style.css?v=20260416141942">
+  <link rel="stylesheet" href="/css/custom.css?v=20260416141942">
+  
+  <link rel="stylesheet" href="/mt-static/support/theme_static/naist_jp_main/vendor/fancybox3/jquery.fancybox-3.5.7.min.css">
+
+
+  <!-- Page-specific JS in head (optional) -->
+  
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-L4RVHFSCX8"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-L4RVHFSCX8');
+  </script>
+
+  <!-- Microsoft Clarity -->
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "w06bdby1rf");
+  </script>
+</head>
+
+
+
+<body>
+  <!-- ヘッダー -->
+  <!-- 共通ヘッダー（NAIST JP Main） -->
+<header class="ly_header">
+  <div class="ly_header_wrapper">
+    <div class="ly_header_inner">
+      <!-- ロゴ -->
+      <div class="ly_header_logo">
+        <a href="/" class="ly_header_logoLink">
+          <img src="/mt-static/support/theme_static/naist_jp_main/images/logo.svg" alt="NAIST" width="60" height="40">
+        </a>
+      </div>
+
+      <!-- グローバルナビゲーション（PC） -->
+      <nav class="ly_globalNav js_globalNav" aria-label="メインナビゲーション">
+        <ul class="ly_globalNav_list">
+          <li class="ly_globalNav_item">
+            <div class="ly_globalNav_link">
+              <a href="/about/">NAISTとは</a>
+              <button class="js_navToggle" data-nav="about"></button>
+            </div>
+          </li>
+
+          <li class="ly_globalNav_item">
+            <div class="ly_globalNav_link">
+              <a href="/research/">研究･産官学連携</a>
+              <button class="js_navToggle" data-nav="research"></button>
+            </div>
+          </li>
+
+          <li class="ly_globalNav_item">
+            <div class="ly_globalNav_link">
+              <a href="/academics/">教育</a>
+              <button class="js_navToggle" data-nav="academics"></button>
+            </div>
+          </li>
+
+          <li class="ly_globalNav_item">
+            <div class="ly_globalNav_link">
+              <a href="/admission/">入学案内</a>
+              <button class="js_navToggle" data-nav="admission"></button>
+            </div>
+          </li>
+
+          <li class="ly_globalNav_item">
+            <div class="ly_globalNav_link">
+              <a href="/campuslife/">学生支援･キャリア</a>
+              <button class="js_navToggle" data-nav="campus"></button>
+            </div>
+          </li>
+
+          <li class="ly_globalNav_item">
+            <div class="ly_globalNav_link">
+              <a href="/international/">国際交流･留学</a>
+              <button class="js_navToggle" data-nav="international"></button>
+            </div>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- ヘッダーユーティリティ -->
+      <div class="ly_header_util">
+        <!-- 検索ボタン -->
+        <button class="ly_header_searchBtn js_searchToggle" aria-label="検索" aria-expanded="false">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22"
+            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <circle cx="12" cy="11" r="10"></circle>
+            <path d="M17.8 17.8 L23 23"></path>
+          </svg>
+        </button>
+
+        <!-- 言語切替（PC） -->
+        <div class="ly_header_langSwitch hp_header-hidden-sp">
+          <button type="button" class="ly_header_langSwitch_toggle js_langSwitchToggle" aria-expanded="false" aria-controls="lang-switch-menu-pc">Language</button>
+          <ul class="ly_header_langSwitch_menu js_langSwitchMenu" id="lang-switch-menu-pc" aria-hidden="true" aria-label="Language">
+            <li class="ly_header_langSwitch_menuItem">
+              <a href="/" class="ly_header_langSwitch_menuLink" lang="ja">Japanese</a>
+            </li>
+            <li class="ly_header_langSwitch_menuItem">
+              <a href="/en/" class="ly_header_langSwitch_menuLink" lang="en">English</a>
+            </li>
+            <li class="ly_header_langSwitch_menuItem">
+              <a href="/en/zh-cn/" class="ly_header_langSwitch_menuLink" lang="zh-CN">Chinese (Simpl.)</a>
+            </li>
+            <li class="ly_header_langSwitch_menuItem">
+              <a href="/en/zh-tw/" class="ly_header_langSwitch_menuLink" lang="zh-TW">Chinese (Trad.)</a>
+            </li>
+            <li class="ly_header_langSwitch_menuItem">
+              <a href="/en/id/" class="ly_header_langSwitch_menuLink" lang="id">Indonesian</a>
+            </li>
+            <li class="ly_header_langSwitch_menuItem">
+              <a href="/en/ko/" class="ly_header_langSwitch_menuLink" lang="ko">Korean</a>
+            </li>
+            <li class="ly_header_langSwitch_menuItem">
+              <a href="/en/th/" class="ly_header_langSwitch_menuLink" lang="th">Thai</a>
+            </li>
+            <li class="ly_header_langSwitch_menuItem">
+              <a href="/en/vi/" class="ly_header_langSwitch_menuLink" lang="vi">Vietnamese</a>
+            </li>
+            <li class="ly_header_langSwitch_menuItem">
+              <a href="/en/languages/" class="ly_header_langSwitch_menuLink">Other languages</a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- QuickLinksボタン（PC） -->
+        <button class="ly_header_quicklinksBtn js_quicklinksToggle hp_header-hidden-sp" aria-label="クイックリンクス" aria-expanded="false">
+          <img src="/mt-static/support/theme_static/naist_jp_main/images/QuickLinks.svg" alt="Quick Links" class="ly_header_quicklinksBtn_img">
+        </button>
+      </div>
+
+      <!-- ハンバーガーメニュー（SP） -->
+      <button class="ly_header_hamburgerBtn js_menuToggle" aria-label="メニュー" aria-expanded="false">
+        <span class="ly_header_hamburgerBtn_line"></span>
+        <span class="ly_header_hamburgerBtn_line"></span>
+        <span class="ly_header_hamburgerBtn_line"></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- メガメニューパネル（PC/SP 共通） -->
+  <div class="bl_megaMenu js_megaMenu" id="megamenu-panel" aria-hidden="true">
+
+    <!-- 検索エリア（SP） -->
+    <div class="bl_searchArea hp_header-hidden-pc">
+      <div class="bl_searchArea_inner">
+        <form class="bl_searchForm" role="search" onsubmit="return executeGoogleCse(this);">
+          <input type="hidden" name="cx" value="008837257182862158591:mzfexruovms">
+          <input type="search" id="search-input-sp" name="q" class="bl_searchForm_input" placeholder="お探しですか？">
+          <button type="submit" class="bl_searchForm_btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22"
+              viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+              <circle cx="12" cy="11" r="10"></circle>
+              <path d="M17.8 17.8 L23 23"></path>
+            </svg>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- QuickLinks トグル（SP アコーディオン用） -->
+    <div class="ly_header_quicklinksBtn_wrapper">
+      <button class="ly_header_quicklinksBtn js_quicklinksToggle js_quicklinksAccordionToggle hp_header-hidden-pc" aria-label="クイックリンクス" aria-expanded="false">
+        <span class="ly_header_quicklinksBtn_text">Quick Links</span>
+      </button>
+    </div>
+
+    <div class="bl_megaMenu_inner">
+      <!-- NAISTとは -->
+      <div class="bl_megaMenu_section" data-section="about">
+        <div class="bl_megaMenu_col">
+          <button class="bl_megaMenu_heading_sp hp_header-hidden-pc js_megaMenuAccordionToggle" aria-expanded="false">NAISTとは</button>
+          <div class="bl_megaMenu_list_wrap js_megaMenuAccordionContent">
+            <a href="/about/" class="bl_megaMenu_heading hp_header-hidden-pc">NAISTとは</a>
+            <ul class="bl_megaMenu_list">
+              <li><a href="/about/#president-office" class="bl_megaMenu_link">学長室</a></li>
+              <li><a href="/about/#university-overview" class="bl_megaMenu_link">大学概要</a></li>
+              <li><a href="/about/#j-peaks" class="bl_megaMenu_link">J-PEAKS</a></li>
+              <li><a href="/about/#information-disclosure" class="bl_megaMenu_link">情報公開</a></li>
+              <li><a href="/about/#initiatives" class="bl_megaMenu_link">取組・計画</a></li>
+              <li><a href="/about/#public-relations" class="bl_megaMenu_link">広報活動</a></li>
+              <li><a href="/about/#community-engagement" class="bl_megaMenu_link">社会連携</a></li>
+              <li><a href="/about/#naist-fund" class="bl_megaMenu_link">奈良先端科学技術大学院大学基金</a></li>
+              <li><a href="/about/#about-others" class="bl_megaMenu_link">その他</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 研究・産官学連携 -->
+      <div class="bl_megaMenu_section" data-section="research">
+        <div class="bl_megaMenu_col">
+          <button class="bl_megaMenu_heading_sp hp_header-hidden-pc js_megaMenuAccordionToggle" aria-expanded="false">研究・産官学連携</button>
+          <div class="bl_megaMenu_list_wrap js_megaMenuAccordionContent">
+            <a href="/research/" class="bl_megaMenu_heading hp_header-hidden-pc">研究・産官学連携</a>
+            <ul class="bl_megaMenu_list">
+              <li><a href="/research/#graduate-school" class="bl_megaMenu_link">研究科</a></li>
+              <li><a href="/research/#research-centers" class="bl_megaMenu_link">研究センター</a></li>
+              <li><a href="/research/#latest-research" class="bl_megaMenu_link">最新の研究成果</a></li>
+              <li><a href="/research/#research-support-facilities" class="bl_megaMenu_link">研究支援施設</a></li>
+              <li><a href="/research/#find-research-and-researchers" class="bl_megaMenu_link">研究と研究者を探す</a></li>
+              <li><a href="/research/#research-status" class="bl_megaMenu_link">研究の状況</a></li>
+              <li><a href="/research/#research-compliance" class="bl_megaMenu_link">研究コンプライアンス・取り組み</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 教育 -->
+      <div class="bl_megaMenu_section" data-section="academics">
+        <div class="bl_megaMenu_col">
+          <button class="bl_megaMenu_heading_sp hp_header-hidden-pc js_megaMenuAccordionToggle" aria-expanded="false">教育</button>
+          <div class="bl_megaMenu_list_wrap js_megaMenuAccordionContent">
+            <a href="/academics/" class="bl_megaMenu_heading hp_header-hidden-pc">教育</a>
+            <ul class="bl_megaMenu_list">
+              <li><a href="/academics/#divisions" class="bl_megaMenu_link">所属領域と研究分野</a></li>
+              <li><a href="/academics/#program-list" class="bl_megaMenu_link">教育プログラム</a></li>
+              <li><a href="/academics/#five-programs" class="bl_megaMenu_link">5つの教育プログラムの概要と人材育成目標</a></li>
+              <li><a href="/academics/#curriculum" class="bl_megaMenu_link">柔軟なカリキュラム</a></li>
+              <li><a href="/academics/#diversity-admission" class="bl_megaMenu_link">分野も経験も問わない"多様性入試"</a></li>
+              <li><a href="/academics/#features" class="bl_megaMenu_link">教育の特色</a></li>
+              <li><a href="/academics/#policies" class="bl_megaMenu_link">教育の方針</a></li>
+              <li><a href="/academics/#degree-award" class="bl_megaMenu_link">学位授与</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 入学案内 -->
+      <div class="bl_megaMenu_section" data-section="admission">
+        <div class="bl_megaMenu_col">
+          <button class="bl_megaMenu_heading_sp hp_header-hidden-pc js_megaMenuAccordionToggle" aria-expanded="false">入学案内</button>
+          <div class="bl_megaMenu_list_wrap js_megaMenuAccordionContent">
+            <a href="/admission/" class="bl_megaMenu_heading hp_header-hidden-pc">入学案内</a>
+            <ul class="bl_megaMenu_list">
+              <li><a href="/admission/#events" class="bl_megaMenu_link">受験生向けイベント</a></li>
+              <li><a href="/admission/#by-area" class="bl_megaMenu_link">各領域の受験生向け情報</a></li>
+              <li><a href="/admission/#exam-info" class="bl_megaMenu_link">入試情報</a></li>
+              <li><a href="/admission/#non-degree" class="bl_megaMenu_link">入試情報（科目等履修生・研究生・聴講生）</a></li>
+              <li><a href="/admission/#results" class="bl_megaMenu_link">合格発表</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 学生支援・キャリア -->
+      <div class="bl_megaMenu_section" data-section="campus">
+        <div class="bl_megaMenu_col">
+          <button class="bl_megaMenu_heading_sp hp_header-hidden-pc js_megaMenuAccordionToggle" aria-expanded="false">学生支援・キャリア</button>
+          <div class="bl_megaMenu_list_wrap js_megaMenuAccordionContent">
+            <a href="/campuslife/" class="bl_megaMenu_heading hp_header-hidden-pc">学生支援・キャリア</a>
+            <ul class="bl_megaMenu_list">
+              <li><a href="/campuslife/#handbooks" class="bl_megaMenu_link">Handbooks</a></li>
+              <li><a href="/campuslife/#academic-affairs" class="bl_megaMenu_link">学務関係</a></li>
+              <li><a href="/campuslife/#student-aid" class="bl_megaMenu_link">経済支援</a></li>
+              <li><a href="/campuslife/#life-support" class="bl_megaMenu_link">生活支援</a></li>
+              <li><a href="/campuslife/#iei" class="bl_megaMenu_link">教育推進機構</a></li>
+              <li><a href="/campuslife/#study-support" class="bl_megaMenu_link">学修支援制度</a></li>
+              <li><a href="/campuslife/#campuslife-others" class="bl_megaMenu_link">その他</a></li>
+              <li><a href="/campuslife/#ciss" class="bl_megaMenu_link">CISS</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 国際交流・留学 -->
+      <div class="bl_megaMenu_section" data-section="international">
+        <div class="bl_megaMenu_col">
+          <button class="bl_megaMenu_heading_sp hp_header-hidden-pc js_megaMenuAccordionToggle" aria-expanded="false">国際交流・留学</button>
+          <div class="bl_megaMenu_list_wrap js_megaMenuAccordionContent">
+            <a href="/international/" class="bl_megaMenu_heading hp_header-hidden-pc">国際交流・留学</a>
+            <ul class="bl_megaMenu_list">
+              <li><a href="/international/#policy" class="bl_megaMenu_link">基本方針</a></li>
+              <li><a href="/international/#agreements" class="bl_megaMenu_link">学術交流協定校一覧</a></li>
+              <li><a href="/international/#international-exchange" class="bl_megaMenu_link">国際交流</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 言語切替（SP） -->
+    <div class="ly_header_langSwitch hp_header-hidden-pc">
+      <button type="button" class="bl_megaMenu_heading_sp ly_header_langSwitch_toggle js_megaMenuAccordionToggle" aria-expanded="false" aria-controls="lang-switch-menu-sp">Language</button>
+      <div class="bl_megaMenu_list_wrap js_megaMenuAccordionContent ly_header_langSwitch_accordionContent" id="lang-switch-menu-sp" aria-hidden="true">
+        <ul class="ly_header_langSwitch_menu" aria-label="Language">
+          <li class="ly_header_langSwitch_menuItem">
+            <a href="/" class="ly_header_langSwitch_menuLink" lang="ja">Japanese</a>
+          </li>
+          <li class="ly_header_langSwitch_menuItem">
+            <a href="/en/" class="ly_header_langSwitch_menuLink" lang="en">English</a>
+          </li>
+          <li class="ly_header_langSwitch_menuItem">
+            <a href="/en/zh-cn/" class="ly_header_langSwitch_menuLink" lang="zh-CN">Chinese (Simpl.)</a>
+          </li>
+          <li class="ly_header_langSwitch_menuItem">
+            <a href="/en/zh-tw/" class="ly_header_langSwitch_menuLink" lang="zh-TW">Chinese (Trad.)</a>
+          </li>
+          <li class="ly_header_langSwitch_menuItem">
+            <a href="/en/id/" class="ly_header_langSwitch_menuLink" lang="id">Indonesian</a>
+          </li>
+          <li class="ly_header_langSwitch_menuItem">
+            <a href="/en/ko/" class="ly_header_langSwitch_menuLink" lang="ko">Korean</a>
+          </li>
+          <li class="ly_header_langSwitch_menuItem">
+            <a href="/en/th/" class="ly_header_langSwitch_menuLink" lang="th">Thai</a>
+          </li>
+          <li class="ly_header_langSwitch_menuItem">
+            <a href="/en/vi/" class="ly_header_langSwitch_menuLink" lang="vi">Vietnamese</a>
+          </li>
+          <li class="ly_header_langSwitch_menuItem">
+            <a href="/en/languages/" class="ly_header_langSwitch_menuLink">Other languages</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+  </div><!-- /.bl_megaMenu -->
+
+  <!-- 検索エリア（PC） -->
+  <div class="bl_searchArea js_searchArea hp_header-hidden-sp" aria-hidden="true">
+    <div class="bl_searchArea_inner">
+      <form class="bl_searchForm" role="search" onsubmit="return executeGoogleCse(this);">
+        <input type="hidden" name="cx" value="008837257182862158591:mzfexruovms">
+        <input type="search" id="search-input-sp" name="q" class="bl_searchForm_input" placeholder="お探しですか？">
+        <button type="submit" class="bl_searchForm_btn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22"
+            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <circle cx="12" cy="11" r="10"></circle>
+            <path d="M17.8 17.8 L23 23"></path>
+          </svg>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- QuickLinksパネル（PC／SP 共通） -->
+  <div class="bl_quicklinks js_quicklinks js_quicklinksAccordionContent" aria-hidden="true" data-original-parent="header">
+    <div class="bl_quicklinks_inner">
+      <ul class="bl_quicklinks_blocks">
+        <li class="bl_quicklinks_block"><a href="https://naistjp.sharepoint.com/" target="_blank" rel="noopener noreferrer">学生・教職員サイト</a></li>
+        <li class="bl_quicklinks_block"><a href="https://www.naist.jp/admission/examinee/" target="_blank" rel="noopener noreferrer">NAIST受験生応援サイト</a></li>
+        <li class="bl_quicklinks_block"><a class="hp_hidden-after" href="/kikin/" target="_blank" rel="noopener noreferrer">寄付について</a></li>
+      </ul>
+      <ul class="bl_quicklinks_areas">
+        <li class="bl_quicklinks_areasItem">
+          <a href="https://isw3.naist.jp/home-ja.html" class="bl_quicklinks_areasLink hp_color-red" target="_blank" rel="noopener noreferrer">情報科学領域</a>
+        </li>
+        <li class="bl_quicklinks_areasItem">
+          <a href="https://bsw3.naist.jp/" class="bl_quicklinks_areasLink hp_color-green" target="_blank" rel="noopener noreferrer">バイオサイエンス領域</a>
+        </li>
+        <li class="bl_quicklinks_areasItem">
+          <a href="https://mswebs.naist.jp/" class="bl_quicklinks_areasLink hp_color-blue" target="_blank" rel="noopener noreferrer">物質創成科学領域</a>
+        </li>
+      </ul>
+      <ul class="bl_quicklinks_list">
+        <li class="bl_quicklinks_listItem">
+          <a href="/publications/" class="bl_quicklinks_link" target="_blank" rel="noopener noreferrer">刊行物</a>
+        </li>
+        <li class="bl_quicklinks_listItem">
+          <a href="/job/" class="bl_quicklinks_link" target="_blank" rel="noopener noreferrer">採用情報</a>
+        </li>
+        <li class="bl_quicklinks_listItem">
+          <a href="/naist-supporters-club/" class="bl_quicklinks_link" target="_blank" rel="noopener noreferrer">サポーターズクラブ</a>
+        </li>
+        <li class="bl_quicklinks_listItem">
+          <a href="/visitor/alumni/syushin.html" class="bl_quicklinks_link" target="_blank" rel="noopener noreferrer">NAIST終身メール</a>
+        </li>
+        <li class="bl_quicklinks_listItem">
+          <a href="/admission/exam/campustour.html" class="bl_quicklinks_link" target="_blank" rel="noopener noreferrer">いつでも見学会</a>
+        </li>
+        <li class="bl_quicklinks_listItem">
+          <a href="/accessmap/" class="bl_quicklinks_link" target="_blank" rel="noopener noreferrer">アクセスマップ</a>
+        </li>
+        <li class="bl_quicklinks_listItem">
+          <a href="/campusmap/" class="bl_quicklinks_link" target="_blank" rel="noopener noreferrer">キャンパスマップ</a>
+        </li>
+        <li class="bl_quicklinks_listItem">
+          <a href="/inquiry/" class="bl_quicklinks_link" target="_blank" rel="noopener noreferrer">問い合わせ先</a>
+        </li>
+      </ul>
+      <div class="bl_quicklinks_social">
+        <a href="https://x.com/NAIST_MAIN" class="bl_quicklinks_socialLink" aria-label="X (Twitter)" target="_blank" rel="noopener noreferrer">
+          <img src="/mt-static/support/theme_static/naist_jp_main/images/sns_icon_x.svg" alt="X">
+        </a>
+        <a href="https://www.youtube.com/user/NAISTChannel" class="bl_quicklinks_socialLink" aria-label="YouTube" target="_blank" rel="noopener noreferrer">
+          <img src="/mt-static/support/theme_static/naist_jp_main/images/sns_icon_youtube.svg" alt="Youtube">
+        </a>
+        <a href="https://www.instagram.com/naist_pr/" class="bl_quicklinks_socialLink" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
+          <img src="/mt-static/support/theme_static/naist_jp_main/images/sns_icon_instagram.png" alt="Instagram">
+        </a>
+        <a href="https://www.facebook.com/naist.jp" class="bl_quicklinks_socialLink" aria-label="Facebook" target="_blank" rel="noopener noreferrer">
+          <img src="/mt-static/support/theme_static/naist_jp_main/images/sns_icon_facebook.svg" alt="facebook">
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Google検索 -->
+<div id="google-cse-hidden-container" style="position: absolute; left: -9999px; top: -9999px; width: 1px; height: 1px; overflow: hidden;">
+  <script async src="https://cse.google.com/cse.js?cx=008837257182862158591:mzfexruovms"></script>
+  <div class="gcse-search" data-gname="g-search"></div>
+</div>
+
+<script>
+  function executeGoogleCse(form) {
+    var query = form.querySelector('input[name="q"]').value;
+
+    if (query) {
+      var element = google.search.cse.element.getElement('g-search');
+      if (element) {
+          element.execute(query);
+      }
+    }
+
+    return false;
+  }
+</script>
+
+
+  <!-- メインコンテンツ -->
+  <main class="ly_main ly_main__common_page">
+    <div class="ly_pageTtl_snap bl_pageTtl">
+      <div class="ly_pageTtl_inner">
+        <p class="ly_pageTtl_snap__txt">NARA INSTITUTE of SCIENCE and TECHNOLOGY</p>
+      </div>
+    </div>
+
+    <div class="ly_main_contentsWrapper">
+      <section class="bl_section">
+        <div class="bl_section_inner">
+          <!-- パンくず（必要であればモジュール差し替え） -->
+          <!-- 共通パンくず（NAIST JP Main） -->
+
+  
+
+
+  <!-- 従来どおりフォルダ階層から自動生成 -->
+<nav class="bl_breadcrumb" aria-label="パンくずリスト">
+  <ul>
+    <li><a href="/">Home</a></li>
+
+
+  <!-- パンくず仕様/運用ルールは ../README.md を参照 -->
+
+  
+
+  
+    
+    
+
+    
+      
+      
+    
+
+    
+
+    
+
+    
+  
+
+  <li>教育</li>
+
+  
+
+  </ul>
+</nav>
+
+
+        </div>
+
+        <div class="bl_commonPage_wrapper bl_section_inner">
+            <h1 class="bl_commonPage_ttl">
+              教育
+            </h1>
+            <div class="bl_commonPage_contents">
+              <div id="first-page" class="bl_pageIntro">
+  <div class="bl_pageIntro_text">
+    <h1 class="bl_pageIntro_catch">
+      研究を基盤とした多様な教育
+    </h1>
+
+    <div class="bl_pageIntro_description">
+      <p>
+        本学では、<span class="hp_color-red">情報科学</span>・<span class="hp_color-green">バイオサイエンス</span>・<span class="hp_color-blue">物質創成科学</span>の3分野およびそれらを横断する融合領域において卓越した研究環境を整え、心ゆくまで研究に打ち込める体制を構築しています。学生は所属する研究室で世界レベルの研究に取り組みながら、融合領域を含む5つの教育プログラムを通じて高度な専門知識と幅広い視野を修得します。教員と学生の距離が近いオープンな環境のもとで、次代の科学技術を牽引する挑戦心と総合知を養います。
+      </p>
+    </div>
+  </div>
+
+  <div class="bl_pageIntro_image">
+    <img src="/mt-static/support/theme_static/naist_jp_main/images/academics/academics_cover.png" alt="NAISTの5つの教育プログラム">
+  </div>
+</div>
+
+<h2 id="divisions">所属領域と研究分野​</h2>
+<p>本学の研究体制は、情報科学、バイオサイエンス、物質創成科学の3つの領域により構成されています。各領域では専門分野の深化に取り組むとともに、領域横断的な融合研究も進めています。以下の各領域サイトから、研究内容の詳細をご覧ください。</p>
+<div class="bl_infoPanel">
+  <div class="bl_infoPanel_banner bl_infoPanel_banner__red">
+    <div class="bl_infoPanel_bannerContent">
+      <h3 class="bl_infoPanel_title">情報科学領域</h3>
+      <p class="bl_infoPanel_subtitle">AI基盤情報学分野 / AI応⽤情報学分野</p>
+    </div>
+  </div>
+
+  <div class="bl_infoPanel_description">
+    <div class="bl_infoPanel_links">
+      <a href="https://isw3.naist.jp/home-ja.html" class="el_btn el_btn__cornerIcon el_btn__cornerIcon__red">
+        <span>WEBサイトはこちら</span>
+      </a>
+      <a href="https://isw3.naist.jp/Research/lablist-ja.html" class="el_btn el_btn__cornerIcon el_btn__cornerIcon__red">
+        <span>研究室一覧はこちら</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="bl_infoPanel">
+  <div class="bl_infoPanel_banner bl_infoPanel_banner__green">
+    <div class="bl_infoPanel_bannerContent">
+      <h3 class="bl_infoPanel_title">バイオサイエンス領域</h3>
+      <p class="bl_infoPanel_subtitle">植物科学 / メディカル生物学 / 統合システム生物学</p>
+    </div>
+  </div>
+
+  <div class="bl_infoPanel_description">
+    <div class="bl_infoPanel_links">
+      <a href="https://bsw3.naist.jp/" class="el_btn el_btn__cornerIcon el_btn__cornerIcon__green">
+        <span>WEBサイトはこちら</span>
+      </a>
+      <a href="https://bsw3.naist.jp/courses/#laboratory" class="el_btn el_btn__cornerIcon el_btn__cornerIcon__green">
+        <span>研究室一覧はこちら</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="bl_infoPanel">
+  <div class="bl_infoPanel_banner bl_infoPanel_banner__blue">
+    <div class="bl_infoPanel_bannerContent">
+      <h3 class="bl_infoPanel_title">物質創成科学領域</h3>
+      <p class="bl_infoPanel_subtitle">データサイエンス系 / デバイス系 / 物性系 / バイオマテリアル系</p>
+    </div>
+  </div>
+
+  <div class="bl_infoPanel_description">
+    <div class="bl_infoPanel_links">
+      <a href="https://mswebs.naist.jp/" class="el_btn el_btn__cornerIcon el_btn__cornerIcon__blue">
+        <span>WEBサイトはこちら</span>
+      </a>
+      <a href="https://mswebs.naist.jp/courses-list/" class="el_btn el_btn__cornerIcon el_btn__cornerIcon__blue">
+        <span>研究室一覧はこちら</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<h2 id="program-list">教育プログラム​</h2>
+<p>情報科学、バイオサイエンス、物質創成科学を基盤とする3つのプログラムに加え、融合領域を対象としたプログラムも設けています。関心や志向に応じた柔軟なコース選択が可能です。</p>
+<div class="bl_table_wrapper">
+  <table class="bl_table">
+    <thead>
+      <tr>
+        <th class="bl_table_borderless"></th>
+        <th class="bl_table_head" colspan="5">プログラム</th>
+      </tr>
+      <tr>
+        <th class="bl_table_head">領域</th>
+        <th class="bl_table_head">情報理工学</th>
+        <th class="bl_table_head">バイオサイエンス</th>
+        <th class="bl_table_head">物質理工学</th>
+        <th class="bl_table_head">データサイエンス</th>
+        <th class="bl_table_head">デジタルグリーンイノベーション</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th class="bl_table_head hp_bg-transparent">情報科学</th>
+        <td class="hp_ta-c">◯</td>
+        <td class="hp_ta-c"></td>
+        <td class="hp_ta-c"></td>
+        <td class="hp_ta-c">◯</td>
+        <td class="hp_ta-c">◯</td>
+      </tr>
+      <tr>
+        <th class="bl_table_head hp_bg-transparent">バイオサイエンス</th>
+        <td class="hp_ta-c"></td>
+        <td class="hp_ta-c">◯</td>
+        <td class="hp_ta-c"></td>
+        <td class="hp_ta-c">◯</td>
+        <td class="hp_ta-c">◯</td>
+      </tr>
+      <tr>
+        <th class="bl_table_head hp_bg-transparent">物質創成科学</th>
+        <td class="hp_ta-c"></td>
+        <td class="hp_ta-c"></td>
+        <td class="hp_ta-c">◯</td>
+        <td class="hp_ta-c">◯</td>
+        <td class="hp_ta-c">◯</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<h2 id="five-programs">5つの教育プログラムの概要と人材育成目標</h2>
+
+<div class="bl_accordion">
+  <!-- 情報理工学プログラム -->
+  <div class="bl_accordion_item bl_accordion__red js_accordion">
+    <button class="bl_accordion_header js_accordionToggle" aria-expanded="false">
+      <div class="bl_accordion_headerText">
+        <h3 class="bl_accordion_title">情報理工学プログラム</h3>
+      </div>
+      <span class="bl_accordion_icon"></span>
+    </button>
+    <div class="bl_accordion_content js_accordionContent" aria-hidden="true">
+      <div class="bl_accordion_body">
+        <h4 class="bl_accordion_heading">取得できる学位：修士・博士（工学／理学）</h4>
+        <div class="bl_accordion_section">
+          <p class="bl_accordion_text">
+            情報科学を主体とし、コンピュータ本体及び情報ネットワークに関する技術、コンピュータと人間のインタラクション及びメディアに関する技術、ロボット等コンピュータを駆使する各種システムに関する技術など、広い視野と高度な専門性を備え、様々な分野で情報科学技術の高度化やその多面的な活用により、高度情報化社会を支える人材を育成します。
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- バイオサイエンスプログラム -->
+  <div class="bl_accordion_item bl_accordion__green js_accordion">
+    <button class="bl_accordion_header js_accordionToggle" aria-expanded="false">
+      <div class="bl_accordion_headerText">
+        <h3 class="bl_accordion_title">バイオサイエンスプログラム</h3>
+      </div>
+      <span class="bl_accordion_icon"></span>
+    </button>
+    <div class="bl_accordion_content js_accordionContent" aria-hidden="true">
+      <div class="bl_accordion_body">
+        <h4 class="bl_accordion_heading">取得できる学位：修士・博士（バイオサイエンス）</h4>
+        <div class="bl_accordion_section">
+          <p class="bl_accordion_text">
+            バイオサイエンスを主体とし、動物・植物・微生物について、生命現象の基本原理から生物の多様性まで、幅広い分野の最先端の知識と技術を備え、環境・エネルギー・食糧・資源や健康・長寿等に関わる研究開発を通して、人類の発展と地球環境の保全に貢献する人材を育成します。
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 物質理工学プログラム -->
+  <div class="bl_accordion_item bl_accordion__blue js_accordion">
+    <button class="bl_accordion_header js_accordionToggle" aria-expanded="false">
+      <div class="bl_accordion_headerText">
+        <h3 class="bl_accordion_title">物質理工学プログラム</h3>
+      </div>
+      <span class="bl_accordion_icon"></span>
+    </button>
+    <div class="bl_accordion_content js_accordionContent" aria-hidden="true">
+      <div class="bl_accordion_body">
+        <h4 class="bl_accordion_heading">取得できる学位：修士・博士（工学／理学）</h4>
+        <div class="bl_accordion_section">
+          <p class="bl_accordion_text">
+            物質創成科学を主体とし、固体物性学、デバイス工学、分子化学、高分子材料、バイオナノ理工学などを横断する教育プログラムにより、物質科学に関する基盤知識と専門性を活かすための高度な知識を持ち、人類の豊かな生活の維持と社会の発展を支える次代の科学技術の担い手となる人材を育成します。
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- データサイエンスプログラム -->
+  <div class="bl_accordion_item bl_accordion__yellow js_accordion">
+    <button class="bl_accordion_header js_accordionToggle" aria-expanded="false">
+      <div class="bl_accordion_headerText">
+        <h3 class="bl_accordion_title">データサイエンスプログラム</h3>
+      </div>
+      <span class="bl_accordion_icon"></span>
+    </button>
+    <div class="bl_accordion_content js_accordionContent" aria-hidden="true">
+      <div class="bl_accordion_body">
+        <h4 class="bl_accordion_heading">取得できる学位：修士・博士（工学／理学／バイオサイエンス）</h4>
+        <div class="bl_accordion_section">
+          <p class="bl_accordion_text">
+            情報科学、バイオサイエンス、物質創成科学の融合プログラムです。
+          </p>
+          <p class="bl_accordion_text">
+            情報科学、バイオサイエンス、物質科学に関わるデータ駆動型科学、AI駆動型科学の最先端の幅広い知識と高度な専門性を備え、蓄積された膨大なデータの処理、可視化、分析を通じてその奥に隠れた「真理」や「価値」を引き出して、次代の科学・技術の進歩や社会の発展に貢献できる人材を育成します。
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- デジタルグリーンイノベーションプログラム -->
+  <div class="bl_accordion_item bl_accordion__pink js_accordion">
+    <button class="bl_accordion_header js_accordionToggle" aria-expanded="false">
+      <div class="bl_accordion_headerText">
+        <h3 class="bl_accordion_title">デジタルグリーンイノベーションプログラム</h3>
+      </div>
+      <span class="bl_accordion_icon"></span>
+    </button>
+    <div class="bl_accordion_content js_accordionContent" aria-hidden="true">
+      <div class="bl_accordion_body">
+        <h4 class="bl_accordion_heading">取得できる学位:修士・博士（工学／理学／バイオサイエンス）</h4>
+        <div class="bl_accordion_section">
+          <p class="bl_accordion_text">
+            情報科学、バイオサイエンス、物質創成科学の融合プログラムです。
+          </p>
+          <p class="bl_accordion_text">
+            社会・経済を支える、情報科学、バイオサイエンス、あるいは、物質創成科学の高度な専門性と、それに隣接する融合分野、とくにグリーン分野とデジタル分野を包含する融合分野を理解できる広範な素養を持ち、社会全体を見渡す俯瞰的な視点から物事を考え、社会においてグリーン分野とデジタル分野において発展を続けるデジタルグリーン科学技術の活用やイノベーションを担う人材を育成します。
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h2 id="curriculum">柔軟なカリキュラム</h2>
+<p>序論科目・基盤科目・専門科目と段階的に学べるカリキュラム構成となっています。他分野の科目も履修でき、幅広い学びが可能です。さらに、PBL科目やゼミナールなど、演習・グループワークを通じて実践的に学ぶ機会も充実しています。他大学との単位互換やクォーター制、長期履修制度を活用することで、自分の目的やペースに合った学び方を選べます。</p>
+<div class="bl_infoPanel_links bl_infoPanel_linksWide">
+  <a href="https://edu-portal.naist.jp/uprx/up/pk/pky001/Pky00101.xhtml?guestlogin=Kmh006" class="el_arrowLinkBtn-gray">
+    <span class="el_arrowLinkBtn_text">シラバス</span>
+  </a>
+  <a href="/campuslife/gakumu/long-term.html" class="el_arrowLinkBtn-gray">
+    <span class="el_arrowLinkBtn_text">長期履修制度</span>
+  </a>
+</div>
+
+<h2 id="diversity-admission">分野も経験も問わない"多様性入試"</h2>
+<div class="hp_flex hp_gap20">
+  <picture>
+    <img src="/mt-static/support/theme_static/naist_jp_main/images/academics/academics_img04.jpg" alt="">
+  </picture>
+  <picture>
+    <img src="/mt-static/support/theme_static/naist_jp_main/images/academics/academics_img05.jpg" alt="">
+  </picture>
+</div>
+
+<h3>多様な学生を歓迎</h3>
+<p>本学では、専攻を問わず「研究したい」「挑戦したい」という意欲を持つみなさんを歓迎します。社会で培った経験、他分野の知識、飛び級での挑戦――すべてが力になります。</p>
+<div class="bl_infoPanel_links bl_infoPanel_linksWide hp_pb20">
+  <a href="/about/student/" class="el_arrowLinkBtn-gray">
+    <span class="el_arrowLinkBtn_text">入学定員・収容定員・現員</span>
+  </a>
+  <a href="/admission/exam/result.html" class="el_arrowLinkBtn-gray">
+    <span class="el_arrowLinkBtn_text">社会人・他分野・飛び級入学者</span>
+  </a>
+</div>
+
+<h3>筆記試験のない選考プロセス</h3>
+<p>年3回の入試で、筆記試験は行いません。面接・調査書等を総合的に評価。研究の可能性とあなたの意欲を大切にします。</p>
+<div class="bl_infoPanel_links bl_infoPanel_linksWide hp_pb20">
+  <a href="https://isw3.naist.jp/Admission/nyushiQ_A-ja.html" class="el_btn el_btn__cornerIcon el_btn__cornerIcon__red">
+    <span>情報科学領域 Q&A</span>
+  </a>
+  <a href="https://bsw3.naist.jp/entrance/exam.html#qa" class="el_btn el_btn__cornerIcon el_btn__cornerIcon__green">
+    <span>バイオサイエンス領域 Q&A</span>
+  </a>
+  <a href="https://mswebs.naist.jp/admissions/faq/" class="el_btn el_btn__cornerIcon el_btn__cornerIcon__blue">
+    <span>物質創成科学領域 Q&A</span>
+  </a>
+</div>
+<div class="bl_infoPanel_links bl_infoPanel_linksWide hp_pb20">
+  <a href="/admission/exam/result.html" class="el_arrowLinkBtn-gray">
+    <span class="el_arrowLinkBtn_text">各試験別入学状況</span>
+  </a>
+</div>
+
+<h2 id="features">教育の特色</h2>
+<div class="bl_navCard">
+  <div class="bl_navCard_image">
+    <picture>
+      <source srcset="/mt-static/support/theme_static/naist_jp_main/images/academics/academics_img01_sp.jpg" media="(max-width: 767px)">
+      <img src="/mt-static/support/theme_static/naist_jp_main/images/academics/academics_img01_pc.jpg" alt="">
+    </picture>
+  </div>
+
+  <div class="bl_navCard_content">
+    <ul class="bl_navCard_list">
+      <li><a href="/campuslife/feature/liaison.html" class="bl_navCard_link">企業等との教育連携活動</a></li>
+      <li><a href="/campuslife/feature/term.html" class="bl_navCard_link">修業年限の弾力化</a></li>
+      <li><a href="/campuslife/gakumu/integrated-corse.html" class="bl_navCard_link">5年一貫コースについて</a></li>
+      <li><a href="/campuslife/gakumu/long-term.html" class="bl_navCard_link">長期履修制度</a></li>
+      <li><a href="/international/engagement/doubledegree.html" class="bl_navCard_link">ダブル・ディグリー・プログラム</a></li>
+      <li><a href="https://www.naist.jp/diversity/interview.html" class="bl_navCard_link">大学院生インタビュー</a></li>
+      <li><a href="/about/student/" class="bl_navCard_link">学生数</a></li>
+      <li><a href="/facilities/sentan/englishsubject/index.html" class="bl_navCard_link">英語による授業の実施</a></li>
+    </ul>
+  </div>
+</div>
+
+<h2 id="policies">教育の方針</h2>
+<div class="bl_navCard">
+  <div class="bl_navCard_image">
+    <picture>
+      <source srcset="/mt-static/support/theme_static/naist_jp_main/images/academics/academics_img02_sp.jpg" media="(max-width: 767px)">
+      <img src="/mt-static/support/theme_static/naist_jp_main/images/academics/academics_img02_pc.jpg" alt="">
+    </picture>
+  </div>
+
+  <div class="bl_navCard_content">
+    <ul class="bl_navCard_list">
+      <li><a href="/about/guideline/de_policy.html" class="bl_navCard_link">ディプロマ・ポリシー</a></li>
+      <li><a href="/about/guideline/cu_policy.html" class="bl_navCard_link">カリキュラム・ポリシー</a></li>
+      <li><a href="/admission/exam/admissionpolicy.html" class="bl_navCard_link">アドミッション・ポリシー</a></li>
+      <li><a href="/campuslife/curriculummap.html" class="bl_navCard_link">カリキュラムマップ</a></li>
+    </ul>
+  </div>
+</div>
+
+<h2 id="degree-award">学位授与</h2>
+<div class="bl_navCard">
+  <div class="bl_navCard_image">
+    <picture>
+      <source srcset="/mt-static/support/theme_static/naist_jp_main/images/academics/academics_img03_sp.jpg" media="(max-width: 767px)">
+      <img src="/mt-static/support/theme_static/naist_jp_main/images/academics/academics_img03_pc.jpg" alt="">
+    </picture>
+  </div>
+
+  <div class="bl_navCard_content">
+    <ul class="bl_navCard_list">
+      <li><a href="/campuslife/degree/criteria.html" class="bl_navCard_link">学位論文審査基準等</a></li>
+      <li><a href="/campuslife/degree/degree.html" class="bl_navCard_link">学位授与状況</a></li>
+      <li><a href="/campuslife/degree/requirements.html" class="bl_navCard_link">修了要件</a></li>
+      <li><a href="/campuslife/degree/completion.html" class="bl_navCard_link">標準修業年限以内での修了状況</a></li>
+    </ul>
+  </div>
+</div>
+
+            </div>
+        </div>
+      </section>
+    </div>
+
+  </main>
+
+  <!-- フッター -->
+  
+  <!-- 共通フッター（NAIST JP Main） -->
+<footer class="ly_footer">
+  <div class="ly_footer_inner">
+    <div class="ly_footer_pc_col">
+      <div class="ly_footer_brand">
+        <div class="ly_footer_logo">
+          <a href="/">
+            <img src="/mt-static/support/theme_static/naist_jp_main/images/logo-full.png" alt="国立大学法人　奈良先端科学技術大学院大学ロゴ">
+          </a>
+        </div>
+      </div>
+
+      <div class="ly_footer_info">
+        <p class="ly_footer_info_org">国立大学法人　奈良先端科学技術大学院大学</p>
+        <p class="ly_footer_info_address">〒630-0192　奈良県生駒市高山町8916番地の5</p>
+        <p class="ly_footer_info_tel">TEL 0743-72-5111（代表）</p>
+        <p class="ly_footer_info_links">
+          <a href="/inquiry/" class="ly_footer_info_link">お問い合せ</a>
+          <a href="/accessmap/" class="ly_footer_info_link">アクセス</a>
+          <a href="/job/" class="ly_footer_info_link">採用情報</a>
+          <a href="/sitemap/" class="ly_footer_info_link">サイトマップ</a>
+        </p>
+      </div>
+    </div>
+
+    <div class="ly_footer_pc_col hp_jc-center">
+      <nav class="ly_footer_nav" aria-label="フッターナビゲーション">
+        <div class="ly_footer_navCol">
+          <ul class="ly_footer_navList">
+            <li><a href="/about/" class="ly_footer_navLink">NAISTとは</a></li>
+            <li><a href="/research/" class="ly_footer_navLink">研究・産官学連携</a></li>
+            <li><a href="/academics/" class="ly_footer_navLink">教育</a></li>
+          </ul>
+        </div>
+
+        <div class="ly_footer_navCol">
+          <ul class="ly_footer_navList">
+            <li><a href="/admission/" class="ly_footer_navLink">入学案内</a></li>
+            <li><a href="/campuslife/" class="ly_footer_navLink">学生支援・キャリア</a></li>
+            <li><a href="/international/" class="ly_footer_navLink">国際交流・留学</a></li>
+          </ul>
+        </div>
+      </nav>
+      <div class="ly_footer_aside">
+        <div class="ly_footer_social">
+          <a href="https://x.com/NAIST_MAIN" class="ly_footer_socialLink" aria-label="X (Twitter)" target="_blank" rel="noopener noreferrer">
+            <img src="/mt-static/support/theme_static/naist_jp_main/images/sns_icon_x.svg" alt="X">
+          </a>
+          <a href="https://www.youtube.com/user/NAISTChannel" class="ly_footer_socialLink" aria-label="YouTube" target="_blank" rel="noopener noreferrer">
+            <img src="/mt-static/support/theme_static/naist_jp_main/images/sns_icon_youtube.svg" alt="Youtube">
+          </a>
+          <a href="https://www.instagram.com/naist_pr/" class="ly_footer_socialLink" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
+            <img src="/mt-static/support/theme_static/naist_jp_main/images/sns_icon_instagram.png" alt="Instagram">
+          </a>
+          <a href="https://www.facebook.com/naist.jp" class="ly_footer_socialLink" aria-label="Facebook" target="_blank" rel="noopener noreferrer">
+            <img src="/mt-static/support/theme_static/naist_jp_main/images/sns_icon_facebook.svg" alt="facebook">
+          </a>
+        </div>
+
+        <div class="ly_footer_legal">
+          <p class="ly_footer_copyright">© NAIST, All Rights Reserved.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- JavaScript（共通） -->
+<script src="/mt-static/support/theme_static/naist_jp_main/js/common.js?v=20260416141942"></script>
+<script src="/mt-static/support/theme_static/naist_jp_main/js/navigation.js?v=20260416141942"></script>
+
+    <script src="/mt-static/support/theme_static/naist_jp_main/vendor/jquery/jquery-3.7.1.min.js"></script>
+    <script src="/mt-static/support/theme_static/naist_jp_main/vendor/fancybox3/jquery.fancybox-3.5.7.min.js"></script>
+    <script src="/mt-static/support/theme_static/naist_jp_main/js/fancybox-init.js"></script>
+    <script src="/mt-static/support/theme_static/naist_jp_main/js/common-page.js"></script>
+    <!-- 入学案内ページの場合のみ fixed-bar.js を読み込む -->
+    
+  
+
+</body>
+</html>
