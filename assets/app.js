@@ -2620,18 +2620,70 @@ const REGION_GROUPS = {
 
 const TOP_SCHOOL_KEYS = new Set(["utokyo", "kyoto", "osaka", "tohoku", "nagoya", "kyushu", "hokudai", "scitokyo", "kobe", "hitotsubashi", "tsukuba"]);
 
+function inferMajorFromBackground(text) {
+  const normalized = normalizeKeyword(text || "");
+  const majorWords = [
+    "经济", "经营", "商学", "会计", "法学", "政治", "教育", "心理", "文学",
+    "机械", "材料", "电气", "电子", "情报", "信息", "计算机", "人工智能", "ai",
+    "数据", "建筑", "土木", "化学", "生物", "医学", "药学", "农学", "环境",
+    "传媒", "观光", "艺术", "设计", "数学", "物理"
+  ];
+  return majorWords.find(word => normalized.includes(word)) || "";
+}
+
+function inferLevelFromBackground(text, type) {
+  const normalized = normalizeKeyword(text || "");
+  if (type === "japanese") {
+    if (/n1|日语好|日语强|日语流利/.test(normalized)) return "high";
+    if (/n2|日语一般|基本交流/.test(normalized)) return "mid";
+    if (/n3|n4|n5|日语弱|无日语|没有日语/.test(normalized)) return "low";
+  }
+  if (type === "english") {
+    const toeic = normalized.match(/toeic\s*([0-9]{3})/);
+    const toefl = normalized.match(/toefl\s*([0-9]{2,3})/);
+    const ielts = normalized.match(/ielts\s*([0-9](?:\.[0-9])?)/);
+    if ((toeic && Number(toeic[1]) >= 730) || (toefl && Number(toefl[1]) >= 80) || (ielts && Number(ielts[1]) >= 6)) return "high";
+    if ((toeic && Number(toeic[1]) >= 550) || (toefl && Number(toefl[1]) >= 60) || (ielts && Number(ielts[1]) >= 5)) return "mid";
+    if (/英语弱|无英语|没有英语|暂无英语/.test(normalized)) return "low";
+  }
+  if (type === "interview") {
+    if (/面试强|表达强|交流强|口语好/.test(normalized)) return "high";
+    if (/面试弱|表达弱|口语弱|不擅长面试/.test(normalized)) return "low";
+  }
+  return "mid";
+}
+
+function inferRegionFromBackground(text) {
+  const normalized = normalizeKeyword(text || "");
+  if (/东京|東京|横滨|横浜|千叶|筑波|首都圈/.test(normalized)) return "tokyo";
+  if (/京都|大阪|神户|神戸|关西|関西|奈良|滋贺|兵库/.test(normalized)) return "kansai";
+  if (/北海道|东北|東北|札幌|仙台/.test(normalized)) return "hokkaido-tohoku";
+  if (/名古屋|中部|金泽|金沢|静冈|静岡|新潟|长野|岐阜|三重/.test(normalized)) return "chubu";
+  if (/广岛|広島|冈山|岡山|山口|德岛|徳島|爱媛|香川|高知|中国|四国/.test(normalized)) return "chugoku-shikoku";
+  if (/九州|福冈|福岡|熊本|鹿儿岛|鹿児島|长崎|長崎|冲绳|沖縄|琉球/.test(normalized)) return "kyushu";
+  return "any";
+}
+
+function inferDifficultyFromBackground(text) {
+  const normalized = normalizeKeyword(text || "");
+  if (/稳|稳妥|保底|合格率|容易|简单|有学上/.test(normalized)) return "safe";
+  if (/冲刺|挑战|名校|顶尖|旧帝|难一点/.test(normalized)) return "challenge";
+  return "balanced";
+}
+
 function readRecommendationProfile() {
-  const major = (document.getElementById("recMajor")?.value || "").trim();
+  const background = (document.getElementById("recBackground")?.value || "").trim();
+  const major = (document.getElementById("recMajor")?.value || "").trim() || inferMajorFromBackground(background);
   return {
     major,
     majorTerms: keywordTopicTerms(major),
-    flex: document.getElementById("recFlex")?.value || "strict",
-    japanese: document.getElementById("recJapanese")?.value || "high",
-    english: document.getElementById("recEnglish")?.value || "high",
-    interview: document.getElementById("recInterview")?.value || "high",
-    region: document.getElementById("recRegion")?.value || "any",
-    difficulty: document.getElementById("recDifficulty")?.value || "balanced",
-    background: (document.getElementById("recBackground")?.value || "").trim()
+    flex: document.getElementById("recFlex")?.value || (/不严格|不限专业|有学上|相关专业|都可以/.test(background) ? "flexible" : "strict"),
+    japanese: document.getElementById("recJapanese")?.value || inferLevelFromBackground(background, "japanese"),
+    english: document.getElementById("recEnglish")?.value || inferLevelFromBackground(background, "english"),
+    interview: document.getElementById("recInterview")?.value || inferLevelFromBackground(background, "interview"),
+    region: document.getElementById("recRegion")?.value || inferRegionFromBackground(background),
+    difficulty: document.getElementById("recDifficulty")?.value || inferDifficultyFromBackground(background),
+    background
   };
 }
 
